@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center display-4"></h1>
+            </div>
+<div class="input-group">
+    <form action="" method="post">
+         {% csrf_token %}
+  <div class="form-outline ">
+    <input name="query" type="search" id="form1" class="form-control bg-dark text-white" />
+    <label class="form-label" for="form1">Search</label>
+      <button type="submit" class="btn btn-dark text-center" style="width:34%;height:55%;margin-left: 101%;
+    margin-top: -130px;" value="submit">
+      Search
+  </button>
+  </div>
+
+        </form>
+</div>
+
+<div class="bg-dark rounded" style="opacity:85%">
+            <div class="col-md-12">
+
+                <table class="table table-dark text-white round" >
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">username</th>
+      <th scope="col">Email</th>
+        <th scope="col">Status</th>
+      <th scope="col">Block</th>
+
+
+    </tr>
+  </thead>
+  {% if key1 %}
+  <tbody>
+  {% for i in key1 %}
+    <tr>
+      <th scope="row">{{ i.id }}</th>
+      <td>{{ i.username }}</td>
+      <td>{{ i.email }}</td>
+        {% if i.is_active %}
+        <td>Active</td>
+        {% else %}
+        <td>Inactive</td>
+         {% endif %}
+     {% if i.is_active %}
+        <td>
+             <form name="deleteform" action="{% url 'block' user_id=i.id%}" method="post">
+              {% csrf_token %}
+              <input class="btn bg-danger text-white" type="submit" name="delete" value="Block" onclick="return confirm('are you sure?')">
+
+          </form>
+
+        </td>
+        {% else %}
+         <td>
+             <form name="unblock" action="{% url 'unblock' user_id=i.id%}" method="post">
+              {% csrf_token %}
+              <input class="btn bg-danger text-white" type="submit" name="unblock" value="Unblock">
+
+          </form>
+
+        </td>
+        {% endif %}
+    </tr>
+  {% endfor %}
+  </tbody>
+                    {% endif %}
+</table>
+         </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

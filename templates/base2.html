@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="">
+    <header class="header">
+        <div class="container">
+        <div class="head">
+            <div class="logo" style="width: 45%;  height: auto;">
+        <p><span class="t text-danger">T</span>orque</p>
+    </div>
+    <div class="content" style="width: 45%; height: auto;">
+        <div class="cont">
+        <div>
+            <a class="headcontent" href="">Online Store</a>
+        </div>
+        <div>
+            <a  class="headcontent" href="">My Account</a>
+        </div>
+        <div>
+            <a  class="headcontent" href="">Contact Us</a>
+        </div>
+
+    </div>
+</div>
+    </div>
+    <hr class="hr">
+</div>
+    </header>
+{% block content %}
+
+{% endblock %}
+<footer>
+    <div class="container">
+        <div class="footer">
+            <div class="logofoot" style="width: 33%;  height: auto;">
+        <p><span class="t text-danger">T</span>orque</p>
+    </div>
+    <div class="contentfoot" style="width: 33%; height: auto;">
+        <div class="cont">
+        <div>
+            <a class="headcontent" href="">Online Store</a>
+        </div>
+        <div>
+            <a  class="headcontent" href="">My Account</a>
+        </div>
+        <div>
+            <a  class="headcontent" href="">Contact Us</a>
+        </div>
+
+    </div>
+</div>
+<div class="lastfoot" style="width: 33%;  height: auto;">
+
+</div>
+    </div>
+    <hr class="hr">
+</div>
+</footer>
+</body>
+</html>

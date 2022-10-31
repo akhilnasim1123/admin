@@ -1,0 +1,33 @@
+.head{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-evenly;
+    align-items: center;
+    height: auto;
+}
+.cont{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: space-evenly;
+
+}.t{
+    font-size: 23px;
+}
+.headcontent{
+    text-decoration: none;
+    color: black;
+    font-size: 12px;
+}
+.hr {
+    margin-top: 0px;
+    color: #721f1f;
+}
+.footer{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-evenly;
+    align-items: center;
+    height: auto;
+}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<center class="mt-5">
+    <form class="container" method="post" action="">
+        {% csrf_token %}
+    <div class="card bg-dark container" style="width:90%;">
+         <div class=" container form-outline mt-5 " style="width:90%;">
+                    <input name="product_name" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Product Name "/>
+
+                  </div>
+<div class="images container " style="width:90%;">
+<div class="">
+<label for="formFileLg" class="form-label">Product Image</label>
+<input class="form-control " id="formFileLg" type="file" name="product_image"/>
+</div>
+<div class="">
+<label for="formFileMultiple" class="form-label">Other Images</label>
+<input class="form-control" type="file" id="formFileMultiple" name="product_images" multiple/>
+</div>
+    <div class="mt-4">
+    <a href="{% url 'product' %}"> <button class="btn bg-success"> Add </button></a>
+</div>
+    </div>
+        </div>
+        </form>
+</center>
+{% endblock content %}
