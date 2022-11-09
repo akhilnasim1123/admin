@@ -1,3 +1,8 @@
+
+#cart-total{
+background-color: red;
+    text-align: center;
+}
 .head{
     background-color: rgb(255, 255, 255);
     display: flex;
@@ -31,3 +36,35 @@
     align-items: center;
     height: auto;
 }
+.home{
+    width: 100%;
+}
+#img-container{
+    z-index: 1;
+	max-width: 500px;
+	position: relative;
+}
+
+#lens{
+ z-index: 2;
+	position: absolute;
+
+	height: 150px;
+	width: 150px;
+	border:0px solid black;
+	background-repeat: no-repeat;
+	cursor: none;
+}
+.pro-card{
+  height:auto;
+  display:flex;
+  justify-content: align-items:center;
+  space-around;
+  background-color: #e8e8e8;
+}.cart-img{
+
+}
+.cart-icon{
+
+}
+

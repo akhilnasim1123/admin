@@ -1,0 +1,61 @@
+.background{
+    background-image: url({% static '/images/back.jpg' %});
+    background-size: cover;
+    height: 568px;
+    background-repeat: no-repeat;
+
+
+}
+body{
+  
+
+ 
+}
+.t{
+    font-size: 40px;
+}
+.logo{
+    margin-top: 16px;
+}
+hr{
+    margin-top: 0;
+    background-color: white;
+    height: 3px;
+    border: white;
+}.part{
+    margin-left: 80px;
+}
+.link{
+    text-decoration: none;
+    color: #5fa8f3eb;
+    font-weight: bold;
+}.part2{
+    flex: 0 0 auto;
+
+    margin-top: 49px;
+}
+.main-header{
+    opacity: 1;
+}
+.engine{
+  
+}
+.engine-img{
+    width: 100%;
+}.set2{
+    display: flex;
+    align-items: center;
+}.gradient-custom {
+    /* fallback for old browsers */
+    background: #f6d365;
+    
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
+    
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
+    }
+.mySlides{
+  
+       width: 100%;
+}

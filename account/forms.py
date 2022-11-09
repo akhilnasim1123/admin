@@ -1,15 +1,18 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
+from phonenumber_field.formfields import PhoneNumberField
+
 from account.models import Account
 
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=60, help_text='Required. Add a valid email address')
 
+
     class Meta:
         model = Account
-        fields = ('email', 'username', 'password1', 'password2','phone')
+        fields = ('first_name','last_name','phone','email', 'password1', 'password2')
 
 
 # class AccountAuthenticationForm(forms.ModelForm):

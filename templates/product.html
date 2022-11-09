@@ -1,29 +1,30 @@
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
 {% load static %}
 
 {% block content %}
-<center class="mt-5">
-    <form class="container" method="post" action="">
-        {% csrf_token %}
-    <div class="card bg-dark container" style="width:90%;">
-         <div class=" container form-outline mt-5 " style="width:90%;">
-                    <input name="product_name" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Product Name "/>
 
-                  </div>
-<div class="images container " style="width:90%;">
-<div class="">
-<label for="formFileLg" class="form-label">Product Image</label>
-<input class="form-control " id="formFileLg" type="file" name="product_image"/>
-</div>
-<div class="">
-<label for="formFileMultiple" class="form-label">Other Images</label>
-<input class="form-control" type="file" id="formFileMultiple" name="product_images" multiple/>
-</div>
-    <div class="mt-4">
-    <a href="{% url 'product' %}"> <button class="btn bg-success"> Add </button></a>
-</div>
-    </div>
+
+    <form class="container" method="post" action="{% url 'product' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <center class="mt-5 bg-dark" >
+        {% for error in field.errors %}
+        <p style="color: red;">{{error}}</p>
+        {% endfor %}
+        {% for field in product_form %}
+
+     <div class="form-outline mb-2 container"style="width:auto;color:white;">
+           <label class="form-label">{{ field.label_tag }}</label>
+           <div class="" >
+               {{ field }}
         </div>
-        </form>
+
+</div>
+
+        {% endfor %}
+
+        <button type="submit">Add Product</button>
 </center>
+        </form>
+
+
 {% endblock content %}

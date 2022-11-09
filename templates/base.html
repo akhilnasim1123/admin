@@ -1,88 +1,113 @@
+{% load static %}
 <!DOCTYPE html>
+<html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-   <!-- CSS only -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    {% load static %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-</head>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    </head>
 <body>
-    <div class="container-fluid">
-        <div class="row flex-nowrap">
-            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                        <span class="fs-5 d-none d-sm-inline"><span class="text-danger">T</span>orque.in</span>
-                         <hr>
-                    </a>
-
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Home</span>
-                            </a>
-
-                        </li>
-                        <li>
-                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Dashboard</span> </a>
-
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Orders</span></a>
-                        </li>
-                        <li>
-                            <a href="{% url 'admin_user' %}" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                                <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Users</span></a>
-
-                        </li>
-                        <li>
-                            <a href="{% url 'product' %}" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Products</span> </a>
-
-                        </li>
-                        <li>
-                            <a href="#" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Customers</span> </a>
-                        </li>
-                    </ul>
-                    <hr>
-                    <div class="dropdown pb-4">
-                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-
-                            <span class="d-none d-sm-inline mx-1">Akhil</span>
-                        </a>
-
-                    </div>
-                </div>
-            </div>
-            <div class="col py-3">
-{% block content %}
-
-{% endblock %}
-            </div>
-        </div>
+    <header class="header">
+        <div class="container">
+        <div class="head">
+            <div class="logo" style="width: 45%;  height: auto;">
+        <p><span class="t text-danger">T</span>orque</p>
     </div>
+    <div class="content" style="width: 45%; height: auto;">
+        <div class="cont">
+        <div>
+            <a class="headcontent" href="">Online Store</a>
+        </div>
+        <div>
+            <a  class="headcontent" href="">My Account</a>
+        </div>
+        <div>
+            <a  class="headcontent" href="">Contact Us</a>
+        </div>
+            {% if user.is_authenticated %}
+             <div>
+
+                 <a  class="headcontent" href="{% url 'logout' %}">Sign Out</a>
+            </div>
+                 {% else %}
+            <div>
+            <a  class="headcontent" href="{% url 'loginpage' %}">Sign In</a>
+                </div>
+                 {% endif %}
+               <div class="cart-icon" style="width: 44px;margin-top: -9px;">
+                   <a class="d-flex" style="text-decoration:none;" href="{% url 'cart' %}">
+<img class="cart-img" src="{% static '/images/6+cart.png' %}" style="width:100%;">
+<p id="cart-total " class="bg-danger text-white text-center rounded" style="display:block;width: 20px; height: 21px;border:radius:50%;margin-left: -21px;font-size: 13px;">{{ cartItems }}</p>
+
+
+
+
+
+
+
+
+
+
+
+        </a>
+
+               </div>
+    </div>
+
+        
+        
+</div>
+    </div>
+    <hr class="hr">
+</div>
+
+    </header>
+
+    <section>
+
+
+ {% block content %}
+        {% endblock %}
+
+
+    </section>
+
+
+  <script src="{% static 'js/script.js' %}"></script>
+      <script src="{% static 'js/cart.js' %}"></script>
+ <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script>
+        var user = '{{ request.user }}'
+
+      function getToken(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getToken('csrftoken');
+    </script>
+
+
 </body>
-<style>
-    body{
-        background-color:#eee;
-    }
 
-    .nav-link:hover{
-        background-color:#525252 !important;
-    }
-
-    .nav-link .fa{
-        transition:all 1s;
-    }
-
-    .nav-link:hover .fa{
-        transform:rotate(360deg);
-    }
-        </style>
 </html>

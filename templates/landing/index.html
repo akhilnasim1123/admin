@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+   {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <script src="{% static 'js/main.js' %}"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="script.js"></script>
+</head>
+<style>
+    .mySlides{display: none;}
+</style>
+<body>
+    <section class="background" style="background-image: url({% static '/images/back.jpg' %});">
+    <header >
+        <div class="main-header col-12">
+            <div class="row">
+        <div class="part col-5">
+            <p class="logo text-white"><span class="t text-danger">T</span>orque.in</p>
+        </div>
+        <div class="part2 col-5">
+            <div class="row text-primary font-weight-bold">
+            <div class="col-3">
+                <a href="{% url 'home' %}" class="link">Online Shop</a>
+            </div>
+            <div class="col-3">
+                <a href="" class="link">My Account</a>
+            </div>
+            <div class="col-3">
+                <a href="" class="link">Contact Us</a>
+            </div>
+            <div class="col-3">
+                <a href="{% url 'login' %}" class="link">Sign In</a>
+            </div>
+        </div>
+        </div>
+
+     </div>
+     
+    </div>
+    <hr>
+    </header>
+
+    
+    </section>
+  
+    <section>
+        <div class="set2">
+        <div class="p-5" style="width: 50%;">
+<p>
+    <b><span>"</span> BMW carries the symbolic message in its very name: the M in the middle of the acronym stands for “Motoren,” or engines. It stands for the beginning of the company,
+     and for engine technology of the highest standard over many decades and for various means of transport. Be it for a plane, a motorcycle or an automobile, BMW pioneers new technologies. 
+     So we’ve chosen not one legendary BMW engine for you, but twelve. And we’ve done it as objectively as possible, but as subjectively as necessary. We make no claim to completeness. Ultimately,
+      every gearhead has a different focus – so this list is the perfect debate starter. <span>"</span>
+     
+    </b>
+</p>
+        </div>
+        <div class="" style="width: 50%;">
+            <div class="engine mt-5">
+                <img class="engine-img" src="{% static '/images/Picsart_22-10-25_17-17-48-145.png' %}" alt="">
+
+            </div>
+
+        </div>
+    </div>
+    </section>
+    <section>
+        <div class="col-12">
+            <img class="mySlides w3-animate-fading" src="{% static '/images/Picsart_22-11-07_20-06-15-216.jpg' %}" alt="">
+            <img class="mySlides w3-animate-fading" src="{% static '/images/Picsart_22-11-07_20-06-59-847.jpg' %}" alt="">
+            <img class="mySlides w3-animate-fading" src="{% static '/images/Picsart_22-11-07_20-07-15-924.jpg' %}" alt="">
+            <img class="mySlides w3-animate-fading" src="{% static '/images/Picsart_22-11-07_20-07-34-542.jpg' %}" alt="">
+            <img class="mySlides w3-animate-fading" src="{% static '/images/Picsart_22-11-07_20-07-52-533.jpg' %}" alt="">
+           
+        </div>
+      
+    </section>
+    <section>
+        <div class="set2">
+        <div class="p-5" style="width: 50%;">
+<p>
+    <b><span>"</span> BMW carries the symbolic message in its very name: the M in the middle of the acronym stands for “Motoren,” or engines. It stands for the beginning of the company,
+     and for engine technology of the highest standard over many decades and for various means of transport. Be it for a plane, a motorcycle or an automobile, BMW pioneers new technologies. 
+     So we’ve chosen not one legendary BMW engine for you, but twelve. And we’ve done it as objectively as possible, but as subjectively as necessary. We make no claim to completeness. Ultimately,
+      every gearhead has a different focus – so this list is the perfect debate starter. <span>"</span>
+     
+    </b>
+</p>
+        </div>
+        <div class="" style="width: 50%;">
+            <div class="engine mt-5">
+                <img class="engine-img" src="{% static '/images/Picsart_22-10-25_17-17-48-145.png' %}" alt="">
+
+            </div>
+
+        </div>
+    </div>
+    </section>
+
+
+    <script>
+        var myIndex = 0;
+        carousel();
+        
+        function carousel() {
+          var i;
+          var x = document.getElementsByClassName("mySlides");
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";  
+          }
+          myIndex++;
+          if (myIndex > x.length) {myIndex = 1}    
+          x[myIndex-1].style.display = "block";  
+          setTimeout(carousel, 3000); // Change image every 2 seconds
+        }
+        </script>
+</body>
+</html>

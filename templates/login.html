@@ -27,16 +27,20 @@
     
 
       </div>
-      <button class="btn btn-secondary btn-lg btn-block mt-4" type="submit" style="width: 100%;">OTP Log In</button>
+
+     <a href="{% url 'otp_login_page' %}"><button class="btn btn-secondary btn-lg btn-block mt-4" type="submit" style="width: 100%;">OTP Log In</button></a>
+              {% for message in messages %}
+            <p class="text-danger">{{message}}</p>
+            {% endfor %}
                <form action="{% url 'login' %}" method="post" >
                     {% csrf_token %}
                   <div class=" form-outline mb-4 mt-5 ">
-                    <input name="email" type="email" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Email Address"/>
+                    <input name="email" type="email" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Email Address" required/>
                    
                   </div>
       
                   <div class="form-outline mb-4">
-                    <input name="password" type="password" id="typePasswordX-2" class="form-control form-control-lg" placeholder="Password"/>
+                    <input name="password" type="password" id="typePasswordX-2" class="form-control form-control-lg" placeholder="Password" required/>
                     
                   </div>
       

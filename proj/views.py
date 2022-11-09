@@ -1,67 +1,216 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import cache_control
+
 from account.forms import RegistrationForm
 from account.models import Account
-from proj.models import Product
+from proj.forms import ItemsForm, SubForm
+from proj.models import Product, Category, SubCategory
 
 
 # admin login page -------------------------------->
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_log(request):
+    if 'email' in request.session:
+        return redirect('admin_page')
     return render(request, 'admin_log.html')
 
 
 # admin homepage html ------------------------------->
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_page(request):
-    return render(request, 'admin.html')
+    if 'email' in request.session:
+        return render(request, 'admin.html')
 
 
 # admin authentication ---------------------------->
+
 def admin_auth(request):
-    if 'username' in request.session:
+    if 'email' in request.session:
         return redirect('admin_page')
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
+
         admin = authenticate(email=email, password=password)
         if admin is not None:
-            login(request, admin)
-            return redirect('admin_page')
-        else:
-            return redirect('admin_log')
+            if admin.is_superuser:
+                print('yes')
 
-        # if email != 'email@gmail.com':
-        #     return redirect('admin_log')
-        # else:
-        #     # admin = authenticate(email=email, password=password,is_superuser=True)
-        #     admin = Account.objects.filter(password=password)
-        #     if admin is not None:
-        #         # login(request, admin)
-        #         return redirect('admin_page')
-        #     else:
-        #         return redirect('admin_log')
+                request.session['email'] = email
+                login(request, admin)
+                return redirect('admin_page')
+            else:
+                print('nope')
+                messages.error(request, 'Your Not a Admin')
+                return redirect('admin_log')
+        else:
+            print('not yet')
+            messages.error(request, 'Your Not a Admin')
+            return redirect('admin_log')
     return redirect('admin_log')
 
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url=admin_log)
 def admin_user(request):
-    user_data = Account.objects.all()
-    return render(request, 'users.html', {'key1': user_data})
+    if 'email' in request.session:
+        user_data = Account.objects.filter(is_superuser=False)
+        data = {
+            'key1': user_data
+        }
+        return render(request, 'users.html', {'key1': user_data})
+    return redirect('admin_log')
 
 
 def block(request, user_id):
     Account.objects.filter(id=user_id).update(is_active=False)
-    return redirect(admin_user)
+    return redirect('admin_user')
 
 
 def unblock(request, user_id):
     Account.objects.filter(id=user_id).update(is_active=True)
-    return redirect(admin_user)
+    return redirect('admin_user')
 
 
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+@login_required(login_url=admin_log)
 def product(request):
+    if 'email' in request.session:
+        # data = Category.objects.all()
+        context = {}
+        if request.method == 'POST':
+            form = ItemsForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                print('saved')
+                return redirect('product_list')
+
+        else:
+            print('not')
+            form = ItemsForm()
+            context['product_form'] = form
+        return render(request, 'product.html', context)
+    return redirect('admin_log')
+
+
+@cache_control(no_cache=True, must_revalidate=True, no_store=True)
+def logout(request):
+    if 'email' in request.session:
+        del request.session['email']
+        print('hey')
+        return redirect('admin_log')
+    return redirect('admin_log')
+
+
+@login_required(login_url=admin_log)
+def category_view(request):
+    if 'email' in request.session:
+        cat_data = Category.objects.all()
+        return render(request, 'category_list.html', {'key1': cat_data})
+    return redirect('admin_log')
+
+
+@login_required(login_url=admin_log)
+def category(request):
+    if 'email' in request.session:
+        if request.method == 'POST':
+            category_name = request.POST.get('category_name')
+            Category.objects.create(category_name=category_name)
+            return redirect('category')
+        return render(request, 'category.html')
+    return redirect('admin_log')
+
+
+@login_required(login_url=admin_log)
+def sub_category(request):
+    if 'email' in request.session:
+        sub = SubCategory.objects.all()
+        return render(request, 'SubCategory/sub_view.html', {'sub': sub})
+    return redirect('admin_log')
+
+
+def sub_cat(request):
+    context = {}
     if request.method == 'POST':
-        product_name = request.POST.get('product_name')
-        product_image = request.POST.get('product_image')
-        data = Product.objects.filter(product_name=product_image, product_image=product_image)
-        data.save()
-    return render(request, 'product.html')
+        form = SubForm(request.POST)
+        if form.is_valid():
+            print('post')
+            form.save()
+            return redirect('sub_category')
+    else:
+        print('get')
+        form = SubForm
+        context['sub_form'] = form
+    return render(request, 'SubCategory/sub.html', context)
+
+
+def deleteSub(request, id):
+    delete = SubCategory.objects.get(id=id)
+    delete.delete()
+    return redirect('sub_category')
+
+
+def editSubpage(request, id):
+    pass
+
+
+def product_list(request):
+    user_data = Product.objects.all()
+    return render(request, 'product_edit.html', {'key2': user_data})
+
+
+def editpage(request, id):
+    val = Product.objects.get(id=id)
+    return render(request, 'proEdit.html', {'key3': val})
+
+
+def editData(request, id):
+    if request.method == 'POST':
+        edit = Product.objects.get(id=id)
+        edit.product_name = request.POST.get('product_name')
+        edit.desc = request.POST.get('description')
+        edit.price = request.POST.get('price')
+        edit.save()
+        return redirect('product_list')
+
+
+def deleteData(request, id):
+    delete = Product.objects.get(id=id)
+    delete.delete()
+    return redirect('product_list')
+
+
+def searchdata(request):
+    pass
+
+
+def editCat(request, cat_id):
+    if request.method == 'POST':
+        editdat = Category.objects.get(id=cat_id)
+        editdat.category_name = request.POST.get('category_name')
+        editdat.save()
+        return redirect('category_view')
+
+
+def editcatpage(request, cat_id):
+    value = Category.objects.get(id=cat_id)
+    return render(request, 'editcat.html', {'key4': value})
+
+
+def deleteCat(request, id):
+    delete = Category.objects.get(id=id)
+    delete.delete()
+    return redirect('category_view')
+
+
+def searchCat(request):
+    pass
+
+
+def test(request):
+    form = ItemsForm()
+    return render(request, 'test.html', {'form': form})

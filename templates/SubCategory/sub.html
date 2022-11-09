@@ -1,0 +1,18 @@
+{% extends 'base1.html' %}
+{% load static %}
+
+{% block content %}
+<center class="mt-5">
+    <div class="bg-secondary" style="width:70%;height:300px;display:flex;align-items:center;color:white;" >
+    <form class="container" method="post" action="{% url 'sub_cat' %}">
+        {% csrf_token %}
+{% for field in sub_form %}
+        {{ field }}
+        {% endfor %}
+        <input class="btn" type="submit" value="add">
+
+
+    </form>
+        </div>
+</center>
+{% endblock content %}

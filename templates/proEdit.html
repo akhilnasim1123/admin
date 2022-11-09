@@ -1,0 +1,35 @@
+{% extends 'base1.html' %}
+{% load static %}
+
+{% block content %}
+<center class="mt-5">
+    {% if key3 %}
+
+    <form class="container" method="post" action="{% url 'editData' id=key3.id %}">
+        {% csrf_token %}
+    <div class="card bg-dark container" style="width:90%;">
+        <div class=" container form-outline mt-5 " style="width:90%;">
+                    <input name="product_name" type="text"  class="form-control form-control-lg" placeholder="product name " value="{{ key3.product_name }}"/>
+
+                  </div>
+         <div class=" container form-outline mt-5 " style="width:90%;">
+                    <input name="price" type="text" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Price " value="{{ key3.price }}"/>
+
+                  </div>
+
+        <div class=" container form-outline mt-5 " style="width:90%;">
+                    <input name="description" type="text"  class="form-control form-control-lg" placeholder="description " value="{{ key3.desc }}"/>
+
+                  </div>
+<div class="images container " style="width:90%;">
+<div class="">
+    <div class="mt-4">
+    <a href=""> <button type="submit" class="btn bg-success"> Add </button></a>
+</div>
+    </div>
+        </div>
+    </div>
+        </form>
+    {% endif %}
+</center>
+{% endblock content %}

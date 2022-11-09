@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base1.html' %}
 
 
 {% block content %}
@@ -25,14 +25,16 @@
         </form>
 </div>
 
-<div class="bg-dark rounded" style="opacity:85%">
+<div class="bg-light rounded" style="opacity:85%">
             <div class="col-md-12">
 
-                <table class="table table-dark text-white round" >
+                <table class="table table-light text-dark round" >
   <thead>
     <tr>
-      <th scope="col">ID</th>
-      <th scope="col">username</th>
+<th></th>
+      <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Phone</th>
       <th scope="col">Email</th>
         <th scope="col">Status</th>
       <th scope="col">Block</th>
@@ -44,8 +46,10 @@
   <tbody>
   {% for i in key1 %}
     <tr>
-      <th scope="row">{{ i.id }}</th>
-      <td>{{ i.username }}</td>
+      <th scope="row"></th>
+      <td>{{ i.first_name }}</td>
+        <td>{{ i.last_name }}</td>
+<td>{{ i.phone }}</td>
       <td>{{ i.email }}</td>
         {% if i.is_active %}
         <td>Active</td>
@@ -54,9 +58,9 @@
          {% endif %}
      {% if i.is_active %}
         <td>
-             <form name="deleteform" action="{% url 'block' user_id=i.id%}" method="post">
+             <form action="{% url 'block' user_id=i.id %}" method="post">
               {% csrf_token %}
-              <input class="btn bg-danger text-white" type="submit" name="delete" value="Block" onclick="return confirm('are you sure?')">
+              <input class="btn bg-danger text-white" type="submit"  value="Block" onclick="return confirm('are you sure?')">
 
           </form>
 

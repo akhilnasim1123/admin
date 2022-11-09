@@ -1,0 +1,82 @@
+{% extends 'base1.html' %}
+
+
+{% block content %}
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center display-4">Product</h1>
+            </div>
+<div class="input-group">
+    <form action="{% url 'searchdata' %}" method="post">
+         {% csrf_token %}
+  <div class="form-outline ">
+    <input name="query" type="search" id="form1" class="form-control bg-dark text-white" />
+    <label class="form-label" for="form1">Search</label>
+      <button type="submit" class="btn btn-dark text-center" style="width:34%;height:55%;margin-left: 101%;
+    margin-top: -130px;" value="submit">
+      Search
+  </button>
+  </div>
+
+        </form>
+</div>
+
+
+
+            <div class="col-md-12">
+                <table class="table table-light text-dark">
+  <thead>
+    <tr>
+ 
+      <th scope="col">Product Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+        <th scope="col">Description</th>
+        <th></th>
+        <th scope="col"><div class="mt-4">
+    <a href="{% url 'product' %}"> <button type="submit" class="btn bg-success"> Add </button></a>
+</div></th>
+
+
+    </tr>
+  </thead>
+  {% if key2 %}
+  <tbody>
+  {% for i in key2 %}
+    <tr>
+
+      <td>{{ i.product_name }}</td>
+      <td>{{ i.price }}</td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ i.desc }}</td>
+
+      <td>
+          <form name="editform" action="{% url 'editpage' id=i.id %}" method="post">
+              {% csrf_token %}
+              <input class="btn bg-success text-white" type="submit" name="Edit" value="Edit">
+
+          </form>
+      </td>
+        <td>
+             <form name="deleteform" action="{% url 'deleteData' id=i.id %}" method="post">
+              {% csrf_token %}
+              <input class="btn bg-danger text-white" type="submit" name="delete" value="delete">
+
+          </form>
+
+        </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+                    {% endif %}
+</table>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

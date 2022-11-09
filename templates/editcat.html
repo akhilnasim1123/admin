@@ -1,0 +1,27 @@
+{% extends 'base1.html' %}
+{% load static %}
+
+{% block content %}
+<center class="mt-5">
+  {% if key4 %}
+    <form class="container" method="post" action="{% url 'editCat' cat_id=key4.id %}">
+        {% csrf_token %}
+    <div class="card bg-dark container" style="width:90%;">
+         <div class=" container form-outline mt-5 " style="width:90%;">
+                    <input name="category_name" type="text" id="typeEmailX-2" class="form-control form-control-lg" value="{{ key4.category_name }}"/>
+
+                  </div>
+  <div class=" container form-outline mt-3 " style="width:90%;">
+        <a href=""><button class="btn bg-white" type="submit" style="width:90%;">Submit</button></a>
+                       </div>
+
+    </div>
+
+
+
+
+
+    </form>
+</center>
+{% endif %}
+{% endblock content %}

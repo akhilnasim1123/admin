@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-5 d-none d-sm-inline"><span class="text-danger">T</span>orque.in</span>
+                         <hr>
+                    </a>
+
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link align-middle px-0">
+                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Home</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Dashboard</span> </a>
+
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Orders</span></a>
+                        </li>
+                        <li>
+                            <a href="{% url 'admin_user' %}" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                                <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Users</span></a>
+
+                        </li>
+                        <li>
+                            <a href="{% url 'product_list' %}" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Products</span> </a>
+
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Customers</span> </a>
+                        </li>
+                          <li>
+                            <a href="{% url 'category_view' %}" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Category</span> </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <a href="{% url 'logout' %}"><button class="btn">Log Out</button></a>
+                    <div class="dropdown pb-4">
+                         <a href="{% url 'logout' %}"><button class="btn">Log Out</button></a>
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+<!--                 <a href="{% url 'logout' %}"><button class="btn">Log Out</button></a>-->
+                            <span class="d-none d-sm-inline mx-1">Akhil</span>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col py-3">
+{% block content %}
+
+{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+<style>
+    body{
+        background-color:#eee;
+    }
+
+    .nav-link:hover{
+        background-color:#525252 !important;
+    }
+
+    .nav-link .fa{
+        transition:all 1s;
+    }
+
+    .nav-link:hover .fa{
+        transform:rotate(360deg);
+    }
+    :root {
+    --price-tag-background: #d1d5db;
+    --price-tag-height: 2rem;
+}
+
+.price-tag {
+    background: var(--price-tag-background);
+    color: #fff;
+
+    /* Center the price */
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
+    /* Used to position the triangle */
+    position: relative;
+
+    /* Size */
+    height: var(--price-tag-height);
+
+    /* Spacing */
+    padding: 0.25rem 0.5rem;
+}
+
+/* The triangle */
+.price-tag::before {
+    content: '';
+
+    border-color: transparent var(--price-tag-background) transparent transparent;
+    border-style: solid;
+    border-width: calc(var(--price-tag-height) / 2) calc(var(--price-tag-height) / 2) calc(var(--price-tag-height) / 2) 0rem;
+
+    /* Position */
+    left: 0px;
+    position: absolute;
+    top: 0px;
+    transform: translate(-100%, 0px);
+}
+
+/* The dot */
+.price-tag::after {
+    content: '';
+
+    /* Make it like a cirle */
+    background: #fff;
+    border-radius: 9999rem;
+
+    /* Position */
+    left: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(-0.5rem, -50%);
+
+    /* Size */
+    height: 0.5rem;
+    width: 0.5rem;
+}
+        </style>
+</html>
