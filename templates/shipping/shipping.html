@@ -49,7 +49,7 @@
                               <div style="width: 120px;">
                                 <h5 class="mb-0">₹{{ order.get_cart_total|floatformat:2 }}/-</h5>
                               </div>
-                              <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                              <a href="{% url 'deletecart' item.id '2' %} " style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
                             </div>
                           </div>
                         </div>
@@ -116,6 +116,27 @@
                                 </div>
                               </div>
                             </div>
+
+               <div class="form-check h-200">
+                    <input class="form-check-input" type="radio" name="razer" id="flexRadioDefault1">
+                          <label class="form-check-label" for="flexRadioDefault1">
+                            Razer Pay
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="paypal" id="flexRadioDefault2" >
+                          <label class="form-check-label" for="flexRadioDefault2">
+                               Paypal
+
+                          </label>
+                        </div>
+                               <div class="form-check">
+                          <input class="form-check-input" type="radio" name="cash_on_delivery"  checked >
+                          <label class="form-check-label" for="flexRadioDefault2">
+                              Cash On Delivery
+                          </label>
+                        </div>
+
 
 
 

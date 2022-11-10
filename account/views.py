@@ -48,9 +48,18 @@ def registration_view(request):
 
 
 def home(request):
+    if request.user.is_authenticated:
+        print('authenticated')
+        customer = request.user
+        print('customer')
+        order = Order.objects.get(account=customer, complete=False)
+        items = order.orderitems_set.all()
+        cartItems = order.get_cart_items
+
     products = Product.objects.all()
     data = {
         'products': products,
+        'cartItems': cartItems,
     }
     return render(request, 'page.html', data)
 
