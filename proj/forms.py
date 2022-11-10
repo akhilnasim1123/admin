@@ -12,3 +12,7 @@ class SubForm(forms.ModelForm):
     class Meta:
         model = SubCategory
         fields = ['sub_name', 'category']
+
+
+
+

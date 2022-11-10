@@ -17,6 +17,8 @@ from account.forms import RegistrationForm
 from proj.models import Product, Category, Order
 
 
+
+
 def landing_page(request):
     return render(request, 'landing/index.html')
 
@@ -82,21 +84,12 @@ def logout_page(request):
 
 
 def product_view(request, id):
-    if request.user.is_authenticated:
-        print('authenticated')
-        customer = request.user
-        order = Order.objects.get(account=customer, complete=False)
-        items = order.orderitems_set.all()
-        cartItems = order.get_cart_items
-    else:
-        items = []
-        order = {'get_cart_items': 0, 'get_cart_total': 0, }
-        cartItems = order['get_cart_items']
-        print('in else')
+
+
 
     val = Product.objects.get(id=id)
-    context = {'key5': val, 'cartItems': cartItems}
-    return render(request, 'product_view.html', context)
+    context = {'key5': val}
+    return render(request, 'product_view.html',context)
 
 
 # def otp_login(request):
