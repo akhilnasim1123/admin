@@ -32,5 +32,8 @@ urlpatterns = [
     path('add-sub',views.sub_cat,name='sub_cat'),
     path('delete-sub/<int:id>',views.deleteSub,name='deleteSub'),
     path('editSub/<int:id>',views.editSubpage,name='editSubpage'),
+    path('orders',views.order_list,name='order_list'),
+    path('cancel/<int:id><int:val>',views.cancel,name='cancel'),
+    path('orders-details/<int:id>',views.order_view,name='order_view'),
 
 ]

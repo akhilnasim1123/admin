@@ -17,8 +17,6 @@ from account.forms import RegistrationForm
 from proj.models import Product, Category, Order
 
 
-
-
 def landing_page(request):
     return render(request, 'landing/index.html')
 
@@ -52,11 +50,21 @@ def home(request):
         print('authenticated')
         customer = request.user
         print('customer')
-        order = Order.objects.get(account=customer, complete=False)
-        items = order.orderitems_set.all()
-        cartItems = order.get_cart_items
+
+        try:
+            order = Order.objects.get(account=customer, complete=False)
+            items = order.orderitems_set.all()
+            cartItems = order.get_cart_items
+        except:
+            print("An exception occurred")
+
+        finally:
+            order = []
+            items = []
+            cartItems = []
 
     products = Product.objects.all()
+    cartItems = []
     data = {
         'products': products,
         'cartItems': cartItems,
@@ -93,12 +101,34 @@ def logout_page(request):
 
 
 def product_view(request, id):
+    if request.user.is_authenticated:
+        print('authenticated')
+        customer = request.user
+        print('customer')
+        try:
+            order = Order.objects.get(account=customer, complete=False)
+            items = order.orderitems_set.all()
+            cartItems = order.get_cart_items
+        except:
+            print("An exception occurred")
 
+        finally:
+            order = []
+            items = []
+            cartItems = []
 
-
+    elif request.user is None:
+        order = []
+        items = []
+        cartItems = []
+    order = []
+    items = []
+    cartItems = []
+    
     val = Product.objects.get(id=id)
-    context = {'key5': val}
-    return render(request, 'product_view.html',context)
+    context = {'key5': val, 'items': items,
+               'order': order, 'cartItems': cartItems}
+    return render(request, 'product_view.html', context)
 
 
 # def otp_login(request):

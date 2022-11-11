@@ -7,8 +7,9 @@ from django.views.decorators.cache import cache_control
 
 from account.forms import RegistrationForm
 from account.models import Account
+from cart.models import OrderedItems
 from proj.forms import ItemsForm, SubForm
-from proj.models import Product, Category, SubCategory
+from proj.models import Product, Category, ShippingAddress, SubCategory
 
 
 # admin login page -------------------------------->
@@ -32,8 +33,8 @@ def admin_auth(request):
     if 'email' in request.session:
         return redirect('admin_page')
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        email                   = request.POST.get('email')
+        password                = request.POST.get('password')
 
         admin = authenticate(email=email, password=password)
         if admin is not None:
@@ -58,7 +59,7 @@ def admin_auth(request):
 @login_required(login_url=admin_log)
 def admin_user(request):
     if 'email' in request.session:
-        user_data = Account.objects.filter(is_superuser=False)
+        user_data               = Account.objects.filter(is_superuser=False)
         data = {
             'key1': user_data
         }
@@ -109,7 +110,7 @@ def logout(request):
 @login_required(login_url=admin_log)
 def category_view(request):
     if 'email' in request.session:
-        cat_data = Category.objects.all()
+        cat_data      = Category.objects.all()
         return render(request, 'category_list.html', {'key1': cat_data})
     return redirect('admin_log')
 
@@ -144,7 +145,7 @@ def sub_cat(request):
     else:
         print('get')
         form = SubForm
-        context['sub_form'] = form
+        context['sub_form']         = form
     return render(request, 'SubCategory/sub.html', context)
 
 
@@ -170,10 +171,10 @@ def editpage(request, id):
 
 def editData(request, id):
     if request.method == 'POST':
-        edit = Product.objects.get(id=id)
-        edit.product_name = request.POST.get('product_name')
-        edit.desc = request.POST.get('description')
-        edit.price = request.POST.get('price')
+        edit                        = Product.objects.get(id=id)
+        edit.product_name           = request.POST.get('product_name')
+        edit.desc                   = request.POST.get('description')
+        edit.price                  = request.POST.get('price')
         edit.save()
         return redirect('product_list')
 
@@ -190,8 +191,8 @@ def searchdata(request):
 
 def editCat(request, cat_id):
     if request.method == 'POST':
-        editdat = Category.objects.get(id=cat_id)
-        editdat.category_name = request.POST.get('category_name')
+        editdat                     = Category.objects.get(id=cat_id)
+        editdat.category_name       = request.POST.get('category_name')
         editdat.save()
         return redirect('category_view')
 
@@ -214,3 +215,28 @@ def searchCat(request):
 def test(request):
     form = ItemsForm()
     return render(request, 'test.html', {'form': form})
+
+
+def order_list(request):
+    order               = OrderedItems.objects.all()
+    return render(request, 'admin/orders.html',{'order':order})
+
+def cancel(request,id,val):
+    pro = OrderedItems.objects.get(id=id)
+    pro.status='Cancelled'
+    
+    pro.save()
+    if val == '1':
+        return redirect('order_list')
+    else:
+        return redirect('order_list')
+
+
+def order_view(request,id):
+    order              = OrderedItems.objects.get_or_create(id=id)
+
+    
+    print(order)
+    return render(request,'admin/order_view.html',{'order':order})
+
+    # 

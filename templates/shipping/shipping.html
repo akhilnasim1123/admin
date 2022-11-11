@@ -55,8 +55,26 @@
                         </div>
                       </div>
  {% endfor %}
-
+ {% if address %}
+ {% for i in address %}
+                            <div>
+                               <p>
+                                {{ i.account.first_name }}
+                               </p>                   
+                               <p>
+                                {{ i.address }},<br>
+                                {{i.city}},
+                                {{i.state}},
+                                {{i.pincode}}
+                               </p>
+                            </div>
+                            <a href="{% url 'pay_page' %}"><button type="submit" class="btn text-danger">Checkout</button></a>
+                            {% endfor %}
+                            {% endif %}
                     </div>
+                    
+
+
 
                     <div class="col-lg-5">
 
@@ -70,7 +88,9 @@
 
                           <p class="small mb-2"></p>
                              {% if order %}
-                          <form class="mt-4" method="post" action="{% url 'pay_page' id=order.account.id %}">
+                  
+                          <form class="mt-4" method="post" action="{% url 'pay_page' %}">
+                  
                               {% csrf_token %}
                               {% for message in messages %}
                                 <h5 class="text-center text-danger">{{ message }}</h5>
