@@ -17,17 +17,20 @@ def cart(request):
     
     if request.user.is_authenticated:
         print('authenticated')
-        customer = request.user
+        customer                = request.user
         print('customer')
-        order                   = Order.objects.get(account=customer, complete=False)
+        order, created                  = Order.objects.get_or_create(account=customer, complete=False)
         items                   = order.orderitems_set.all()
         cartItems               = order.get_cart_items
+        context = {'items': items, 'order': order,'cartItems': cartItems}
+        return render(request, 'cart/cart.html', context)
     elif request.user is None:
         order                   = []
         items                   = []
         cartItems               = []
-
-    
+    order                       = []
+    items                       = []
+    cartItems                   = []
     context = {'items': items, 'order': order,'cartItems': cartItems}
     return render(request, 'cart/cart.html', context)
 
@@ -82,7 +85,7 @@ def pay_page(request):
     if request.user.is_authenticated:
         print('authenticated')
         customer                        = request.user
-        order                           = Order.objects.get(account=customer, complete=False)
+        order                           = Order.objects.get(account=customer)
         items                           = order.orderitems_set.all()
         cartItems                       = order.get_cart_items
     else:
@@ -92,7 +95,7 @@ def pay_page(request):
 
         user_order                      = OrderedItems()
         add                             = ShippingAddress()
-        orItems                         = OrderItems.objects.get(order=order)
+        orItems                         = OrderItems.objects.get()
         add.address                     = request.POST.get('address')
         add.city                        = request.POST.get('city')
         add.state                       = request.POST.get('state')
@@ -125,10 +128,18 @@ def pay_page(request):
         prod_qunt                       = Product.objects.get(id=orItems.product.id)
         prod_qunt.quantity              = user_order.quantity - prod_qunt.quantity
         prod_qunt.save()
+        product                         = OrderItems.objects.get(order=order)
+        product.delete()
+
 
 
         context = {'cartItems': cartItems}
         return render(request, 'shipping/success.html',context)
+    order                               = Order.objects.get(account=customer, complete=False)
+    items                               = order.orderitems_set.all()
+    cartItems                           = order.get_cart_items
+    context                             = {'cartItems': cartItems}
+    return render(request, 'shipping/success.html',context)
 
 
 def deletecart(request,id,value):
@@ -141,6 +152,8 @@ def deletecart(request,id,value):
         return redirect(cart)
     else:
         return redirect(shoppingaddress)
+
+
 
     
 

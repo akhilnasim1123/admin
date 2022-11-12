@@ -36,4 +36,5 @@ urlpatterns = [
     path('cancel/<int:id><int:val>',views.cancel,name='cancel'),
     path('orders-details/<int:id>',views.order_view,name='order_view'),
 
+
 ]

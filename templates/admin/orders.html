@@ -53,19 +53,16 @@
       <td>{{ i.account }}</td>
       <td>{{ i.orderitems.product }}</td>
         <td>{{ i.quantity }}</td>
-        {% if i.is_active %}
-        <td>{{ i.status }}</td>
-        <td>
-            <form name="editform" action="{% url 'order_view' i.id %}" method="post">
-                {% csrf_token %}
-                <input class="btn bg-success text-white" type="submit" name="Edit" value="View">
-  
-            </form>
-        </td>
-        {% else %}
-        <td>cancelled</td>
-{% endif %}
-      
+
+        <td>{{ i.active }}</td>
+        
+      <td>
+          <form name="editform" action="{% url 'order_view' i.id %}" method="post">
+              {% csrf_token %}
+              <input class="btn bg-success text-white" type="submit" name="Edit" value="View">
+
+          </form>
+      </td>
         <td>
            
 

@@ -34,13 +34,13 @@
             {% endfor %}
                <form action="{% url 'login' %}" method="post" >
                     {% csrf_token %}
-                  <div class=" form-outline mb-4 mt-5 ">
-                    <input name="email" type="email" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Email Address" required/>
+                  <div class=" form-outline mb-4 mt-2 ">
+                    <input name="email" type="email" id="typeEmailX-2" class="form-control form-control-lg" placeholder="Email Address"/>
                    
                   </div>
       
                   <div class="form-outline mb-4">
-                    <input name="password" type="password" id="typePasswordX-2" class="form-control form-control-lg" placeholder="Password" required/>
+                    <input name="password" type="password" id="typePasswordX-2" class="form-control form-control-lg" placeholder="Password"/>
                     
                   </div>
       

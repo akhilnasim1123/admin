@@ -7,6 +7,7 @@ from django.views.decorators.cache import cache_control
 
 from account.forms import RegistrationForm
 from account.models import Account
+from account.views import order_userside
 from cart.models import OrderedItems
 from proj.forms import ItemsForm, SubForm
 from proj.models import Product, Category, ShippingAddress, SubCategory
@@ -35,19 +36,19 @@ def admin_auth(request):
     if request.method == 'POST':
         email                   = request.POST.get('email')
         password                = request.POST.get('password')
-
         admin = authenticate(email=email, password=password)
         if admin is not None:
-            if admin.is_superuser:
-                print('yes')
+                if admin.is_superuser:
+                    print('yes')
 
-                request.session['email'] = email
-                login(request, admin)
-                return redirect('admin_page')
-            else:
-                print('nope')
-                messages.error(request, 'Your Not a Admin')
-                return redirect('admin_log')
+                    request.session['email'] = email
+                    login(request, admin)
+                    return redirect('admin_page')
+                else:
+                    print('nope')
+                    messages.error(request, 'Your Not a Admin')
+                    return redirect('admin_log')
+           
         else:
             print('not yet')
             messages.error(request, 'Your Not a Admin')
@@ -223,20 +224,19 @@ def order_list(request):
 
 def cancel(request,id,val):
     pro = OrderedItems.objects.get(id=id)
-    pro.status='Cancelled'
-    
+    pro.active='Cancelled'
+
     pro.save()
     if val == '1':
         return redirect('order_list')
     else:
-        return redirect('order_list')
+        return redirect(order_userside)
 
 
 def order_view(request,id):
     order              = OrderedItems.objects.get_or_create(id=id)
+    print(order)
 
     
-    print(order)
+    print(id)
     return render(request,'admin/order_view.html',{'order':order})
-
-    # 

@@ -1,20 +1,23 @@
+import random
 from random import random
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from account.models import Account
-import random
+from django.http import HttpResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.decorators.cache import never_cache
 from twilio.rest import Client
 
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from account.forms import AccountAuthenticationForm, RegistrationForm
+from account.models import Account
+from cart.models import OrderedItems
+from proj.models import Category, Order, Product, ShippingAddress
+from wishlist.models import Wishlist
+
 # Create your views here.
 
-from account.forms import RegistrationForm
-from proj.models import Product, Category, Order
 
 
 def landing_page(request):
@@ -50,26 +53,56 @@ def home(request):
         print('authenticated')
         customer = request.user
         print('customer')
-
         try:
             order = Order.objects.get(account=customer, complete=False)
             items = order.orderitems_set.all()
             cartItems = order.get_cart_items
+            products = Product.objects.all()
+            data = {'products': products, 'items': items,
+               'order': order, 'cartItems': cartItems}
+            return render(request, 'page.html', data)
         except:
             print("An exception occurred")
-
-        finally:
-            order = []
-            items = []
-            cartItems = []
-
-    products = Product.objects.all()
+    elif request.user is None:
+        order = []
+        items = []
+        cartItems = []
+    order = []
+    items = []
     cartItems = []
+    products = Product.objects.all()
     data = {
         'products': products,
         'cartItems': cartItems,
+        'items': items,
+        'order': order, 
     }
     return render(request, 'page.html', data)
+
+# def login_page(request):
+#     context = {}
+#     # if user.is_authenticated:
+#     #     return redirect('home')
+#     if request.method == 'POST':
+#         form = AccountAuthenticationForm(request.POST)
+#         if form.is_valid():
+#             # email = request.POST['email']
+#             # password = request.POST['password']
+#             # user = authenticate(email=email, password=password)
+
+#             # if user:
+#                 # login(request, user)
+#                 return redirect('home')
+#         # else:
+#         #     context['login_form'] = form
+
+#     else:        
+    
+#         form = AccountAuthenticationForm()
+#         context['login_form'] = form
+#     return render(request, 'login.html', context)
+
+
 
 
 def login_page(request):
@@ -78,14 +111,22 @@ def login_page(request):
         password = request.POST.get('password')
         user = authenticate(email=email, password=password)
         if user is not None:
-            dat = Account.objects.get(email=email)
+            dat = Account.objects.get(email=email, is_superuser=False)
             print('success')
-            request.session['user_exist'] = dat.first_name
+            request.session['user_exist'] = dat.email
             login(request, user)
             return redirect('home')
+        elif email == '' and password == '':
+            messages.error(request, 'Invalid Details')
+            return redirect('loginpage')
+        elif email == '':
+            messages.error(request,'email is Required')
+        elif password == '':
+            messages.error(request,'Password is Required')
         else:
             messages.error(request, 'Invalid Details')
             return redirect('loginpage')
+        
     return redirect('loginpage')
 
 
@@ -109,13 +150,13 @@ def product_view(request, id):
             order = Order.objects.get(account=customer, complete=False)
             items = order.orderitems_set.all()
             cartItems = order.get_cart_items
+            val = Product.objects.get(id=id)
+            
+            context = {'key5': val, 'items': items,
+               'order': order, 'cartItems': cartItems}
+            return render(request, 'product_view.html', context)
         except:
             print("An exception occurred")
-
-        finally:
-            order = []
-            items = []
-            cartItems = []
 
     elif request.user is None:
         order = []
@@ -124,15 +165,10 @@ def product_view(request, id):
     order = []
     items = []
     cartItems = []
-    
     val = Product.objects.get(id=id)
     context = {'key5': val, 'items': items,
                'order': order, 'cartItems': cartItems}
     return render(request, 'product_view.html', context)
-
-
-# def otp_login(request):
-#     return render(request, 'phone.html')
 
 @never_cache
 def otp_login_page(request):
@@ -199,26 +235,111 @@ class OtpGenerate():
         print(message.body)
         return True
 
-# def login_view(request):
-#     context = {}
-#     user = request.user
-#     # if user.is_authenticated:
-#     #     return redirect('home')
-#     if request.POST:
-#         form = AccountAuthenticationForm(request.POST)
-#         if form.is_valid():
-#             email = request.POST['email']
-#             password = request.POST['password']
-#             user = authenticate(email=email, password=password, is_active=False)
-#
-#             if user:
-#                 login(request, user)
-#                 return redirect('home')
-#         else:
-#             form = AccountAuthenticationForm()
-#
-#             context['login_form'] = form
-#     return render(request, 'login.html', context)
+
+@login_required(login_url=login_page)
+def user_profile(request,id):
+   
+   
+    if request.user.is_authenticated:
+        
+        print('authenticated')
+        customer = request.user
+        print('customer')
+        try:
+            order = Order.objects.get(account=customer, complete=False)
+            items = order.orderitems_set.all()
+            cartItems = order.get_cart_items
+            datas = {
+                'data':data,
+                 'cartItems': cartItems}
+            return render(request, 'Profile/profile.html', datas)
+        except:
+            print("An exception occurred")
+
+    elif request.user is None:
+
+        cartItems = []
+    else:
+        return redirect(login_page)
+
+
+    data                    = ShippingAddress.objects.filter(account=id).first()
+    cartItems = []
+    datas ={
+        'data':data,
+        'cartItems': cartItems,
+
+    }
+    return render(request,'profile/profile.html',datas)
+
+def address_view(request,id):
+    if request.user.is_authenticated:
+        print('authenticated')
+        customer = request.user
+        print('customer')
+        try:
+            order = Order.objects.get(account=customer, complete=False)
+            items = order.orderitems_set.all()
+            cartItems = order.get_cart_items
+            context = {'items': items,
+               'order': order, 'cartItems': cartItems}
+            return render(request, 'address_view.html', context)
+        except:
+            print("An exception occurred")
+
+    elif request.user is None:
+        order = []
+        items = []
+        cartItems = []
+
+    account                             = Account.objects.get(id=id)
+    datas                               = ShippingAddress.objects.filter(account=id)
+    context ={
+        'datas':datas,
+        'cartItems': cartItems,
+        'items': items,
+        'order': order, 
+    }
+    return render(request,'profile/address_view.html',context)
+
+
+def delete_address(request,id):
+    delete                              = ShippingAddress.objects.filter(id=id)
+    delete.delete()
+    return redirect(address_view)
+def address_edit(request,id):
+    details = ShippingAddress.objects.get(id=id)
+    details.address = request.POST.get('address')
+    details.city = request.POST.get('city')
+    details.state = request.POST.get('state')
+    details.phone= request.POST.get('phone') 
+    details.save()
+    return redirect(address_view)
+
+def order_userside(request,id):
+    account              = Account.objects.get(id=id)
+    orders               = OrderedItems.objects.filter(account=account)
+    context={
+        'orders':orders
+    }
+    return render(request,'profile/user_orders.html',context)
+
+def add_wishlist(request,product_id,user_id,val):
+    product                         = Product.objects.get(id=product_id)
+    user                            = Account.objects.get(id=user_id)
+    if Wishlist.objects.filter(product=product, account =user).exists:   
+        wishlist                    = Wishlist.objects.get(product=product,account=user)
+        wishlist.delete()
+        return redirect(product_view)
+    else:
+        product                     = Product.objects.get(id=product_id)
+        user                        = Account.objects.get(id=user_id)
+        wishlist                    = Wishlist.objects.create(product=product,account=user)     
+        return redirect(product_view)
+
+
+    
+
 
 # def user(request):
 #     # if 'username' in request.session:

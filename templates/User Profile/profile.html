@@ -1,0 +1,79 @@
+
+{% extends 'base.html' %}{% load static %}
+
+{% block content %}
+<section>
+    <div class="container">
+<div class="d-flex justify-content-center align-items-center">
+  
+<a href="{% url 'userprofile' user.id %}"><button class=" btn text-danger"><b>Account Information</b></button></a>
+<a href="{% url 'order_userside' user.id %}"><button class=" btn text-black"><b>Order</b></button></a>
+<a href=""> <button class="btn text-black"> <b>Wishlist</b></button></a>
+</div>
+<hr>
+<div class="" style="">
+    <div class="card bg-light">
+        <div class="container">
+            <div class="container">
+            <h5 class="text-black "><span class="text-danger" style="width: 10%; font-size:40px;"><b>|</b></span>Genaral Inforamation</h5>
+        </div>
+
+        <div class="mt-4 container">
+          
+            <div class="d-flex">
+             
+        <div class="mx-4">
+            <p><span><b> First Name :</b></span>{{ data.account.first_name }}</p>
+           
+        </div>
+        <div class="mx-4">
+            <p><span><b> Last Name :</b></span> {{ data.account.last_name }}</p>
+        </div>
+        <div class="mx-4">
+            <p><span><b> Email :</b></span> {{ data.account.email }}</p>
+        </div>
+    </div>
+            </div>
+            <div class="container mt-4">
+                <h5 class="text-black"><span class="text-danger" style="width: 10%; font-size:40px;"><b>|</b></span>Address</h5>
+            </div>
+    <div class="mt-4 ">
+        <div class="mx-4 mt-2 container">
+            <p><span><b> Address :</b></span>  {{ data.address }} </p>
+        </div> 
+        <div class="d-flex mt-2 container">
+         
+               <div class="mx-4 ">
+        <p><span><b> Phone :</b></span>{{ data.account.phone }}</p>
+    </div>
+   
+    <div class="mx-4">
+        <p><span><b> City :</b></span> {{ data.city }}</p>
+    </div>
+</div>
+
+<div class="mt-2">
+    <div class="d-flex container">
+        <div class="mx-4">
+    <p><span><b> State :</b></span> {{ data.state }}</p>
+</div>
+<div class="mx-4">
+    <p><span><b> Pincode :</b></span> {{ data.pincode }}</p>
+</div>
+</div>
+
+
+    </div>
+</div>
+    </div>
+    <div style="margin-left: 80%;float: end;margin-top: -10px;">
+    <a href="{% url 'addressview' user.id %}" > <Button class="btn border border-danger" type=""> View Address</Button></a>
+</div>
+</div>
+</div>
+</section>
+
+
+
+
+{% endblock content %}

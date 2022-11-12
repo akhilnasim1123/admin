@@ -69,6 +69,7 @@ class Order(models.Model):
 
 
 class OrderItems(models.Model):
+    
     product                 = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     order                   = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
     quantity                = models.IntegerField(default=0, null=True, blank=True)
@@ -90,3 +91,4 @@ class ShippingAddress(models.Model):
     city                    = models.CharField(max_length=200, null=True)
     state                   = models.CharField(max_length=200, null=True)
     pincode                 = models.CharField(max_length=10, null=True)
+    phone                   = models.CharField(max_length=30)

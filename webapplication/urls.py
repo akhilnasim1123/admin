@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin-log/', include('proj.urls')),
     path('', include('account.urls')),
     path('cart/', include('cart.urls')),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

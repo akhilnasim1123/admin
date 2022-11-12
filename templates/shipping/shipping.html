@@ -57,7 +57,8 @@
  {% endfor %}
  {% if address %}
  {% for i in address %}
-                            <div>
+ <div class="text-center bg-dark card mb-3">
+                            <div class="text-center bg-secondary card mb-3">
                                <p>
                                 {{ i.account.first_name }}
                                </p>                   
@@ -67,8 +68,9 @@
                                 {{i.state}},
                                 {{i.pincode}}
                                </p>
-                            </div>
-                            <a href="{% url 'pay_page' %}"><button type="submit" class="btn text-danger">Checkout</button></a>
+                              </div>
+                            <a  href="{% url 'pay_page' %}"><button type="submit" class="btn bg-danger text-center text-light">Checkout</button></a>
+                          </div>
                             {% endfor %}
                             {% endif %}
                     </div>
@@ -104,7 +106,7 @@
 
                              <div  class="form-outline form-white">
                                   <input name="phone" type="tel" class="form-control form-control-lg"
-                                    placeholder="{{ order.account.phone }}"  maxlength="19" value="{{ order.account.phone}}"/>
+                                    placeholder=""  maxlength="19" value=""/>
                                   <label class="form-label">Phone Number</label>
                                 </div>
 

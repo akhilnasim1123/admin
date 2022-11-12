@@ -16,6 +16,11 @@ urlpatterns = [
     path('otp-login-page',views.otp_login_page,name='otp_login_page'),
     path('enter-otp',views.enter_otp,name='enter_otp'),
     path('verify-otp',views.verify_otp,name='verify_otp'),
-
-
+    path('user-profile/<int:id>',views.user_profile,name='userprofile'),
+    path('address-view/<int:id>',views.address_view,name='addressview'),
+    path('delete-address/<int:id>',views.delete_address,name='deleteaddress'),
+    path('address-edit/<int:id>',views.address_edit,name='addressedit'),
+    path('user-orders/<int:id>',views.order_userside,name='order_userside'),
+    path('add-wishlist/<int:product_id>/<int:user_id>',views.add_wishlist,name='add_wishlist'),
+   
 ]
