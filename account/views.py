@@ -79,32 +79,7 @@ def home(request):
     }
     return render(request, 'page.html', data)
 
-# def login_page(request):
-#     context = {}
-#     # if user.is_authenticated:
-#     #     return redirect('home')
-#     if request.method == 'POST':
-#         form = AccountAuthenticationForm(request.POST)
-#         if form.is_valid():
-#             # email = request.POST['email']
-#             # password = request.POST['password']
-#             # user = authenticate(email=email, password=password)
-
-#             # if user:
-#                 # login(request, user)
-#                 return redirect('home')
-#         # else:
-#         #     context['login_form'] = form
-
-#     else:        
     
-#         form = AccountAuthenticationForm()
-#         context['login_form'] = form
-#     return render(request, 'login.html', context)
-
-
-
-
 def login_page(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -151,8 +126,9 @@ def product_view(request, id):
             items = order.orderitems_set.all()
             cartItems = order.get_cart_items
             val = Product.objects.get(id=id)
+            wishlist=Wishlist.objects.get(Product=val,account=customer)
             
-            context = {'key5': val, 'items': items,
+            context = {'key5': val, 'items': items,'wishlist':wishlist,
                'order': order, 'cartItems': cartItems}
             return render(request, 'product_view.html', context)
         except:
@@ -252,7 +228,7 @@ def user_profile(request,id):
             datas = {
                 'data':data,
                  'cartItems': cartItems}
-            return render(request, 'Profile/profile.html', datas)
+            return render(request, 'userprofile/profile.html', datas)
         except:
             print("An exception occurred")
 
@@ -270,7 +246,7 @@ def user_profile(request,id):
         'cartItems': cartItems,
 
     }
-    return render(request,'profile/profile.html',datas)
+    return render(request,'userprofile/profile.html',datas)
 
 def address_view(request,id):
     if request.user.is_authenticated:
@@ -300,7 +276,7 @@ def address_view(request,id):
         'items': items,
         'order': order, 
     }
-    return render(request,'profile/address_view.html',context)
+    return render(request,'userprofile/address_view.html',context)
 
 
 def delete_address(request,id):
@@ -322,21 +298,26 @@ def order_userside(request,id):
     context={
         'orders':orders
     }
-    return render(request,'profile/user_orders.html',context)
+    return render(request,'userprofile/user_orders.html',context)
 
-def add_wishlist(request,product_id,user_id,val):
+def add_wishlist(request,product_id,user_id):
     product                         = Product.objects.get(id=product_id)
     user                            = Account.objects.get(id=user_id)
-    if Wishlist.objects.filter(product=product, account =user).exists:   
-        wishlist                    = Wishlist.objects.get(product=product,account=user)
-        wishlist.delete()
-        return redirect(product_view)
+    if Wishlist.objects.filter(product=product, account =user).exists():   
+        wishlist                    = Wishlist.objects.filter(product=product,account=user)
+        if wishlist:
+            wishlist.delete()
+            return redirect(product_view)
+        else:
+            return redirect(product_view)
     else:
         product                     = Product.objects.get(id=product_id)
         user                        = Account.objects.get(id=user_id)
         wishlist                    = Wishlist.objects.create(product=product,account=user)     
         return redirect(product_view)
 
+def wishlist_userside(request,id):
+    return render(request,'userprofile/wishlist.html')
 
     
 

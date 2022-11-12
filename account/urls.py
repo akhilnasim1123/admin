@@ -22,5 +22,7 @@ urlpatterns = [
     path('address-edit/<int:id>',views.address_edit,name='addressedit'),
     path('user-orders/<int:id>',views.order_userside,name='order_userside'),
     path('add-wishlist/<int:product_id>/<int:user_id>',views.add_wishlist,name='add_wishlist'),
+    path('wishlists/<int:id>',views.wishlist_userside,name='wishlists'),
+    
    
 ]

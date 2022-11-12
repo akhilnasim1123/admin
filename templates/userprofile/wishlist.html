@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}{% load static %}
+
+{% block content %}
+<section>
+    <div class="container">
+<div class="d-flex justify-content-center align-items-center">
+  
+<a href="{% url 'userprofile' user.id %}"><button class=" btn text-black"><b>Account Information</b></button></a>
+<a href="{% url 'order_userside' user.id %}"><button class=" btn text-black"><b>Order</b></button></a>
+<a href=""> <button class="btn text-danger"> <b>Wishlist</b></button></a>
+</div>
+<hr>
+</div>
+</section>
+{% endblock content %}

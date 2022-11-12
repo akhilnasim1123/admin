@@ -2,6 +2,18 @@
 {% extends 'base.html' %}{% load static %}
 
 {% block content %}
+<style>
+input [type=text]{
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: none;
+  box-sizing: border-box;
+
+  border-bottom: 0px  solid red;
+}
+</style>
+
 
  <section class="h-100 h-custom" style="background-color: #eee;">
         <div class="container py-5 h-100">
@@ -57,19 +69,25 @@
  {% endfor %}
  {% if address %}
  {% for i in address %}
- <div class="text-center bg-dark card mb-3">
-                            <div class="text-center bg-secondary card mb-3">
+ <div class="text-center bg-light card mb-3">
+                            <div class="text-center bg-light card mb-3">
+                              <form action="{% url 'pay_page' %}" method="post">
+                                {% csrf_token %}
+                                          
                                <p>
-                                {{ i.account.first_name }}
-                               </p>                   
-                               <p>
-                                {{ i.address }},<br>
-                                {{i.city}},
-                                {{i.state}},
-                                {{i.pincode}}
+                                <input value="{{ i.address }}," type="text" class="bg-light" name="address" style="border-bottom: 0px  solid red;border:none;">
+                                <br>
+                                <input value="{{i.city}}," type="text" name="city" class="bg-light"style="border-bottom: 0px  solid red;border:none;">
+                                
+                                <input value="{{i.state}}," type="text" name="state" class="bg-light"style="border-bottom: 0px  solid red;border:none;">
+                                ,
+                                <input value="{{i.pincode}}," type="text" name="pincode" class="bg-light"style="border-bottom: 0px  solid red;border:none;">
+                                <input value="{{i.phone}}," type="tel" name="phone" class="bg-light"style="border-bottom: 0px  solid red;border:none;">
+                               
                                </p>
                               </div>
-                            <a  href="{% url 'pay_page' %}"><button type="submit" class="btn bg-danger text-center text-light">Checkout</button></a>
+                            <a  href=""><button type="submit" class="btn bg-danger text-center text-light">Checkout</button></a>
+                          </form>
                           </div>
                             {% endfor %}
                             {% endif %}
@@ -106,7 +124,7 @@
 
                              <div  class="form-outline form-white">
                                   <input name="phone" type="tel" class="form-control form-control-lg"
-                                    placeholder=""  maxlength="19" value=""/>
+                                    placeholder=""  maxlength="19" value="{{ order.account.phone}}"/>
                                   <label class="form-label">Phone Number</label>
                                 </div>
 

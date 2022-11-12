@@ -11,13 +11,14 @@ class OrderedItems(models.Model):
         ('accepted','accepted'),
         ('pending','pending')
     }
+    product                     = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     account                     = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
     order                       = models.ForeignKey(Order,on_delete=models.SET_NULL,blank=True,null=True)
     orderitems                  = models.ForeignKey(OrderItems,on_delete=models.SET_NULL,blank=True,null=True)
     status                      = models.CharField(max_length=20,choices=status_choices, default='pending')
     shippingaddress             = models.ForeignKey(ShippingAddress, on_delete=models.CASCADE,blank=True,null=True)
     payment                     = models.CharField(max_length=20,blank=True, null=True)
-    quantity                    = models.CharField(max_length=40,blank=True, null=True)
+    quantity                    = models.IntegerField(blank=True, null=True)
     active                      = models.CharField(max_length=20,default='ordered')
     price                       = models.CharField(max_length=40,blank=True, null=True)
 

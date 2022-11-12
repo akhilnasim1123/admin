@@ -95,7 +95,7 @@ def pay_page(request):
 
         user_order                      = OrderedItems()
         add                             = ShippingAddress()
-        orItems                         = OrderItems.objects.get()
+        orItems,create                  = OrderItems.objects.get_or_create(order=order)
         add.address                     = request.POST.get('address')
         add.city                        = request.POST.get('city')
         add.state                       = request.POST.get('state')
@@ -113,20 +113,24 @@ def pay_page(request):
         if add.address == '' or add.city == '' or add.state == '' or add.pincode == '':
             messages.error(request, 'These Fields are Required')
             return redirect('shipping')
+        
 
+        prod_qunt                       = Product.objects.get(id=orItems.product.id)
+        
         user_order.account              = customer
         user_order.order                = order
         user_order.orderitems           = orItems
         user_order.shippingaddress      = add
         user_order.payment              = order.payment_choices
         user_order.quantity             = orItems.quantity
+        prod_qunt.quantity              -= user_order.quantity
         user_order.price                = order.get_cart_total
+        user_order.product              = prod_qunt
        
         add.save()
         user_order.save()
 
-        prod_qunt                       = Product.objects.get(id=orItems.product.id)
-        prod_qunt.quantity              = user_order.quantity - prod_qunt.quantity
+        
         prod_qunt.save()
         product                         = OrderItems.objects.get(order=order)
         product.delete()
