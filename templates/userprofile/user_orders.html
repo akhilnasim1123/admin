@@ -16,50 +16,43 @@
     <div class=" card col-md-12">
         <table class="table table-light text-dark ">
 <thead>
-<tr>
-    <th scope="col">Image</th>
-<th scope="col">Product</th>
-<th scope="col">Price</th>
-<th scope="col">Status</th>
-<th scope="col">Quantity</th>
-<th scope="col">Description</th>
 
-<th scope="col"><div class="mt-4">
-
-</div></th>
-
-
-</tr>
 </thead>
 {% if orders %}
 {% for i in orders %}
 <tbody>
 
-<tr>
-<td><img class="" style="width: 15%;" src="/media/{{ i.shippingaddress.product.image1 }}" alt=""></td>
-<td>{{ i.shippingaddress.product }}</td>
-<td>{{ i.price }}</td>
-<td>{{ i.active }}</td>
-<td>{{ i.quantity }}</td>
+<tr class="">
+<td style="width: 20%;"><img class="" style="width: 100%;" src="/media/{{ i.product.image1 }}" alt=""></td>
+<td class="pt-5">{{ i.product }}</td>
+<td class="pt-5">{{ i.price }}</td>
+<td class="pt-5">{{ i.active }}</td>
+<td class="pt-5">{{ i.quantity }}</td>
 
 
 
 
 
 
-<td class="d-flex">
+<td  class="pt-5">
+    <div>
   <form name="editform" action="" method="post">
       {% csrf_token %}
       <input class="btn bg-success text-white" type="submit" name="Edit" value="View">
 
   </form>
+</div>
+</td>
+<td class="pt-5">
+  <div >
   {% if i.active == 'ordered' %}
   <form name="editform" action="{% url 'cancel' i.id '1' %}" method="post">
     {% csrf_token %}
-    <input class="btn bg-success text-white" type="submit" name="Edit" value="Cancel">
+    <input class="btn bg-danger text-white" type="submit" name="Edit" value="Cancel">
 
 </form>
 {% endif %}
+</div>
 </td>
 <td>
    

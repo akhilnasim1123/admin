@@ -9,8 +9,8 @@ from account.forms import RegistrationForm
 from account.models import Account
 from account.views import order_userside
 from cart.models import OrderedItems
-from proj.forms import ItemsForm, SubForm
-from proj.models import Product, Category, ShippingAddress, SubCategory
+from proj.forms import BannerForm, ItemsForm, SubForm
+from proj.models import BannerManagement, Product, Category, ShippingAddress, SubCategory
 
 
 # admin login page -------------------------------->
@@ -240,3 +240,21 @@ def order_view(request,id):
     
     print(id)
     return render(request,'admin/order_view.html',{'order':order})
+
+
+def banner(request):
+    context = {}
+    if request.method == 'POST':
+       form = BannerForm(request.POST, request.FILES)
+       old_banner   = BannerManagement.objects.all()
+       
+       if form.is_valid():
+            old_banner.delete()
+            form.save()
+            print('saved')
+            return redirect('banner')
+    
+    print('get')
+    form = BannerForm()
+    context['banner_form']         = form
+    return render(request, 'admin/bannermanage.html', context)

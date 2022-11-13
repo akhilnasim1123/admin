@@ -13,6 +13,11 @@ class SubForm(forms.ModelForm):
         model = SubCategory
         fields = ['sub_name', 'category']
 
+class BannerForm(forms.ModelForm):
+    class Meta:
+        model = BannerManagement
+        fields = ['name','image']
+
 
 
 

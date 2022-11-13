@@ -1,5 +1,5 @@
 .background{
-    background-image: url({% static '/images/back.jpg' %});
+
     background-size: cover;
     height: 568px;
     background-repeat: no-repeat;

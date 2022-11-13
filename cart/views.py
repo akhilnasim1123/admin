@@ -19,8 +19,8 @@ def cart(request):
         print('authenticated')
         customer                = request.user
         print('customer')
-        order, created                  = Order.objects.get_or_create(account=customer, complete=False)
-        items                   = order.orderitems_set.all()
+        order, created          = Order.objects.get_or_create(account=customer, complete=False)
+        items                   = OrderItems.objects.all()
         cartItems               = order.get_cart_items
         context = {'items': items, 'order': order,'cartItems': cartItems}
         return render(request, 'cart/cart.html', context)
@@ -113,6 +113,7 @@ def pay_page(request):
         if add.address == '' or add.city == '' or add.state == '' or add.pincode == '':
             messages.error(request, 'These Fields are Required')
             return redirect('shipping')
+        idd=orItems.product
         
 
         prod_qunt                       = Product.objects.get(id=orItems.product.id)

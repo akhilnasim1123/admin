@@ -12,5 +12,44 @@
 </div>
 <hr>
 </div>
+<div>
+    {% if wishlst %}
+    {% for i in wishlst %}
+    <div class="container">
+    <div class="card bg-light">
+        <div class="d-flex">
+            <div class="mt-4" style="width: 40%;">
+                <img src="/media/{{ i.product.image1 }}" alt="" style="width: 100%;">
+            </div>
+            <div>
+                <div >
+                    <div class="d-flex justify-content-evenly mt-4" style="font-size:20px">
+                    <div class="pro-name" style="width: 70%;">
+                    <b>{{ i.product.product_name }}</b>
+                </div>
+                <div>
+                    <b class="text-danger"> ₹ {{ i.product.price }}/-</b>
+                </div>
+                <a href="{% url 'add_wishlist' i.product.id user.id '2' %}"><i class="fa fa-heart" aria-hidden="true" style="font-size: 30px;"></i></a>
+
+            </div>
+
+                </div>
+                <div class="mt-4">
+                    {{ i.product.desc }}
+                </div>
+                <button data-product="{{ i.product.id }}" type="button" data-action="add" class="update-cart btn mt-3 bg-secondary text-white text-center  " style="width:100%;"> Add To Cart</button>
+            </div>
+       
+               
+           
+        </div>
+
+    </div>
+</div>
+{% endfor %}
+    {% endif %}
+</div>
 </section>
+
 {% endblock content %}

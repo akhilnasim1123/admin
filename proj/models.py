@@ -25,7 +25,7 @@ class Product(models.Model):
     product_name            = models.CharField(max_length=50)
     price                   = models.BigIntegerField()
     desc                    = models.CharField(max_length=600)
-    quantity                = models.IntegerField(default=0);
+    quantity                = models.IntegerField(default=0)
     image1                  = models.ImageField(upload_to="media/images")
     image2                  = models.ImageField(upload_to="media/images")
     image3                  = models.ImageField(upload_to="media/images")
@@ -56,15 +56,16 @@ class Order(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.id, self.tracking_no)
 
+    
+    @property
+    def get_cart_items(self):
+        orderitems = self.orderitems_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total
     @property
     def get_cart_total(self):
         orderitems = self.orderitems_set.all()
         total = sum([item.get_total for item in orderitems])
-        return total
-
-    def get_cart_items(self):
-        orderitems = self.orderitems_set.all()
-        total = sum([item.quantity for item in orderitems])
         return total
 
 
@@ -92,3 +93,18 @@ class ShippingAddress(models.Model):
     state                   = models.CharField(max_length=200, null=True)
     pincode                 = models.CharField(max_length=10, null=True)
     phone                   = models.CharField(max_length=30)
+
+
+
+class BannerManagement(models.Model):
+    image              = models.ImageField(upload_to="media/images")
+    name               = models.CharField(max_length=300,null=True,blank=True)
+
+    def __str__(self):
+        return self.name
+        
+        
+
+
+
+

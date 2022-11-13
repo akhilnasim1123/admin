@@ -16,7 +16,9 @@
     .mySlides{display: none;}
 </style>
 <body>
-    <section class="background" style="background-image: url({% static '/images/back.jpg' %});">
+{% for i in banner %}
+    <section class="background" style="background-image: url(/media/{{i.image}});">
+{% endfor %}
     <header >
         <div class="main-header col-12">
             <div class="row">

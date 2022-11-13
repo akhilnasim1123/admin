@@ -27,13 +27,13 @@
 <div class=" mx-3 " style="width: auto;">
 
   {% if user.is_authenticated and wishlist.product.id == product.id %}
-  <a href="{% url 'add_wishlist' key5.id user.id  %}"><i class="fa fa-heart" aria-hidden="true" style="font-size: 30px;"></i></a>
+  <a href="{% url 'add_wishlist' key5.id user.id '1'  %}"><i class="fa fa-heart" aria-hidden="true" style="font-size: 30px;"></i></a>
 
     {% elif wishlist.product.id != product.id %}
- <a href="{% url 'add_wishlist' key5.id user.id  %}" style="text-decoration: none;"><i  class="bi bi-heart text-danger" style="font-size: 30px;"></i></a>
+ <a href="{% url 'add_wishlist' key5.id user.id '1' %}" style="text-decoration: none;"><i  class="bi bi-heart text-danger" style="font-size: 30px;"></i></a>
 
   {% else %}
-  <i class="bi bi-heart"></i>
+  <i class="bi bi-heart text-danger" style="font-size: 30px;"></i>
   {% endif %}
 </div>
 </div>

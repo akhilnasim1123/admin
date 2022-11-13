@@ -13,7 +13,7 @@ from twilio.rest import Client
 from account.forms import AccountAuthenticationForm, RegistrationForm
 from account.models import Account
 from cart.models import OrderedItems
-from proj.models import Category, Order, Product, ShippingAddress
+from proj.models import BannerManagement, Category, Order, Product, ShippingAddress
 from wishlist.models import Wishlist
 
 # Create your views here.
@@ -21,7 +21,12 @@ from wishlist.models import Wishlist
 
 
 def landing_page(request):
-    return render(request, 'landing/index.html')
+    banner          = BannerManagement.objects.all()
+
+    context         = {
+        'banner':banner
+    }
+    return render(request, 'landing/index.html',context)
 
 
 def user_loginpage(request):
@@ -54,7 +59,7 @@ def home(request):
         customer = request.user
         print('customer')
         try:
-            order = Order.objects.get(account=customer, complete=False)
+            order,create = Order.objects.get_or_create(account=customer, complete=False)
             items = order.orderitems_set.all()
             cartItems = order.get_cart_items
             products = Product.objects.all()
@@ -132,7 +137,13 @@ def product_view(request, id):
                'order': order, 'cartItems': cartItems}
             return render(request, 'product_view.html', context)
         except:
+            order = Order.objects.get(account=customer, complete=False)
+            items = order.orderitems_set.all()
+            val = Product.objects.get(id=id)
+            cartItems = order.get_cart_items
+            context = {'key5': val,'cartItems': cartItems}
             print("An exception occurred")
+            return render(request, 'product_view.html', context)
 
     elif request.user is None:
         order = []
@@ -295,29 +306,59 @@ def address_edit(request,id):
 def order_userside(request,id):
     account              = Account.objects.get(id=id)
     orders               = OrderedItems.objects.filter(account=account)
+    order = Order.objects.get(account=account, complete=False)
+    items = order.orderitems_set.all()
+    cartItems = order.get_cart_items   
     context={
-        'orders':orders
+        'orders':orders,'cartItems':cartItems,
     }
     return render(request,'userprofile/user_orders.html',context)
 
-def add_wishlist(request,product_id,user_id):
+def add_wishlist(request,product_id,user_id,id):
     product                         = Product.objects.get(id=product_id)
     user                            = Account.objects.get(id=user_id)
     if Wishlist.objects.filter(product=product, account =user).exists():   
         wishlist                    = Wishlist.objects.filter(product=product,account=user)
         if wishlist:
             wishlist.delete()
-            return redirect(product_view)
+            if id == '1':
+                return redirect('product_view',product_id)
+            else:
+                return redirect('wishlists',user_id)
         else:
-            return redirect(product_view)
+            return redirect('wishlists',product_id)
     else:
         product                     = Product.objects.get(id=product_id)
         user                        = Account.objects.get(id=user_id)
         wishlist                    = Wishlist.objects.create(product=product,account=user)     
-        return redirect(product_view)
+        return redirect('product_view',product_id)
 
 def wishlist_userside(request,id):
-    return render(request,'userprofile/wishlist.html')
+    # try:
+    account = Account.objects.get(id=id)
+    wishlst = Wishlist.objects.filter(account=account)
+    try:
+        order = Order.objects.get(account=account, complete=False)
+        items = order.orderitems_set.all()
+        cartItems = order.get_cart_items   
+        context = {'cartItems': cartItems,'wishlst':wishlst}
+        return render(request,'userprofile/wishlist.html',context)
+    except:
+        print("An exception occurred")
+
+
+    
+    print(wishlst)
+    context ={
+        'wishlst':wishlst
+    }
+    return render(request,'userprofile/wishlist.html',context)
+    # except:
+    #     wishlst = []
+    #     context = {
+    #         'wishlst':wishlst
+    #     }
+
 
     
 

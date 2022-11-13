@@ -7,7 +7,7 @@
     <div class="container" style=" height:auto; display:flex; align-items:center;   text-align:center">
 {% for product in products %}
 
-<a href="{% url 'product_view' id=product.id %}" class="card pt-3" style="width: 17%;height: 83%;text-align:center; display:flex;flex-direction:column; align-items:center;justify-content:center; text-decoration: none; color:black;">
+<a href="{% url 'product_view' id=product.id %}" class="card pt-3 mx-2" style="width: 17%;height: 83%;text-align:center; display:flex;flex-direction:column; align-items:center;justify-content:center; text-decoration: none; color:black;">
     <div style="width:100%">
   <img src="/media/{{ product.image1 }}" class="card-img-top" alt="..." style="width:80%">
 

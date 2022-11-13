@@ -1,0 +1,35 @@
+{% extends 'base1.html' %}
+
+
+{% block content %}
+
+<section>
+    <center class="mt-5">
+        <div class=" card text-center " style="width:70%;height:300px;display:flex;align-items:center;color:black; padding-top: 5%; background-color: #03030345;" >
+        <form  class="container" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+   
+    <div class="form-outline container"style="width:100%;">
+        {% for field in banner_form %}
+           <label class="form-label"><strong>{{ field.label_tag }}</strong></label>
+           <div class="text-center">
+            {{ field }}
+           
+        </div>
+        {% endfor %}
+        <div class="d-flex justify-content-end mt-5">
+            <input class="btn border-danger d-flex justify-content-end" type="submit" value="add" style="margin-left: 10%;">
+        </div>
+    </div>
+
+    
+    
+        </form>
+            </div>
+    </center>
+    
+</section>
+
+
+
+{% endblock content %}

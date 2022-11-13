@@ -11,5 +11,6 @@ admin.site.register(SubCategory)
 admin.site.register(Order)
 admin.site.register(OrderItems)
 admin.site.register(ShippingAddress)
+admin.site.register(BannerManagement)
 
 
