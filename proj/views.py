@@ -225,12 +225,12 @@ def order_list(request):
 def cancel(request,id,val):
     pro = OrderedItems.objects.get(id=id)
     pro.active='Cancelled'
-
+    user_id = pro.account.id
     pro.save()
     if val == '1':
         return redirect('order_list')
     else:
-        return redirect(order_userside)
+        return redirect(order_userside,user_id)
 
 
 def order_view(request,id):

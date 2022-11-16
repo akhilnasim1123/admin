@@ -21,6 +21,8 @@ def cart(request):
         print('customer')
         order, created          = Order.objects.get_or_create(account=customer, complete=False)
         items                   = OrderItems.objects.all()
+        for i in items:
+            print(i.get_total)
         cartItems               = order.get_cart_items
         context = {'items': items, 'order': order,'cartItems': cartItems}
         return render(request, 'cart/cart.html', context)
@@ -85,7 +87,7 @@ def pay_page(request):
     if request.user.is_authenticated:
         print('authenticated')
         customer                        = request.user
-        order                           = Order.objects.get(account=customer)
+        order                           = Order.objects.get(account=customer,complete=False)
         items                           = order.orderitems_set.all()
         cartItems                       = order.get_cart_items
     else:
@@ -95,14 +97,15 @@ def pay_page(request):
 
         user_order                      = OrderedItems()
         add                             = ShippingAddress()
-        orItems,create                  = OrderItems.objects.get_or_create(order=order)
+        orItems                         = OrderItems.objects.filter(order=order)
+        
         add.address                     = request.POST.get('address')
         add.city                        = request.POST.get('city')
         add.state                       = request.POST.get('state')
         add.pincode                     = request.POST.get('pincode')
         add.account                     = customer
         add.order                       = order
-        order.payment_choices           = request.POST.get('cash_on_delivery')
+        order.payment_choices           = request.POST.get('PaymentMethod')
 
         track_no = order.account.first_name + str(random.randint(1111111, 9999999))
         while Order.objects.filter(tracking_no=track_no) is None:
@@ -113,34 +116,46 @@ def pay_page(request):
         if add.address == '' or add.city == '' or add.state == '' or add.pincode == '':
             messages.error(request, 'These Fields are Required')
             return redirect('shipping')
-        idd=orItems.product
-        
-
-        prod_qunt                       = Product.objects.get(id=orItems.product.id)
-        
-        user_order.account              = customer
-        user_order.order                = order
-        user_order.orderitems           = orItems
-        user_order.shippingaddress      = add
-        user_order.payment              = order.payment_choices
-        user_order.quantity             = orItems.quantity
-        prod_qunt.quantity              -= user_order.quantity
-        user_order.price                = order.get_cart_total
-        user_order.product              = prod_qunt
-       
-        add.save()
-        user_order.save()
 
         
-        prod_qunt.save()
-        product                         = OrderItems.objects.get(order=order)
+        if orItems.exists():
+            for i in orItems:
+                orItemss = i
+                prod_qunt                       = Product.objects.get(id=orItemss.product.id)
+        
+                user_order.account              = customer
+                user_order.order                = order
+                user_order.orderitems           = orItemss
+                user_order.shippingaddress      = add
+                user_order.payment              = order.payment_choices
+                user_order.quantity             = orItemss.quantity
+                prod_qunt.quantity              -= user_order.quantity
+                user_order.price                = order.get_cart_total
+                user_order.product              = prod_qunt
+                user_order.payment_id           = request.POST.get('payment_id')
+
+            
+                add.save()
+                user_order.save()
+
+        
+                prod_qunt.save()
+
+
+
+
+        product                         = OrderItems.objects.filter(order=order)
         product.delete()
-
+        if (user_order.payment == 'Paid by Razorpay' or user_order.payment == 'Paid by Paypal'):
+                    return JsonResponse({'status':'Your order has been placed successfully'})
 
 
         context = {'cartItems': cartItems}
         return render(request, 'shipping/success.html',context)
     order                               = Order.objects.get(account=customer, complete=False)
+    if (user_order.payment == 'Paid by Razorpay'):
+                    return JsonResponse({'status':'Your order has been placed successfully'})
+
     items                               = order.orderitems_set.all()
     cartItems                           = order.get_cart_items
     context                             = {'cartItems': cartItems}
@@ -157,6 +172,18 @@ def deletecart(request,id,value):
         return redirect(cart)
     else:
         return redirect(shoppingaddress)
+
+
+def razorpay(request):
+    cartitems = Order.objects.get(account=request.user)
+    total_price = cartitems.get_cart_total
+    
+    return JsonResponse({
+        'total_price':total_price
+    })
+def success(request):
+    return render(request,'shipping/success.html')
+
 
 
 

@@ -42,7 +42,7 @@
 
               </div>
               <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                <h5 class="mb-0">₹{{ item.get_total|floatformat:2 }}/-</h5>
+                <h5 class="mb-0">₹{{ item.get_total }}/-</h5>
               </div>
               <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                 <a href="{% url 'deletecart' item.id '1' %}" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>

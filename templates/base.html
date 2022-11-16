@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     {% load static %}
+    <script src="{% static 'js/checkout.js' %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/fontawesome.min.css" integrity="sha384-z4tVnCr80ZcL0iufVdGQSUzNvJsKjEtqYZjiQrrYKlpGow+btDHDfQWkFjoaz/Zr" crossorigin="anonymous">
@@ -118,6 +119,14 @@
     }
     const csrftoken = getToken('csrftoken');
     </script>
+
+    {% block scripts %} 
+
+
+
+    {% endblock scripts %}
+
+    <script src="{% static 'js/checkout.js' %}"></script>
 
 
 </body>

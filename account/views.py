@@ -290,10 +290,10 @@ def address_view(request,id):
     return render(request,'userprofile/address_view.html',context)
 
 
-def delete_address(request,id):
+def delete_address(request,id,user_id):
     delete                              = ShippingAddress.objects.filter(id=id)
     delete.delete()
-    return redirect(address_view)
+    return redirect(address_view,user_id)
 def address_edit(request,id):
     details = ShippingAddress.objects.get(id=id)
     details.address = request.POST.get('address')
@@ -305,7 +305,7 @@ def address_edit(request,id):
 
 def order_userside(request,id):
     account              = Account.objects.get(id=id)
-    orders               = OrderedItems.objects.filter(account=account)
+    orders               = OrderedItems.objects.filter(account=account).order_by('id')
     order = Order.objects.get(account=account, complete=False)
     items = order.orderitems_set.all()
     cartItems = order.get_cart_items   

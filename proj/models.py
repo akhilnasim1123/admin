@@ -40,18 +40,14 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    PAYMENT_CHOICES = [
-        ('razer pay', 'razer pay'),
-        ('cash on delivery', 'cash on delivery'),
-        ('paypal', 'paypal')
 
-    ]
     account                 = models.ForeignKey(Account, on_delete=models.SET_NULL, blank=True, null=True)
     date_order              = models.DateTimeField(auto_now_add=True)
     complete                = models.BooleanField(default=False, null=True, blank=False)
-    payment_choices         = models.CharField(max_length=100, choices=PAYMENT_CHOICES, default='cash on delivery')
+
     transaction_id          = models.CharField(max_length=200, null=True)
     tracking_no             = models.CharField(max_length=150, null=True)
+
 
     def __str__(self):
         return '{} - {}'.format(self.id, self.tracking_no)

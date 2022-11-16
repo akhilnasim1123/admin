@@ -8,8 +8,10 @@ from proj.models import *
 
 class OrderedItems(models.Model):
     status_choices ={
-        ('accepted','accepted'),
-        ('pending','pending')
+        ('pending','pending'),
+        ('out for shipping','out for shipping'),
+        ('completed','completed'),
+
     }
     product                     = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     account                     = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
@@ -17,11 +19,11 @@ class OrderedItems(models.Model):
     orderitems                  = models.ForeignKey(OrderItems,on_delete=models.SET_NULL,blank=True,null=True)
     status                      = models.CharField(max_length=20,choices=status_choices, default='pending')
     shippingaddress             = models.ForeignKey(ShippingAddress, on_delete=models.CASCADE,blank=True,null=True)
-    payment                     = models.CharField(max_length=20,blank=True, null=True)
+    payment                     = models.CharField(max_length=120,null=False)
     quantity                    = models.IntegerField(blank=True, null=True)
     active                      = models.CharField(max_length=20,default='ordered')
     price                       = models.CharField(max_length=40,blank=True, null=True)
-
+    payment_id                  = models.CharField(max_length=100,blank=True,null=True)
 
     def __str__(self):
         return str(self.account)

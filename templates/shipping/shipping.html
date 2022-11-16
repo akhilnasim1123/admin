@@ -59,7 +59,7 @@ input [type=text]{
                                 <h5 class="fw-normal mb-0">{{ item.quantity }}</h5>
                               </div>
                               <div style="width: 120px;">
-                                <h5 class="mb-0">₹{{ order.get_cart_total|floatformat:2 }}/-</h5>
+                                <h5 class="mb-0">₹{{ item.get_total|floatformat:2 }}/-</h5>
                               </div>
                               <a href="{% url 'deletecart' item.id '2' %} " style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
                             </div>
@@ -117,14 +117,14 @@ input [type=text]{
                               {% endfor %}
                             <div class="form-outline form-white">
                                   <input name="name" type="text" class="form-control form-control-lg"
-                                    placeholder="{{ order.account.first_name }}"  maxlength="19" value="{{ order.account.first_name}}"/>
+                                    placeholder=""  maxlength="19" value=""/>
                                   <label class="form-label">Name</label>
                                 </div>
 
 
                              <div  class="form-outline form-white">
                                   <input name="phone" type="tel" class="form-control form-control-lg"
-                                    placeholder=""  maxlength="19" value="{{ order.account.phone}}"/>
+                                    placeholder=""  maxlength="19" value=""/>
                                   <label class="form-label">Phone Number</label>
                                 </div>
 
@@ -136,7 +136,7 @@ input [type=text]{
                             </div>
                             <div class="form-outline form-white mb-4">
                               <input name="city" type="text" id="typeText" class="form-control form-control-lg" siez="17"
-                                placeholder="City"  />
+                                placeholder="city"  />
                               <label class="form-label" for="typeText">City</label>
                             </div>
 
@@ -157,25 +157,6 @@ input [type=text]{
                               </div>
                             </div>
 
-               <div class="form-check h-200">
-                    <input class="form-check-input" type="radio" name="razer" id="flexRadioDefault1">
-                          <label class="form-check-label" for="flexRadioDefault1">
-                            Razer Pay
-                          </label>
-                        </div>
-                        <div class="form-check">
-                          <input class="form-check-input" type="radio" name="paypal" id="flexRadioDefault2" >
-                          <label class="form-check-label" for="flexRadioDefault2">
-                               Paypal
-
-                          </label>
-                        </div>
-                               <div class="form-check">
-                          <input class="form-check-input" type="radio" name="cash_on_delivery"  checked >
-                          <label class="form-check-label" for="flexRadioDefault2">
-                              Cash On Delivery
-                          </label>
-                        </div>
 
 
 
@@ -184,14 +165,25 @@ input [type=text]{
                           <hr class="my-4">
 
 
+
+
+
                           <button type="submit" class="btn text-white btn-block btn-lg" style="width: 100%;background-color: #387445">
                             <div class="d-flex justify-content-evenly">
                               <div><span>₹{{ order.get_cart_total|floatformat:2 }}/-</span></div>
-                              <div> <span>Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>
+                              <div> <span>COD Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>
                             </div>
                           </button>
+                          <button type="button" class="btn mt-2 text-white btn-secondary payWithRazorpay btn-block btn-lg" style="width: 100%;">
+                            <div class="d-flex justify-content-evenly">
+
+                              <div> <span>RazorPay <i class="fas fa-long-arrow-alt-right  ms-2"></i></span></div>
+                            </div>
+                          </button>
+                          <div class="mt-2" id="paypal-button-container"></div>
                               </form>
                                 {% endif %}
+
                         </div>
                       </div>
 
@@ -207,3 +199,90 @@ input [type=text]{
       </section>
 
 {% endblock content %}
+{% block scripts %} 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AU9bfhFhG6kK53IK6MsaXC0jJR6gpKiW1fvkculvVBm6Reb7hra5aQ0rgpBp3kPDQL-9tSta3Tu1RIIe&currency=USD"></script>
+
+<script>
+
+  paypal.Buttons({
+    
+    // Sets up the transaction when a payment button is clicked
+    
+    onClick : function(data,actions){
+
+      var fname = $("[name='name']").val();
+      var phone = $("[name='phone']").val();
+      var address = $("[name='address']").val();
+      var city = $("[name='City']").val();
+      var state = $("[name='state']").val();
+      var pincode = $("[name='pincode']").val();
+      var token = $("[name='csrfmiddlewaretoken']").val();
+  
+      if(fname == "" || phone == "" || address == "" || city == "" || state == "" || pincode == "")
+          {
+              swal("Alert!", "All fields are mandatory!","error"); 
+              return false;
+          }
+      else{
+              return true;
+
+  }
+
+    },
+    
+    createOrder: (data, actions) => {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '0.01' //'{{ order.get_cart_total|floatformat:2 }}' // Can also reference a variable or function
+          }
+        }]
+      });
+    },
+    // Finalize the transaction after payer approval
+    onApprove: (data, actions) => {
+      return actions.order.capture().then(function(orderData) {
+        // Successful capture! For dev/demo purposes:
+      console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+       alert(orderData.id)
+       // const transaction = orderData.purchase_units[0].payments.captures[0];
+       // alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+        // When ready to go live, remove the alert and show a success message within this page. For example:
+        // const element = document.getElementById('paypal-button-container');
+        // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+        // Or go to another URL:  actions.redirect('thank_you.html');       
+        data = {
+          "fname":fname,
+          "phone":phone,
+          "address":address,
+          "city":city,
+          "state":state,
+          "pincode":pincode,
+          "payment":"Paid by Paypal",
+          "payment_id":orderData.id,
+          csrfmiddlewaretoken:token
+
+          }
+          $.ajax({
+          type: "POST",
+          url: "/cart/payment",
+          data: data,
+          success: function (response) {
+              swal("Congratulations!", response.status,"success").then((value) => {
+                  window.location.href = '/cart/payment'
+                });
+              
+              
+              
+          }
+      });
+      
+      
+      });
+    }
+  }).render('#paypal-button-container');
+</script>
+
+{% endblock scripts %}
