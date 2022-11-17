@@ -95,41 +95,40 @@ def pay_page(request):
 
     if request.method == "POST":
 
-        user_order                      = OrderedItems()
         add                             = ShippingAddress()
-        orItems                         = OrderItems.objects.filter(order=order)
-        
+               
         add.address                     = request.POST.get('address')
         add.city                        = request.POST.get('city')
         add.state                       = request.POST.get('state')
         add.pincode                     = request.POST.get('pincode')
         add.account                     = customer
         add.order                       = order
-        order.payment_choices           = request.POST.get('PaymentMethod')
-
-        track_no = order.account.first_name + str(random.randint(1111111, 9999999))
+        track_no = 'akhil'+ str(random.randint(1111111, 9999999))
         while Order.objects.filter(tracking_no=track_no) is None:
             track_no = 'akhil' + str(random.randint(1111111, 9999999))
 
-        add.tracking_no                 = track_no
+        order.tracking_no                 = track_no
 
         if add.address == '' or add.city == '' or add.state == '' or add.pincode == '':
             messages.error(request, 'These Fields are Required')
             return redirect('shipping')
+        orItems                         = OrderItems.objects.filter(order=order)
 
         
-        if orItems.exists():
-            for i in orItems:
-                orItemss = i
+
+        for item in orItems:
+                user_order                      = OrderedItems()
+                user_order.payment              = request.POST.get('payment_mode')
+                orItemss = item
                 prod_qunt                       = Product.objects.get(id=orItemss.product.id)
-        
+
                 user_order.account              = customer
                 user_order.order                = order
                 user_order.orderitems           = orItemss
                 user_order.shippingaddress      = add
-                user_order.payment              = order.payment_choices
                 user_order.quantity             = orItemss.quantity
                 prod_qunt.quantity              -= user_order.quantity
+                user_order                      = request.POST.get('payment_mode')
                 user_order.price                = order.get_cart_total
                 user_order.product              = prod_qunt
                 user_order.payment_id           = request.POST.get('payment_id')
@@ -189,3 +188,17 @@ def success(request):
 
     
 
+
+
+
+                #     OrderedItems.objects.create(
+                
+                # order=order,
+                # product=item.product,
+                # price= order.get_cart_total,
+                # quantity             = item.quantity,
+                
+                # tracking_no     = order.tracking_no,
+                # shippingaddress = add,
+
+                # )

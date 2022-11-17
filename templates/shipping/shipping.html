@@ -172,6 +172,7 @@ input [type=text]{
                             <div class="d-flex justify-content-evenly">
                               <div><span>₹{{ order.get_cart_total|floatformat:2 }}/-</span></div>
                               <div> <span>COD Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>
+                            <input type="hidden" value="COD" name="payment_mode">
                             </div>
                           </button>
                           <button type="button" class="btn mt-2 text-white btn-secondary payWithRazorpay btn-block btn-lg" style="width: 100%;">
