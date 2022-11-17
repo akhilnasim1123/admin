@@ -78,15 +78,19 @@ def updateItem(request):
         order=order, product=product)
     print('hr')
     if action == 'add':
-        orderItem.quantity = (orderItem.quantity + 1)
+        if product.quantity<= 0 and orderItem.quantity > product.quantity:
+                messages.error(request,'Out of Stock')
+        else:
+            orderItem.quantity = (orderItem.quantity + 1)
+
 
     elif action == 'remove':
-        orderItem.quantity = (orderItem.quantity - 1)
+        if orderItem.quantity <= 0:
+            messages.error(request,'')
+        else:
+            orderItem.quantity = (orderItem.quantity - 1)
 
-    orderItem.save()
-
-    if orderItem.quantity <= 0:
-        orderItem.delete()
+    orderItem.save()  
     return JsonResponse('Item was Added', safe=False)
 
 
