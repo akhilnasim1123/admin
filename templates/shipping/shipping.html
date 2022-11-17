@@ -212,24 +212,25 @@ input [type=text]{
     // Sets up the transaction when a payment button is clicked
     
     onClick : function(data,actions){
-
-      var fname = $("[name='name']").val();
+      var name = $("[name='name']").val();
       var phone = $("[name='phone']").val();
+
       var address = $("[name='address']").val();
-      var city = $("[name='City']").val();
+      var city = $("[name='city']").val();
       var state = $("[name='state']").val();
       var pincode = $("[name='pincode']").val();
       var token = $("[name='csrfmiddlewaretoken']").val();
   
-      if(fname == "" || phone == "" || address == "" || city == "" || state == "" || pincode == "")
+      if(phone == "" || name == "" || address == "" || city == "" || state == "" || pincode == "")
           {
-              swal("Alert!", "All fields are mandatory!","error"); 
+              swal("Alert!", "All fields are mandatory!","error");
+  
               return false;
           }
       else{
               return true;
 
-  }
+         }
 
     },
     
@@ -254,8 +255,18 @@ input [type=text]{
         // const element = document.getElementById('paypal-button-container');
         // element.innerHTML = '<h3>Thank you for your payment!</h3>';
         // Or go to another URL:  actions.redirect('thank_you.html');       
+        var name = $("[name='name']").val();
+        var phone = $("[name='phone']").val();
+  
+        var address = $("[name='address']").val();
+        var city = $("[name='city']").val();
+        var state = $("[name='state']").val();
+        var pincode = $("[name='pincode']").val();
+        var token = $("[name='csrfmiddlewaretoken']").val();
+        
+        
         data = {
-          "fname":fname,
+          "name":name,
           "phone":phone,
           "address":address,
           "city":city,
@@ -263,17 +274,20 @@ input [type=text]{
           "pincode":pincode,
           "payment":"Paid by Paypal",
           "payment_id":orderData.id,
-          csrfmiddlewaretoken:token
 
-          }
+          csrfmiddlewaretoken:token,
+
+                             }
+
+
           $.ajax({
-          type: "POST",
-          url: "/cart/payment",
-          data: data,
-          success: function (response) {
-              swal("Congratulations!", response.status,"success").then((value) => {
-                  window.location.href = '/cart/payment'
-                });
+            type: "POST",
+            url: "/cart/payment",
+            data: data,
+            success: function (responseb) {
+                swal("Congratulations!", "Your Order is Placed","success").then((value) => {
+                    window.location.href = '/cart/success'
+                  });
               
               
               
