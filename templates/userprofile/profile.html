@@ -17,10 +17,11 @@
 </div>
 <hr>
 <div class="" style="">
-    <div class="card bg-light">
+    <div class="card bg-light border-dark">
         <div class="container">
-            <div class="container">
+            <div class="container d-flex">
             <h5 class="text-black "><span class="text-danger" style="width: 10%; font-size:40px;"><b>|</b></span>Genaral Inforamation</h5>
+            <a href="{% url 'editprofile' %}" style="text-decoration: none;" class="text-danger mt-4 mx-3" title="Edit Profile"><i class="fas fa-edit"></i></a>
         </div>
 
         <div class="mt-4 container">
@@ -37,9 +38,11 @@
         <div class="mx-4">
             <p><span><b> Email :</b></span> {{ data.account.email }}</p>
         </div>
+
+        <a href="{% url 'password_change' user.id %}" class="btn border-dark">Change password</a>
     </div>
             </div>
-            <div class="container mt-4">
+            <div class="container mt-4 ">
                 <h5 class="text-black"><span class="text-danger" style="width: 10%; font-size:40px;"><b>|</b></span>Address</h5>
             </div>
     <div class="mt-4 ">

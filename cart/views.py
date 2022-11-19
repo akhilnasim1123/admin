@@ -1,6 +1,7 @@
 # Create your views here.
 import json
 import random
+from random import randint
 
 from django.contrib import messages
 from django.http import JsonResponse
@@ -34,8 +35,8 @@ def cart(request):
     order = []
     items = []
     cartItems = []
-    
-    messages.error(request,'Cart is Empty')
+
+    messages.error(request, 'Cart is Empty')
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'cart/cart.html', context)
 
@@ -48,7 +49,8 @@ def shoppingaddress(request):
         order = Order.objects.get(account=customer, complete=False)
         items = order.orderitems_set.all()
         cartItems = order.get_cart_items
-        address = ShippingAddress.objects.filter(account=customer).order_by('id')
+        address = ShippingAddress.objects.filter(
+            account=customer).order_by('id')
 
     else:
         items = []
@@ -78,19 +80,18 @@ def updateItem(request):
         order=order, product=product)
     print('hr')
     if action == 'add':
-        if product.quantity<= 0 and orderItem.quantity > product.quantity:
-                messages.error(request,'Out of Stock')
+        if product.quantity <= 0 and orderItem.quantity > product.quantity:
+            messages.error(request, 'Out of Stock')
         else:
             orderItem.quantity = (orderItem.quantity + 1)
 
-
     elif action == 'remove':
         if orderItem.quantity <= 0:
-            messages.error(request,'')
+            messages.error(request, '')
         else:
             orderItem.quantity = (orderItem.quantity - 1)
 
-    orderItem.save()  
+    orderItem.save()
     return JsonResponse('Item was Added', safe=False)
 
 
@@ -113,26 +114,21 @@ def pay_page(request):
         account = customer
         order = order
 
-
-
-        
         track_no = 'akhil' + str(random.randint(1111111, 9999999))
         while Order.objects.filter(tracking_no=track_no) is None:
             track_no = 'akhil' + str(random.randint(1111111, 9999999))
 
         order.tracking_no = track_no
 
-        if address== '' or city == '' or state == '' or pincode == '':
+        if address == '' or city == '' or state == '' or pincode == '':
             messages.error(request, 'These Fields are Required')
             return redirect('shipping')
         orItems = OrderItems.objects.filter(order=order)
 
-
-
-
-        addrs = ShippingAddress.objects.filter(address=address, city=city, account=account).exists()
+        addrs = ShippingAddress.objects.filter(
+            address=address, city=city, account=account).exists()
         if addrs:
-            messages.error(request,'this address already exist')
+            messages.error(request, 'this address already exist')
         else:
             add = ShippingAddress()
             add.address = address
@@ -141,7 +137,15 @@ def pay_page(request):
             add.pincode = pincode
             add.account = customer
             add.order = order
-            add.save()
+            add_count = ShippingAddress.objects.filter(account=customer).count()
+            if add_count > 4:
+                dele= ShippingAddress.objects.filter(account=customer).reverse()
+                print(dele)
+                print(add_count)
+                dele.delete()
+                add.save()
+            else:
+                add.save()
         user_order = OrderedItems()
 
         for item in orItems:

@@ -20,11 +20,11 @@ input [type=text]{
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col">
               <div class="card">
-                <div class="card-body p-4">
+                <div class="card-body p-4 d-flex">
+<div class="d-flex">
+                  <div class="row " style="width: 100%;">
 
-                  <div class="row">
-
-                    <div class="col-lg-7">
+                    <div class="">
                       <h5 class="mb-3"><a href="#!" class="text-body"><i
                             class="fas fa-long-arrow-alt-left me-2"></i>Continue shopping</a></h5>
                       <hr>
@@ -68,35 +68,30 @@ input [type=text]{
                       </div>
  {% endfor %}
  {% if address %}
- {% for i in address %}
- <div class="text-center bg-light card mb-3">
-                            <div class="text-center bg-light card mb-3">
-                              <form action="{% url 'pay_page' %}" method="post">
-                                {% csrf_token %}
-                                          
+ 
+ <div class="mb-3">
+  <p><b>Address</b></p>
+  <hr>
+  {% for i in address %}          
                                <p>
-                                <input value="{{ i.address }}," type="text" class="bg-light" name="address" style="border-bottom: 0px  solid red;border:none;">
-                                <br>
-                                <input value="{{i.city}}," type="text" name="city" class="bg-light"style="border-bottom: 0px  solid red;border:none;">
-                                
-                                <input value="{{i.state}}," type="text" name="state" class="bg-light"style="border-bottom: 0px  solid red;border:none;">
-                                ,
-                                <input value="{{i.pincode}}," type="text" name="pincode" class="bg-light"style="border-bottom: 0px  solid red;border:none;">
-                                <input value="{{i.phone}}," type="tel" name="phone" class="bg-light"style="border-bottom: 0px  solid red;border:none;">
+                                    {{i.address}}<br>
+                                    {{i.city}},{{i.state}}
+                              </p>
                                
-                               </p>
-                              </div>
-                            <a  href=""><button type="submit" class="btn bg-danger text-center text-light">Checkout</button></a>
-                          </form>
+                               <input type="radio" id="address" name="address" value="i.id">
+                              <hr>
+                          {% endfor %}
+                        </div>
+                          {% endif %}
                           </div>
-                            {% endfor %}
-                            {% endif %}
+                            
+                            
                     </div>
                     
 
 
 
-                    <div class="col-lg-5">
+                    <div class="" style="width: 100%;">
 
                       <div class="card bg-dark text-white rounded-3">
                         <div class="card-body">
@@ -129,12 +124,12 @@ input [type=text]{
                                 </div>
 
 
-                            <div class="form-outline form-white mb-4">
+                            <div class="form-outline form-white">
                               <input name="address" type="text" id="typeName" class="form-control form-control-lg" siez="17"
                                 placeholder="Address" />
                               <label class="form-label" for="typeName">Address</label>
                             </div>
-                            <div class="form-outline form-white mb-4">
+                            <div class="form-outline form-white">
                               <input name="city" type="text" id="typeText" class="form-control form-control-lg" siez="17"
                                 placeholder="city"  />
                               <label class="form-label" for="typeText">City</label>
@@ -177,11 +172,15 @@ input [type=text]{
                           </button>
                           <button type="button" class="btn mt-2 text-white btn-secondary payWithRazorpay btn-block btn-lg" style="width: 100%;">
                             <div class="d-flex justify-content-evenly">
-
+                              <input type="hidden" value="Paid by Razorpay" name="payment_mode">
                               <div> <span>RazorPay <i class="fas fa-long-arrow-alt-right  ms-2"></i></span></div>
                             </div>
                           </button>
-                          <div class="mt-2" id="paypal-button-container"></div>
+                          <div class="mt-2">
+                          
+                          <div  id="paypal-button-container"></div>
+                          <input type="hidden" value="Paid by Razorpay" name="payment_mode">
+                        </div>
                               </form>
                                 {% endif %}
 
@@ -189,6 +188,7 @@ input [type=text]{
                       </div>
 
                     </div>
+                  </div>
 
                   </div>
 

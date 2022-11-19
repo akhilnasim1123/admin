@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{% if order %}
+
 
 <section class="h-100 gradient-custom">
     <div class="container py-5 h-100">
@@ -52,23 +52,21 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-2">
-                      <img src="/media/{{ i.orderitems.product.image1 }}"
+                      <img src="/media/{{ i.product.image1 }}"
                         class="img-fluid" alt="Phone">
                     </div>
-                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                      <p class="text-muted mb-0">{{ i.orderitems }}</p>
+                    <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0">{{ i.product }}</p>
                     </div>
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0 small">{{ i.account }}</p>
                     </div>
-                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                      <p class="text-muted mb-0 small"></p>
-                    </div>
+
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0 small">Qty:{{ i.quantity  }}</p>
                     </div>
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                      <p class="text-muted mb-0 small">₹{{ i.orderitems.get_total  }}</p>
+                      <p class="text-muted mb-0 small">₹{{ i.get_total }}</p>
                     </div>
                   </div>
                   <hr class="mb-4" style="background-color: #000000; opacity: 1;">
@@ -88,7 +86,9 @@
                       </div>
                     </div>
                   </div>
+       
                 </div>
+
               </div>
               {% endfor %}
 
@@ -109,7 +109,7 @@
       </div>
     </div>
   </section>
-  {% endif %}
+
 
   <style>
     .gradient-custom {

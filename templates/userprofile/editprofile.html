@@ -1,0 +1,25 @@
+{% extends 'base.html' %}{% load static %}
+
+{% block content %}
+<div class=" container ">
+<div class="text-center mt-5 border-dark card bg-light" style="width: 40%;height: 390px; margin-left: 25%;">
+<form action="{% url 'editprofile' %}" method="post">
+
+    <div class="">
+        <div class="bg-dark text-white mt-4 pt-1" style="height: 40px;">
+            <span><b>Edit Profile</b></span>
+        </div>
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="mt-3">
+<div class="">{{field}}</div>
+</div>
+   {% endfor %}
+   <input type="submit" class="mt-4 btn bg-dark text-white" value="Edit" style="width: 70%;">
+
+</div>
+</form>
+</div>
+</div>
+
+{% endblock content %}

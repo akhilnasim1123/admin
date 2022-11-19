@@ -1,6 +1,7 @@
 import random
-from random import random
-
+from random import randint
+import uuid
+from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -10,11 +11,14 @@ from django.urls import reverse
 from django.views.decorators.cache import never_cache
 from twilio.rest import Client
 
-from account.forms import AccountAuthenticationForm, RegistrationForm
-from account.models import Account
+from account.forms import AccountAuthenticationForm, RegistrationForm, UserEditForm
+from account.models import Account, Profile
 from cart.models import OrderedItems
 from proj.models import BannerManagement, Category, Order, Product, ShippingAddress
 from wishlist.models import Wishlist
+from account.helpers import *
+from .helpers import send_forget_password_mail
+
 
 # Create your views here.
 
@@ -189,9 +193,11 @@ def verify_otp(request):
         re_otp = request.POST.get('otp')
         ge_otp = obj.Otp
         if re_otp == ge_otp:
-            # user = Account.objects.get(phone=obj.phone)
-            # if request.user.is_superuser is False:
-            #     login(request, user)
+            user = Account.objects.filter(phone=obj.phone).first()
+            
+            if request.user.is_superuser is False:
+                login(request, user)
+            # login(request,request.user)
             return redirect('home')
         else:
             messages.error(request, "Invalid Otp")
@@ -206,10 +212,10 @@ class OtpGenerate():
     phone = None
 
     def send_otp(phone_number):
-        account_sid = 'ACe7b9b69f043dc2db7caf7eede2ec925e'
-        auth_token = '24b116899b1df7deba1f553db2f05217'
+        account_sid = settings.ACCOUNT_SID
+        auth_token = settings.AUTH_TOKEN
         target_number = '+91' + phone_number
-        twilio_number = '+12183192744'
+        twilio_number = '+17199744556'
         otp = random.randint(1000, 9999)
         OtpGenerate.Otp = str(otp)
         OtpGenerate.phone = phone_number
@@ -368,3 +374,95 @@ def wishlist_userside(request, id):
 #     user_data = RegistrationForm()
 #     return render(request, 'users.html', {'key1': user_data})
 # # return redirect('register')
+
+# def forgotpassword(request):
+#     try:
+#         if request.method == 'POST':
+#             email = request.POST.get('email')
+#             if not Account.objects.filter(email=email).first():
+#                 messages.error(request,'not user found with this email')
+#                 return redirect('/forgot-password')
+#             user_obj=Account.objects.get(email=email)
+            
+#             print(user_obj)
+#             token=str(uuid.uuid4())
+#             account, create=Profile.objects.get_or_create(user=user_obj)
+#             account.forget_password_token=token
+#             account.save()
+#             print(account.forget_password_token)
+#             print(user_obj.email)
+#             send_forget_password_mail(user_obj.email, token)
+#             messages.error(request,'An email is sent')
+#             return redirect('/forgot-password')
+
+
+    
+#     except Exception as e:
+#         print(e)
+
+
+
+#     return render(request,'forgot/forgottpassword.html')
+
+
+# def changepassword(request,token):
+
+#     context ={}
+#     try:
+#         account = Account.objects.filter(forgot_password_token = token).first()
+#         print(account)
+
+#     except Exception as e:
+#         print(e)
+
+
+#     return render(request,'forgot/changepassword.html')
+
+
+def password_change(request,id):
+    if request.method == 'POST':
+        currentpass = request.POST.get('currentpass')
+        newpass = request.POST.get('newpass')
+        repeatpass = request.POST.get('repeatpass')
+        print(id)
+        user = Account.objects.filter(id=id,password=currentpass).exists()
+        if user is not None:
+            print(user)
+            if newpass == repeatpass:
+                change = Account.objects.get(id=id)
+                newpass = make_password(newpass)
+                change.password = newpass
+                print('error')
+                print(change.password)
+                change.save()
+                return redirect(user_profile,id)
+            else:
+                messages.error('password not match')
+        else:
+            messages.error(request,'Current Password is Incorrect')
+            
+
+    return render(request,'userprofile/changepassword.html')
+
+
+
+
+
+def editProfile(request):
+    form = UserEditForm()
+    instance = Account.objects.get(email=request.user)
+    
+    if request.method == "POST":
+        form = UserEditForm(request.POST,instance=instance)
+        if form.is_valid():
+            print(request.user)
+
+            form.save()
+            id=instance.id
+            
+            return redirect('userprofile',id)
+
+   
+    form = UserEditForm(instance=instance)
+    return render(request,'userprofile/editprofile.html',{'form':form})
+

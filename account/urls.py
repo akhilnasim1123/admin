@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-
+from django.contrib.auth import views as auth_views
 from account import views
 
 urlpatterns = [
@@ -23,6 +23,9 @@ urlpatterns = [
     path('user-orders/<int:id>',views.order_userside,name='order_userside'),
     path('add-wishlist/<int:product_id>/<int:user_id>/<int:id>',views.add_wishlist,name='add_wishlist'),
     path('wishlists/<int:id>',views.wishlist_userside,name='wishlists'),
-    
-   
+
+    path('edit-profile',views.editProfile,name='editprofile'),
+    path('password-change/<int:id>',views.password_change,name='password_change'),
+
+
 ]

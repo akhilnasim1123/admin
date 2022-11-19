@@ -63,10 +63,17 @@
 
           </form>
       </td>
-        <td>
-           
-
-        </td>
+      <td class="">
+        <div >
+        {% if i.active == 'ordered' %}
+        <form name="editform" action="{% url 'cancel' i.id '1' %}" method="post">
+          {% csrf_token %}
+          <input class="btn bg-danger text-white" type="submit" name="Edit" value="Cancel">
+      
+      </form>
+      {% endif %}
+      </div>
+      </td>
     </tr>
 
   </tbody>
@@ -79,4 +86,4 @@
         </div>
     </div>
 
-{% endblock %}
+{% endblock content%}

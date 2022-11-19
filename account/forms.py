@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
+from django.forms import EmailInput, TextInput
 from phonenumber_field.formfields import PhoneNumberField
 
 from account.models import Account
@@ -29,3 +30,34 @@ class AccountAuthenticationForm(forms.ModelForm):
     #         password = self.cleaned_data['password']
     #         if not authenticate(email=email, password=password):
     #             raise forms.ValidationError('invalid login')
+
+
+class UserEditForm(forms.ModelForm):
+     class Meta:
+        model=Account
+        fields = ('first_name','last_name','email','phone')
+        widgets = {
+            'first_name': TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;margin-left:15%;',
+                'placeholder': 'First Name'
+                }),
+            'email': EmailInput(attrs={
+                'class': "form-control", 
+                'style': 'max-width: 300px;margin-left:15%;',
+                'placeholder': 'Email'
+                }),
+            'last_name': TextInput(attrs={
+            'class': "form-control", 
+            'style': 'max-width: 300px;margin-left:15%;',
+            'placeholder': 'Last Name'
+            }),
+            'phone': TextInput(attrs={
+            'class': "form-control", 
+            'style': 'max-width: 300px;margin-left:15%;',
+            'placeholder': 'Last Name'
+            })
+
+
+        }
+

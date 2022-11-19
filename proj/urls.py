@@ -35,7 +35,8 @@ urlpatterns = [
     path('orders',views.order_list,name='order_list'),
     path('cancel/<int:id><int:val>',views.cancel,name='cancel'),
     path('orders-details/<int:id>',views.order_view,name='order_view'),
-    path('banner',views.banner,name='banner')
+    path('banner',views.banner,name='banner'),
+    path('dashboard',views.dashboard,name='dashboard'),
 
 
 ]

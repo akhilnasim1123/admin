@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
+
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,9 +84,9 @@ WSGI_APPLICATION = 'webapplication.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'projectData',
-        'USER': 'postgres',
-        'PASSWORD': '2134',
+        'NAME': env('NAME'),
+        'USER': env('USER'),
+        'PASSWORD': env('PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -136,3 +141,17 @@ MEDIA_URL = '/media/'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
+#SMTP Confiquration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = 'True'
+EMAIL_PORT = 587
+EMAIL_HOST_USER =env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+ACCOUNT_SID = env('account_sid')
+AUTH_TOKEN = env('auth_token')
+
+
+
+

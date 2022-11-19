@@ -33,4 +33,6 @@ class OrderedItems(models.Model):
     def __str__(self):
         return str(self.account)
 
-
+    def get_total(self):
+        total = self.product.price * self.quantity
+        return total

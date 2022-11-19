@@ -44,12 +44,20 @@ class Account(AbstractUser):
     email                       = models.EmailField(max_length=100, unique=True)
     first_name                  = models.CharField(max_length=100)
     last_name                   = models.CharField(max_length=100)
-    phone                       = models.CharField(max_length=14)
-
+    phone                       = models.CharField(max_length=14) 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(Account,on_delete=models.CASCADE)
+    forget_password_token = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.first_name
 
 
 
