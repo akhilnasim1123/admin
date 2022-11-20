@@ -22,10 +22,26 @@ def cart(request):
         print('customer')
         order, created = Order.objects.get_or_create(
             account=customer, complete=False)
-        items = OrderItems.objects.all()
-        for i in items:
-            print(i.get_total)
+        items = OrderItems.objects.all().order_by('id')
+        # for i in items:
+        #     print(i.get_total)
         cartItems = order.get_cart_items
+        itm = OrderItems.objects.filter(account=customer)
+
+        # count = itm.product.quantity
+        # price= itm.product.price
+        # print(count)
+        for i in itm:
+           count = i.product.quantity
+           price = i.product.price
+           pro_id=i.product.id
+           print(count)
+           print(price)
+           print(pro_id)
+        
+
+
+        
         context = {'items': items, 'order': order, 'cartItems': cartItems}
         return render(request, 'cart/cart.html', context)
     elif request.user is None:
@@ -52,6 +68,9 @@ def shoppingaddress(request):
         address = ShippingAddress.objects.filter(
             account=customer).order_by('id')
 
+        
+        
+
     else:
         items = []
         order = {'get_cart_items': 0, 'get_cart_total': 0, }
@@ -59,7 +78,8 @@ def shoppingaddress(request):
         address = []
 
         print('in else')
-
+    # itm = OrderItems.objects.filter(account=customer)
+    # count =itm.product.quantity
     context = {'items': items, 'order': order,
                'cartItems': cartItems, 'address': address}
     return render(request, 'shipping/shipping.html', context)
@@ -67,6 +87,7 @@ def shoppingaddress(request):
 
 def updateItem(request):
     data = json.loads(request.body)
+    print(data)
     productId = data['productId']
     action = data['action']
     print('Action:', action)
@@ -78,7 +99,7 @@ def updateItem(request):
 
     orderItem, created = OrderItems.objects.get_or_create(
         order=order, product=product)
-    print('hr')
+
     if action == 'add':
         if product.quantity <= 0 and orderItem.quantity > product.quantity:
             messages.error(request, 'Out of Stock')
@@ -149,7 +170,7 @@ def pay_page(request):
         user_order = OrderedItems()
 
         for item in orItems:
-
+            
             user_order.payment = request.POST.get('payment_mode')
             orItemss = item
             prod_qunt = Product.objects.get(id=orItemss.product.id)
@@ -160,7 +181,6 @@ def pay_page(request):
 
             user_order.quantity = orItemss.quantity
             prod_qunt.quantity -= user_order.quantity
-            user_order.payment = request.POST.get('payment_mode')
             user_order.price = order.get_cart_total
             user_order.product = prod_qunt
             user_order.payment_id = request.POST.get('payment_id')
@@ -172,7 +192,7 @@ def pay_page(request):
         product = OrderItems.objects.filter(order=order)
         product.delete()
         if user_order.payment == 'Paid by Razorpay' or user_order.payment == 'Paid by Paypal':
-            return JsonResponse({"status": "Your order has been placed successfully"})
+            return JsonResponse({"status:success"})
 
         context = {'cartItems': cartItems}
         return render(request, 'shipping/success.html', context)

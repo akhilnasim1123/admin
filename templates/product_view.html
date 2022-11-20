@@ -24,6 +24,7 @@
     <div class="d-flex justify-content-between">
    
 <button data-product="{{ key5.id }}" data-action="add" type="button" class="update-cart btn btn-dark btn-block btn-lg " data-mdb-ripple-color="dark">Add to Cart</button>
+
 <div class=" mx-3 " style="width: auto;">
 
   {% if user.is_authenticated and wishlist.product.id == product.id %}
@@ -36,7 +37,11 @@
   <i class="bi bi-heart text-danger" style="font-size: 30px;"></i>
   {% endif %}
 </div>
+
 </div>
+{%for message in messages%}
+<p class="text-danger mt-4"> {{message}}</p>
+{%endfor%}
 
     <div class="mt-5">
   <p>{{ key5.desc }}</p>

@@ -136,6 +136,8 @@ def product_view(request, id):
             cartItems = order.get_cart_items
             val = Product.objects.get(id=id)
             wishlist = Wishlist.objects.get(Product=val, account=customer)
+            if val.quantity<0:
+                messages.error(request,'Out Of Stock')
 
             context = {'key5': val, 'items': items, 'wishlist': wishlist,
                        'order': order, 'cartItems': cartItems}
@@ -144,6 +146,8 @@ def product_view(request, id):
             order = Order.objects.get(account=customer, complete=False)
             items = order.orderitems_set.all()
             val = Product.objects.get(id=id)
+            if val.quantity<0:
+                messages.error(request,'Out Of Stock')
             cartItems = order.get_cart_items
             context = {'key5': val, 'cartItems': cartItems}
             print("An exception occurred")

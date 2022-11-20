@@ -54,7 +54,7 @@ $(document).ready(function () {
                                 data: data,
                                 success: function (responseb) {
                                     swal("Congratulations!", "Your Order is Placed", "success").then((value) => {
-                                        window.location.href = '/cart/success'
+                                        window.location.href = '/'
                                     });
 
 

@@ -37,19 +37,28 @@
                 <div class="d-flex">
 
 						<div class="quantity">
-							<img data-product="{{ item.product.id }}" data-action="add" class="chg-quantity update-cart mt-5" src="{% static '/images/3+arrow-up.png' %}" style="width:10%;">
-   <p class="quantity mx-0">{{ item.quantity }}</p>
-							<img  data-product="{{ item.product.id }}" min=1 data-action="remove" class="chg-quantity update-cart" src="{% static  '/images/2+arrow-down.png' %}" style="width:10%;margin-top:-55px;">
-              {%for message in messages%}
-              <p class="text-danger"> {{message}}</p>
-            {%endfor%}
+              <div class="quantity-field" ><h2></h2>
+
+                <button 
+                  class="value-button decrease-button btn border-dark" 
+                  onclick="decreaseValue(this,`{{item.product.id}}`,`{{item.product.quantity}}`,`{{item.product.price}}`)"
+                  title="Azalt" data-action="remove" style="width: 36px;">-</button>
+                  <div class="number" style="margin-left: 8px;">{{item.quantity}}</div>
+                <button 
+                  class="value-button increase-button btn border-dark" 
+                  onclick="increaseValue(this,`{{item.product.id}}`,`{{item.product.quantity}}`,`{{item.product.price}}`)"
+                  title="Arrtır" data-action="add"
+                  >+
+                </button>
+              </div>
+
             </div>
 
 </div>
 
               </div>
               <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                <h5 class="mb-0">₹{{ item.get_total }}/-</h5>
+                <h5 class="mb-0">₹<span id="{{item.product.id}}">{{ item.get_total }}</span>/-</h5>
               </div>
               <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                 <a href="{% url 'deletecart' item.id '1' %}" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
@@ -67,13 +76,13 @@
           </div>
                <div class="" >
 
-                <h5 class="mb-0">Items: {{ order.get_cart_items }}</h5>
+                <h5 class="mb-0">Items: <span id="totalquantity">{{ order.get_cart_items }}</span></h5>
 
             </div>
 
             <div class="" >
 
-                <h5 class="mb-0">₹ {{ order.get_cart_total }}</h5>
+                <h5 class="mb-0">₹ <span id="carttotalprice">{{ order.get_cart_total }}</span></h5>
 
             </div>
             </div>
@@ -158,6 +167,72 @@ body {
     background-color: #4466f2!important;
     border-color: #4466f2!important;
 }
+.quantity-field {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px; 
+  height: 40px;
+  margin: 0 auto;    
+}
+
+.quantity-field .value-button{ 
+  border: 1px solid #ddd;
+  margin: 0px;
+  width: 40px;
+  height: 100%;   
+  padding: 0;
+  background: #eee; 
+  outline: none;
+  cursor: pointer;
+}
+
+.quantity-field .value-button:hover {
+  background: rgb(230, 230, 230);
+}
+
+.quantity-field .value-button:active{
+  background: rgb(210, 210, 210);
+}
+
+.quantity-field .decrease-button {
+  margin-right: -4px;
+  border-radius: 8px 0 0 8px;
+}
+
+.quantity-field .increase-button {
+  margin-left: -4px;
+  border-radius: 0 8px 8px 0;
+}
+ 
+.quantity-field .number{
+  display: inline-block;
+  text-align: center;
+  border: none;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin: 0px;
+  width: 40px;
+  height: 100%;
+  line-height: 40px;
+  font-size: 11pt;
+  box-sizing: border-box; 
+  background: white;
+  font-family: calibri;
+}
+
+.quantity-field .number::selection{
+  background: none;
+}
+
+/*
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+*/
+
 </style>
 {%endif%}
 {% endblock content %}
