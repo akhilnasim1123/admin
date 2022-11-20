@@ -4,14 +4,14 @@ $(document).ready(function () {
 
 
         var phone = $("[name='phone']").val();
-        var fname = $("[name='name']").val();
+        var name = $("[name='name']").val();
         var address = $("[name='address']").val();
         var city = $("[name='city']").val();
         var state = $("[name='state']").val();
         var pincode = $("[name='pincode']").val();
         var token = $("[name='csrfmiddlewaretoken']").val();
 
-        if (phone == "" || fname == "" || address == "" || city == "" || state == "" || pincode == "") {
+        if (phone == "" || name == "" || address == "" || city == "" || state == "" || pincode == "") {
             swal("Alert!", "All fields are mandatory!", "error");
 
             return false;
@@ -36,15 +36,14 @@ $(document).ready(function () {
                         "handler": function (responses) {
                             alert(responses.razorpay_payment_id);
                             data = {
-                                "fname": fname,
+                                "name": name,
                                 "phone": phone,
                                 "address": address,
                                 "city": city,
                                 "state": state,
                                 "pincode": pincode,
-                                "payment": "Paid by Razorpay",
+                                "payment_mode":"Paid by Razorpay",
                                 "payment_id": responses.razorpay_payment_id,
-
                                 csrfmiddlewaretoken: token,
 
                             }
@@ -54,10 +53,8 @@ $(document).ready(function () {
                                 data: data,
                                 success: function (responseb) {
                                     swal("Congratulations!", "Your Order is Placed", "success").then((value) => {
-                                        window.location.href = '/'
+                                        window.location.href = '/cart/success'
                                     });
-
-
 
                                 }
                             });
@@ -66,7 +63,7 @@ $(document).ready(function () {
 
 
                         "prefill": {
-                            "name": fname,
+                            "name": name,
 
                             "contact": phone
                         },

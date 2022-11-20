@@ -225,7 +225,15 @@ def order_list(request):
 
 def cancel(request, id, val):
     pro = OrderedItems.objects.get(id=id)
+    product = Product.objects.get(id=pro.product.id)
     pro.active = 'Cancelled'
+    # for qnty in product:
+    #     qnty.quantity = qnty.quantity + pro.quantity
+    #     print(qnty.quantity)
+    #     qnty.save()
+    product.quantity = product.quantity + pro.quantity
+    
+    product.save()
     user_id = pro.account.id
     pro.save()
     if val == '1':

@@ -32,16 +32,13 @@ def cart(request):
         # price= itm.product.price
         # print(count)
         for i in itm:
-           count = i.product.quantity
-           price = i.product.price
-           pro_id=i.product.id
-           print(count)
-           print(price)
-           print(pro_id)
-        
+            count = i.product.quantity
+            price = i.product.price
+            pro_id = i.product.id
+            print(count)
+            print(price)
+            print(pro_id)
 
-
-        
         context = {'items': items, 'order': order, 'cartItems': cartItems}
         return render(request, 'cart/cart.html', context)
     elif request.user is None:
@@ -67,9 +64,6 @@ def shoppingaddress(request):
         cartItems = order.get_cart_items
         address = ShippingAddress.objects.filter(
             account=customer).order_by('id')
-
-        
-        
 
     else:
         items = []
@@ -158,9 +152,11 @@ def pay_page(request):
             add.pincode = pincode
             add.account = customer
             add.order = order
-            add_count = ShippingAddress.objects.filter(account=customer).count()
+            add_count = ShippingAddress.objects.filter(
+                account=customer).count()
             if add_count > 4:
-                dele= ShippingAddress.objects.filter(account=customer).reverse()
+                dele = ShippingAddress.objects.filter(
+                    account=customer).reverse()
                 print(dele)
                 print(add_count)
                 dele.delete()
@@ -170,8 +166,7 @@ def pay_page(request):
         user_order = OrderedItems()
 
         for item in orItems:
-            
-            user_order.payment = request.POST.get('payment_mode')
+
             orItemss = item
             prod_qunt = Product.objects.get(id=orItemss.product.id)
 
@@ -184,6 +179,7 @@ def pay_page(request):
             user_order.price = order.get_cart_total
             user_order.product = prod_qunt
             user_order.payment_id = request.POST.get('payment_id')
+            user_order.payment = request.POST.get('payment_mode')
 
             user_order.save()
 
@@ -191,8 +187,10 @@ def pay_page(request):
 
         product = OrderItems.objects.filter(order=order)
         product.delete()
-        if user_order.payment == 'Paid by Razorpay' or user_order.payment == 'Paid by Paypal':
-            return JsonResponse({"status:success"})
+
+        payMode = request.POST.get('payment_mode')
+        if (payMode == 'Paid by Razorpay' or payMode == 'Paid by Paypal'):
+            return JsonResponse({"status": "success"})
 
         context = {'cartItems': cartItems}
         return render(request, 'shipping/success.html', context)
