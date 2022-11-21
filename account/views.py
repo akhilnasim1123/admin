@@ -95,11 +95,17 @@ def login_page(request):
         password = request.POST.get('password')
         user = authenticate(email=email, password=password)
         if user is not None:
-            dat = Account.objects.get(email=email, is_superuser=False)
-            print('success')
-            request.session['user_exist'] = dat.email
-            login(request, user)
-            return redirect('home')
+            dat = Account.objects.filter(email=email, is_superuser=False).exists()
+            if dat:
+
+                print('success')
+                request.session['user_exist'] = email
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, 'Invalid Details')
+                return redirect('loginpage')
+            
         elif email == '' and password == '':
             messages.error(request, 'Invalid Details')
             return redirect('loginpage')
@@ -313,7 +319,8 @@ def address_edit(request, id):
     details.state = request.POST.get('state')
     details.phone = request.POST.get('phone')
     details.save()
-    return redirect(address_view)
+    id = details.account.id
+    return redirect(address_view,id)
 
 
 def order_userside(request, id):

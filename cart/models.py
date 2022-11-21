@@ -28,11 +28,16 @@ class OrderedItems(models.Model):
     tracking_no                 = models.CharField(max_length=150,null=True)
 
 
+
    
+
    
     def __str__(self):
         return str(self.account)
+    
 
     def get_total(self):
         total = self.product.price * self.quantity
         return total
+    
+

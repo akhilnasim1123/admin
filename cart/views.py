@@ -160,6 +160,7 @@ def pay_page(request):
                 print(dele)
                 print(add_count)
                 dele.delete()
+                saddress = add
                 add.save()
             else:
                 add.save()
@@ -173,7 +174,7 @@ def pay_page(request):
             user_order.account = customer
             user_order.order = order
             user_order.orderitems = orItemss
-
+            # user_order.shippingaddress = saddress
             user_order.quantity = orItemss.quantity
             prod_qunt.quantity -= user_order.quantity
             user_order.price = order.get_cart_total

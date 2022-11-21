@@ -5,11 +5,13 @@ $(document).ready(function () {
 
         var phone = $("[name='phone']").val();
         var name = $("[name='name']").val();
+        var email = $("[name='email']").val();
         var address = $("[name='address']").val();
         var city = $("[name='city']").val();
         var state = $("[name='state']").val();
         var pincode = $("[name='pincode']").val();
         var token = $("[name='csrfmiddlewaretoken']").val();
+        console.log(email)
 
         if (phone == "" || name == "" || address == "" || city == "" || state == "" || pincode == "") {
             swal("Alert!", "All fields are mandatory!", "error");
@@ -53,7 +55,7 @@ $(document).ready(function () {
                                 data: data,
                                 success: function (responseb) {
                                     swal("Congratulations!", "Your Order is Placed", "success").then((value) => {
-                                        window.location.href = '/cart/success'
+                                        window.location.href = '/'
                                     });
 
                                 }
@@ -64,7 +66,7 @@ $(document).ready(function () {
 
                         "prefill": {
                             "name": name,
-
+                            "email":email,
                             "contact": phone
                         },
 
@@ -75,12 +77,7 @@ $(document).ready(function () {
                     var rzp1 = new Razorpay(options);
                     rzp1.on('payment.failed', function (response) {
                         alert(response.error.code);
-                        alert(response.error.description);
-                        alert(response.error.source);
-                        alert(response.error.step);
-                        alert(response.error.reason);
-                        alert(response.error.metadata.order_id);
-                        alert(response.error.metadata.payment_id);
+
                     });
 
                     rzp1.open();

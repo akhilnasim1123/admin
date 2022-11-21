@@ -36,7 +36,7 @@
 
 <td  class="pt-5">
     <div>
-  <form name="editform" action="" method="post">
+  <form name="editform" action="{% url 'product_view' i.product.id %}" method="post">
       {% csrf_token %}
       <input class="btn bg-success text-white" type="submit" name="Edit" value="View">
 

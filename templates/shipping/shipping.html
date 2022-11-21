@@ -112,6 +112,8 @@ input [type=text]{
 
                                 </div>
 
+                                <input type="email" value="{{order.account.email}}" name="email" hidden/>
+
 
                              <div  class="form-outline form-white mt-2">
                                   <input name="phone" type="tel" class="form-control "
@@ -273,9 +275,9 @@ input [type=text]{
             type: "POST",
             url: "/cart/payment",
             data: data,
-            success: function (responseb) {
+            success: function (responsea) {
                 swal("Congratulations!", "Your Order is Placed","success").then((value) => {
-                    window.location.href = '/cart/'
+                    window.location.href = '/'
                   });
               
               
