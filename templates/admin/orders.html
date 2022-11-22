@@ -31,15 +31,16 @@
                 <table class="table table-light text-dark">
   <thead>
     <tr>
- 
+      
+      <th scope="col">Custumer</th>
       <th scope="col">Product</th>
       <th scope="col">Price</th>
       <th scope="col">Quantity</th>
-        <th scope="col">Description</th>
-        <th></th>
-        <th scope="col"><div class="mt-4">
-
-</div></th>
+        <th scope="col">Status</th>
+        <th scope="col">Time</th>
+        <th scope="col " ></th>
+        <th scope="col " ></th>
+        <th scope="col " ></th>
 
 
     </tr>
@@ -51,10 +52,12 @@
     <tr>
 
       <td>{{ i.account }}</td>
-      <td>{{ i.orderitems.product }}</td>
+      <td>{{ i.product }}</td>
+      <td>{{ i.price }}</td>
         <td>{{ i.quantity }}</td>
-
-        <td>{{ i.active }}</td>
+        <td>{{ i.status }}</td>
+        <td>{{ i.ordered }}</td>
+        <td></td>
         
       <td>
           <form name="editform" action="{% url 'order_view' i.id %}" method="post">
@@ -65,7 +68,7 @@
       </td>
       <td class="">
         <div >
-        {% if i.active == 'ordered' %}
+        {% if i.status == 'pending' %}
         <form name="editform" action="{% url 'cancel' i.id '1' %}" method="post">
           {% csrf_token %}
           <input class="btn bg-danger text-white" type="submit" name="Edit" value="Cancel">

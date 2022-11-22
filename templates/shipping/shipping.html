@@ -153,6 +153,7 @@ input [type=text]{
 
                           <button type="submit" class="btn text-white btn-block " style="width: 100%;background-color: #387445">
                             <div class="d-flex justify-content-evenly">
+                              <input type="hidden" name="payment_mode" value="COD">
                               <div><span>₹{{ order.get_cart_total|floatformat:2 }}/-</span></div>
       <div> <span>COD Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>
                             

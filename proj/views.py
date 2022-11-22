@@ -226,7 +226,7 @@ def order_list(request):
 def cancel(request, id, val):
     pro = OrderedItems.objects.get(id=id)
     product = Product.objects.get(id=pro.product.id)
-    pro.active = 'Cancelled'
+    pro.status = 'Cancelled'
     # for qnty in product:
     #     qnty.quantity = qnty.quantity + pro.quantity
     #     print(qnty.quantity)
@@ -269,7 +269,7 @@ def banner(request):
 
 
 def dashboard(request):
-    cancel_data = OrderedItems.objects.filter(active='Cancelled').count()
+    cancel_data = OrderedItems.objects.filter(status='Cancelled').count()
     order_data = OrderedItems.objects.all().count()
     order = OrderedItems.objects.all()
     total_revenue = 0
@@ -279,7 +279,7 @@ def dashboard(request):
     paypal = OrderedItems.objects.filter(payment='Paid by Paypal').count()
     cash_on_delivery = OrderedItems.objects.filter(payment='COD').count()
     print(razorpay)
-    cancel = OrderedItems.objects.filter(active='Cancelled')
+    cancel = OrderedItems.objects.filter(status='Cancelled')
     refund = 0
     for money in cancel:
         refund = refund + int(money.price)

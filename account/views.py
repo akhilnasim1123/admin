@@ -95,7 +95,8 @@ def login_page(request):
         password = request.POST.get('password')
         user = authenticate(email=email, password=password)
         if user is not None:
-            dat = Account.objects.filter(email=email, is_superuser=False).exists()
+            dat = Account.objects.filter(
+                email=email, is_superuser=False).exists()
             if dat:
 
                 print('success')
@@ -105,7 +106,7 @@ def login_page(request):
             else:
                 messages.error(request, 'Invalid Details')
                 return redirect('loginpage')
-            
+
         elif email == '' and password == '':
             messages.error(request, 'Invalid Details')
             return redirect('loginpage')
@@ -142,8 +143,8 @@ def product_view(request, id):
             cartItems = order.get_cart_items
             val = Product.objects.get(id=id)
             wishlist = Wishlist.objects.get(Product=val, account=customer)
-            if val.quantity<0:
-                messages.error(request,'Out Of Stock')
+            if val.quantity < 0:
+                messages.error(request, 'Out Of Stock')
 
             context = {'key5': val, 'items': items, 'wishlist': wishlist,
                        'order': order, 'cartItems': cartItems}
@@ -152,8 +153,8 @@ def product_view(request, id):
             order = Order.objects.get(account=customer, complete=False)
             items = order.orderitems_set.all()
             val = Product.objects.get(id=id)
-            if val.quantity<0:
-                messages.error(request,'Out Of Stock')
+            if val.quantity < 0:
+                messages.error(request, 'Out Of Stock')
             cartItems = order.get_cart_items
             context = {'key5': val, 'cartItems': cartItems}
             print("An exception occurred")
@@ -204,7 +205,7 @@ def verify_otp(request):
         ge_otp = obj.Otp
         if re_otp == ge_otp:
             user = Account.objects.filter(phone=obj.phone).first()
-            
+
             if request.user.is_superuser is False:
                 login(request, user)
             # login(request,request.user)
@@ -264,12 +265,13 @@ def user_profile(request, id):
         cartItems = []
     else:
         return redirect(login_page)
-
+    user = Account.objects.get(id=id)
     data = ShippingAddress.objects.filter(account=id).first()
     cartItems = []
     datas = {
         'data': data,
         'cartItems': cartItems,
+        'user': user,
 
     }
     return render(request, 'userprofile/profile.html', datas)
@@ -296,7 +298,7 @@ def address_view(request, id):
         cartItems = []
 
     account = Account.objects.get(id=id)
-    datas = ShippingAddress.objects.filter(account=id)
+    datas = ShippingAddress.objects.filter(account=id).order_by('id')
     context = {
         'datas': datas,
         'cartItems': cartItems,
@@ -318,9 +320,10 @@ def address_edit(request, id):
     details.city = request.POST.get('city')
     details.state = request.POST.get('state')
     details.phone = request.POST.get('phone')
+    details.pincode=request.POST.get('pincode')
     details.save()
     id = details.account.id
-    return redirect(address_view,id)
+    return redirect(address_view, id)
 
 
 def order_userside(request, id):
@@ -394,7 +397,7 @@ def wishlist_userside(request, id):
 #                 messages.error(request,'not user found with this email')
 #                 return redirect('/forgot-password')
 #             user_obj=Account.objects.get(email=email)
-            
+
 #             print(user_obj)
 #             token=str(uuid.uuid4())
 #             account, create=Profile.objects.get_or_create(user=user_obj)
@@ -407,10 +410,8 @@ def wishlist_userside(request, id):
 #             return redirect('/forgot-password')
 
 
-    
 #     except Exception as e:
 #         print(e)
-
 
 
 #     return render(request,'forgot/forgottpassword.html')
@@ -430,50 +431,61 @@ def wishlist_userside(request, id):
 #     return render(request,'forgot/changepassword.html')
 
 
-def password_change(request,id):
+def password_change(request, id):
     if request.method == 'POST':
+
         currentpass = request.POST.get('currentpass')
         newpass = request.POST.get('newpass')
         repeatpass = request.POST.get('repeatpass')
-        print(id)
-        user = Account.objects.filter(id=id,password=currentpass).exists()
-        if user is not None:
-            print(user)
-            if newpass == repeatpass:
-                change = Account.objects.get(id=id)
-                newpass = make_password(newpass)
-                change.password = newpass
-                print('error')
-                print(change.password)
-                change.save()
-                return redirect(user_profile,id)
-            else:
-                messages.error('password not match')
+        if currentpass == '' or newpass == '' or repeatpass == '':
+            return redirect('password_change', id)
         else:
-            messages.error(request,'Current Password is Incorrect')
-            
+            print(id)
+            user = Account.objects.filter(id=id, password=currentpass).exists()
+            if user:
+                print(user)
+                if newpass == repeatpass:
+                    change = Account.objects.get(id=id)
+                    newpass = make_password(newpass)
+                    change.password = newpass
+                    print('error')
+                    print(change.password)
+                    change.save()
+                    return redirect(user_profile, id)
+                else:
+                    messages.error(request, 'password does not match')
+                    return redirect('password_change', id)
+            else:
+                messages.error(request, 'Current Password is Incorrect')
 
-    return render(request,'userprofile/changepassword.html')
-
-
-
+    return render(request, 'userprofile/changepassword.html')
 
 
 def editProfile(request):
     form = UserEditForm()
     instance = Account.objects.get(email=request.user)
-    
+
     if request.method == "POST":
-        form = UserEditForm(request.POST,instance=instance)
+        form = UserEditForm(request.POST, instance=instance)
         if form.is_valid():
             print(request.user)
 
             form.save()
-            id=instance.id
-            
-            return redirect('userprofile',id)
+            id = instance.id
 
-   
+            return redirect('userprofile', id)
+
     form = UserEditForm(instance=instance)
-    return render(request,'userprofile/editprofile.html',{'form':form})
+    return render(request, 'userprofile/editprofile.html', {'form': form})
 
+
+def order_details_user_side(request,id):
+    order = OrderedItems.objects.get(id=id)
+    payment=order.payment
+    payment_id=order.payment_id
+    context = {
+        'order':order,
+        'payment':payment,
+        'payment_id':payment_id,
+    }
+    return render(request,'userprofile/order_details.html',context)

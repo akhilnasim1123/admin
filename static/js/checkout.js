@@ -29,7 +29,7 @@ $(document).ready(function () {
 
                     var options = {
                         "key": "rzp_test_JgN88azXlg3vAo", // Enter the Key ID generated from the Dashboard
-                        "amount": 1 * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "amount": response.total_price*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                         "currency": "INR",
                         "name": "Torque.in",
                         "description": "Thank You For Buying From us",

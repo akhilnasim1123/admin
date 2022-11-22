@@ -29,14 +29,14 @@
             <div class="d-flex">
              
         <div class="mx-4">
-            <p><span><b> First Name :</b></span>{{ data.account.first_name }}</p>
+            <p><span><b> First Name :</b></span>{{ user.first_name }}</p>
            
         </div>
         <div class="mx-4">
-            <p><span><b> Last Name :</b></span> {{ data.account.last_name }}</p>
+            <p><span><b> Last Name :</b></span> {{ user.last_name }}</p>
         </div>
         <div class="mx-4">
-            <p><span><b> Email :</b></span> {{ data.account.email }}</p>
+            <p><span><b> Email :</b></span> {{ user.email }}</p>
         </div>
 
         <a href="{% url 'password_change' user.id %}" class="btn border-dark">Change password</a>

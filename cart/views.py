@@ -129,29 +129,34 @@ def pay_page(request):
         account = customer
         order = order
 
-        track_no = 'akhil' + str(random.randint(1111111, 9999999))
+        track_no = str(account.first_name)+str(random.randint(1111111, 9999999))
         while Order.objects.filter(tracking_no=track_no) is None:
-            track_no = 'akhil' + str(random.randint(1111111, 9999999))
+            track_no = str(account.first_name)+str(random.randint(1111111, 9999999))
 
         order.tracking_no = track_no
+        order.save()
 
         if address == '' or city == '' or state == '' or pincode == '':
             messages.error(request, 'These Fields are Required')
             return redirect('shipping')
         orItems = OrderItems.objects.filter(order=order)
 
+
+        #     messages.error(request, 'this address already exist')
+        # else:
+        add = ShippingAddress() 
+        add.address = address
+        add.city = city
+        add.state = state
+        add.pincode = pincode
+        add.account = customer
+        add.order = order
         addrs = ShippingAddress.objects.filter(
             address=address, city=city, account=account).exists()
         if addrs:
-            messages.error(request, 'this address already exist')
+            address_get = ShippingAddress.objects.get(address=address,city=city,account=account)
+            add = address_get
         else:
-            add = ShippingAddress()
-            add.address = address
-            add.city = city
-            add.state = state
-            add.pincode = pincode
-            add.account = customer
-            add.order = order
             add_count = ShippingAddress.objects.filter(
                 account=customer).count()
             if add_count > 4:
@@ -160,10 +165,12 @@ def pay_page(request):
                 print(dele)
                 print(add_count)
                 dele.delete()
-                saddress = add
                 add.save()
             else:
                 add.save()
+
+        saddress = add
+        
         user_order = OrderedItems()
 
         for item in orItems:
@@ -173,8 +180,8 @@ def pay_page(request):
 
             user_order.account = customer
             user_order.order = order
-            user_order.orderitems = orItemss
-            # user_order.shippingaddress = saddress
+            user_order.shippingaddress = saddress
+            user_order.tracking_no = track_no
             user_order.quantity = orItemss.quantity
             prod_qunt.quantity -= user_order.quantity
             user_order.price = order.get_cart_total

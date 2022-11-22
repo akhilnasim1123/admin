@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,117 +12,118 @@
     <script src="{% static 'js/checkout.js' %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/fontawesome.min.css" integrity="sha384-z4tVnCr80ZcL0iufVdGQSUzNvJsKjEtqYZjiQrrYKlpGow+btDHDfQWkFjoaz/Zr" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/fontawesome.min.css"
+        integrity="sha384-z4tVnCr80ZcL0iufVdGQSUzNvJsKjEtqYZjiQrrYKlpGow+btDHDfQWkFjoaz/Zr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
 
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-    </head>
+</head>
+
 <body>
     <header class="header">
         <div class="container">
-        <div class="head">
-            <div class="logo" style="width: 45%;  height: auto;">
-        <p><a href="{% url 'landing_page' %}" style="text-decoration: none;"><span class="t text-danger" >T</span><span class="text-black">orque</span></p></a>
-    </div>
-    <div class="content" style="width: 45%; height: auto;">
-        <div class="cont">
-        <div>
-            <a class="headcontent" href="{% url 'home' %}">Online Store</a>
-        </div>
-        {% if user.is_authenticated %}
-        <div>
-            <a  class="headcontent" href="{% url 'userprofile' user.id %}">My Account</a>
-        </div>
-        {% else %}
-        <div>
-            <a  class="headcontent" href="">My Account</a>
-        </div>
-        {% endif %}
-        <div>
-            <a  class="headcontent" href="">Contact Us</a>
-        </div>
-            {% if user.is_authenticated %}
-             <div>
-
-                 <a  class="headcontent" href="{% url 'logout' %}">Sign Out</a>
-            </div>
-                 {% else %}
-            <div>
-            <a  class="headcontent" href="{% url 'loginpage' %}">Sign In</a>
+            <div class="head">
+                <div class="logo" style="width: 45%;  height: auto;">
+                    <p><a href="{% url 'landing_page' %}" style="text-decoration: none;"><span
+                                class="t text-danger">T</span><span class="text-black">orque</span></p></a>
                 </div>
-                 {% endif %}
-               <div class="cart-icon" style="width: 44px;margin-top: -9px;">
-                   <a class="d-flex" style="text-decoration:none;" href="{% url 'cart' %}">
-<img class="cart-img" src="{% static '/images/6+cart.png' %}" style="width:100%;">
-<p id="cart-total " class="bg-danger text-white text-center rounded" style="display:block;width: 20px; height: 21px;border:radius:50%;margin-left: -21px;font-size: 13px;">{{ cartItems }}</p>
+                <div class="content" style="width: 45%; height: auto;">
+                    <div class="cont">
+                        <div>
+                            <a class="headcontent" href="{% url 'home' %}">Online Store</a>
+                        </div>
+                        {% if user.is_authenticated %}
+                        <div>
+                            <a class="headcontent" href="{% url 'userprofile' user.id %}">My Account</a>
+                        </div>
+                        {% else %}
+                        <div>
+                            <a class="headcontent" href="">My Account</a>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <a class="headcontent" href="">Contact Us</a>
+                        </div>
+                        {% if user.is_authenticated %}
+                        <div>
+
+                            <a class="headcontent" href="{% url 'logout' %}">Sign Out</a>
+                        </div>
+                        {% else %}
+                        <div>
+                            <a class="headcontent" href="{% url 'loginpage' %}">Sign In</a>
+                        </div>
+                        {% endif %}
+                        <div class="cart-icon" style="width: 44px;margin-top: -9px;">
+                            <a class="d-flex" style="text-decoration:none;" href="{% url 'cart' %}">
+                                <img class="cart-img" src="{% static '/images/6+cart.png' %}" style="width:100%;">
+                                <p id="cart-total " class="bg-danger text-white text-center rounded"
+                                    style="display:block;width: 20px; height: 21px;border:radius:50%;margin-left: -21px;font-size: 13px;">
+                                    {{ cartItems }}</p>
+
+                            </a>
+
+                        </div>
+                    </div>
 
 
 
-
-
-
-
-
-
-
-
-        </a>
-
-               </div>
-    </div>
-
-        
-        
-</div>
-    </div>
-    <hr class="hr">
-</div>
+                </div>
+            </div>
+            <hr class="hr">
+        </div>
 
     </header>
 
-    <section >
+    <section>
 
 
- {% block content %}
+        {% block content %}
         {% endblock %}
 
 
     </section>
 
 
-  <script src="{% static 'js/script.js' %}"></script>
-      <script src="{% static 'js/cart.js' %}"></script>
-      <script srs="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script srs="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"
+        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
 
- <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"
+        integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
     <script>
         var user = '{{ request.user }}'
 
-      function getToken(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+        function getToken(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
+            return cookieValue;
         }
-        return cookieValue;
-    }
-    const csrftoken = getToken('csrftoken');
+        const csrftoken = getToken('csrftoken');
     </script>
 
-    {% block scripts %} 
+    {% block scripts %}
 
 
 
