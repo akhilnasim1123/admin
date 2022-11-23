@@ -479,13 +479,3 @@ def editProfile(request):
     return render(request, 'userprofile/editprofile.html', {'form': form})
 
 
-def order_details_user_side(request,id):
-    order = OrderedItems.objects.get(id=id)
-    payment=order.payment
-    payment_id=order.payment_id
-    context = {
-        'order':order,
-        'payment':payment,
-        'payment_id':payment_id,
-    }
-    return render(request,'userprofile/order_details.html',context)

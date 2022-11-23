@@ -27,6 +27,8 @@ urlpatterns = [
     path('admin-log/', include('proj.urls')),
     path('', include('account.urls')),
     path('cart/', include('cart.urls')),
+    path('invoice/',include('invoice.urls')),
+    path('coupen/',include('coupen.urls')),
 
 
 ]

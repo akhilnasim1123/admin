@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'proj',
     'account',
     'cart',
+    'invoice',
     'wishlist',
+    'coupen',
 
 ]
 

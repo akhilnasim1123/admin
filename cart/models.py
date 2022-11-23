@@ -1,6 +1,7 @@
 from django.db import models
 
 from account.models import *
+from coupen.models import Coupen
 from proj.models import *
 
 # Create your models here.
@@ -33,6 +34,7 @@ class OrderedItems(models.Model):
     message                     = models.TextField(null=True)
     tracking_no                 = models.CharField(max_length=150,null=True)
     ordered                     = models.DateTimeField(auto_now_add=True)
+    coupen                      = models.ForeignKey(Coupen,on_delete=models.SET_NULL,blank=True,null=True)
 
 
 
@@ -48,5 +50,8 @@ class OrderedItems(models.Model):
     def get_total(self):
         total = self.product.price * self.quantity
         return total
+
+
+
     
 

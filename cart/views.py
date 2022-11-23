@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from account.models import Account
 from account.views import login_page
 from cart.models import OrderedItems
+from coupen.models import Coupen
 from proj.models import Order, OrderItems, Product, ShippingAddress
 
 
@@ -57,6 +58,7 @@ def cart(request):
 @login_required(login_url=login_page)
 def shoppingaddress(request):
     if request.user.is_authenticated:
+        discound = 0
         print('authenticated')
         customer = request.user
         order = Order.objects.get(account=customer, complete=False)
@@ -64,6 +66,25 @@ def shoppingaddress(request):
         cartItems = order.get_cart_items
         address = ShippingAddress.objects.filter(
             account=customer).order_by('id')
+        if request.method == 'POST':
+            print('coupen')
+            coupen = request.POST.get('coupen')
+            print(coupen)
+            coupen_check = Coupen.objects.filter(coupen=coupen).exists()
+            if coupen_check: 
+                coupen_discound = Coupen.objects.get(coupen=coupen)
+                user = Account.objects.get(id=customer.id)
+                cart = Order.objects.get(account=user)
+                print(cart.get_cart_total)
+                # items = OrderItems.objects.filter(cart=cart)
+                if int(coupen_discound.minimum_price) <= int(cart.get_cart_total) or int(coupen_discound.maximum_price) >= int(cart.get_cart_total):
+                    print('entered')
+                    discound =  cart.get_cart_total - int(coupen_discound.price) 
+                    print(discound)
+                    messages.success(request,'coupen applied')
+                else:
+                    messages.error(request,'you are not eligible for this coupen')
+
 
     else:
         items = []
@@ -74,8 +95,13 @@ def shoppingaddress(request):
         print('in else')
     # itm = OrderItems.objects.filter(account=customer)
     # count =itm.product.quantity
-    context = {'items': items, 'order': order,
-               'cartItems': cartItems, 'address': address}
+
+    if discound is not None:
+            context = {'items': items, 'order': order,
+               'cartItems': cartItems,'discound':discound, 'address': address}
+    else:
+        context = {'items': items, 'order': order,
+                'cartItems': cartItems, 'address': address}
     return render(request, 'shipping/shipping.html', context)
 
 
@@ -244,3 +270,21 @@ def success(request):
     # shippingaddress = add,
 
     # )
+
+
+def addressSelect(request,id):
+    print('asdfhakfhaskfhasff')
+
+    print(id)
+   
+    address = ShippingAddress.objects.get(id=id)
+    
+    return JsonResponse({
+        'name':address.account.first_name,
+        'email': address.account.email,
+        'phone': address.account.phone,
+        'address':address.address,
+        'city':address.city,
+        'state':address.state,
+        'pincode':address.pincode
+    })
