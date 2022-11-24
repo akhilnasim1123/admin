@@ -35,8 +35,10 @@
   <form name="editform" action="{% url 'order_details' i.id %}" method="post">
       {% csrf_token %}
       <input class="btn bg-success text-white" type="submit" name="Edit" value="View">
-      <a href="{% url 'pdf_download'  i.id %}"  style="text-decoration: none;"><button class="btn border border-black text-black">Download</button></a>
-  </form>
+       </form>
+       
+       <a href="{% url 'pdf_download'  i.id %}" class="mt-3"  style="text-decoration: none;"><button class="btn border border-black text-black">Download</button></a>
+
 </div>
 </td>
 <td class="pt-5">

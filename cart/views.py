@@ -66,6 +66,7 @@ def shoppingaddress(request):
         cartItems = order.get_cart_items
         address = ShippingAddress.objects.filter(
             account=customer).order_by('id')
+        coupen = None
         if request.method == 'POST':
             print('coupen')
             coupen = request.POST.get('coupen')
@@ -77,13 +78,13 @@ def shoppingaddress(request):
                 cart = Order.objects.get(account=user)
                 print(cart.get_cart_total)
                 # items = OrderItems.objects.filter(cart=cart)
-                if int(coupen_discound.minimum_price) <= int(cart.get_cart_total) or int(coupen_discound.maximum_price) >= int(cart.get_cart_total):
+                if int(coupen_discound.minimum_price) <= int(cart.get_cart_total) and int(coupen_discound.maximum_price) >= int(cart.get_cart_total):
                     print('entered')
                     discound =  cart.get_cart_total - int(coupen_discound.price) 
                     print(discound)
                     messages.success(request,'coupen applied')
                 else:
-                    messages.error(request,'you are not eligible for this coupen')
+                    messages.error(request,'you are not eligible for this coupen..!')
 
 
     else:
@@ -97,7 +98,7 @@ def shoppingaddress(request):
     # count =itm.product.quantity
 
     if discound is not None:
-            context = {'items': items, 'order': order,
+            context = {'items': items, 'order': order,'coupen':coupen,
                'cartItems': cartItems,'discound':discound, 'address': address}
     else:
         context = {'items': items, 'order': order,
@@ -148,6 +149,17 @@ def pay_page(request):
         return redirect(login_page)
 
     if request.method == "POST":
+        value = request.POST.get('butt')
+        discound_or_not = request.POST.get('check')
+        coupen = request.POST.get('coupens')
+        if coupen is not None:
+            coupen = Coupen.objects.get(coupen=coupen)
+        else:
+            coupen = None
+        if discound_or_not == '1':
+            discounded = 'Yes'
+        else:
+            discounded = 'No'
         address = request.POST.get('address')
         city = request.POST.get('city')
         state = request.POST.get('state')
@@ -161,13 +173,7 @@ def pay_page(request):
 
         order.tracking_no = track_no
         order.save()
-
-        if address == '' or city == '' or state == '' or pincode == '':
-            messages.error(request, 'These Fields are Required')
-            return redirect('shipping')
         orItems = OrderItems.objects.filter(order=order)
-
-
         #     messages.error(request, 'this address already exist')
         # else:
         add = ShippingAddress() 
@@ -210,7 +216,10 @@ def pay_page(request):
             user_order.tracking_no = track_no
             user_order.quantity = orItemss.quantity
             prod_qunt.quantity -= user_order.quantity
-            user_order.price = order.get_cart_total
+            user_order.coupen_applied = discounded
+            user_order.total_price = order.get_cart_total
+            user_order.price = value
+            user_order.coupen = coupen
             user_order.product = prod_qunt
             user_order.payment_id = request.POST.get('payment_id')
             user_order.payment = request.POST.get('payment_mode')
