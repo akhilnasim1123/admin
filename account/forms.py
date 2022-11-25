@@ -1,10 +1,12 @@
+from turtle import numinput
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
-from django.forms import EmailInput, TextInput
+from django.forms import EmailInput, NumberInput, TextInput
 from phonenumber_field.formfields import PhoneNumberField
 
 from account.models import Account
+from coupen.models import Coupen
 
 
 class RegistrationForm(UserCreationForm):
@@ -60,4 +62,35 @@ class UserEditForm(forms.ModelForm):
 
 
         }
+
+
+class CoupenForm(forms.ModelForm):
+     class Meta:
+        model=Coupen
+        fields = ('coupen','price','minimum_price','maximum_price')
+        widgets = {
+            'coupen': TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;margin-left:15%;',
+                'placeholder': 'Coupen'
+                }),
+            'price': NumberInput(attrs={
+                'class': "form-control", 
+                'style': 'max-width: 300px;margin-left:15%;',
+                'placeholder': 'Price'
+                }),
+            'minimum_price': NumberInput(attrs={
+            'class': "form-control", 
+            'style': 'max-width: 300px;margin-left:15%;',
+            'placeholder': 'Minimum Price'
+            }),
+            'maximum_price': NumberInput(attrs={
+            'class': "form-control", 
+            'style': 'max-width: 300px;margin-left:15%;',
+            'placeholder': 'Maximum Price'
+            })
+
+
+        }
+
 

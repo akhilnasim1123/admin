@@ -1,0 +1,63 @@
+{% extends 'base1.html' %}
+
+
+{% block content %}
+
+<section>
+    <div class="" >
+        <form action="{% url 'createCoupen' %}" method="post">
+            {% csrf_token %}
+            {%for coupen_msg in messages %}
+            <p>{{coupen_msg}}</p>
+            {% endfor %}
+        {% for field in coupen_form %}
+        <div class="mt-3 d-flex justify-content-center" >
+            <div style="width: 50%;">{{field.label}} : </div>
+        <div style="width: 50%;"> {{field}}</div>
+        
+    </div>
+        {% endfor %}
+        <div class=" mt-3 d-flex justify-content-center">
+            <div style="width: 50%;"> </div>
+            <div style="width: 50%;" class="">
+            <button type="submit " class="btn bg-black text-center text-white" style="margin-left: 15%; width: 63%;"> Create</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</section>
+<section class="mt-4">
+    <div class="conteiner">
+        <h3 class="mt-5" style="font-family: initial;"><b>Coupens</b></h3>
+        <hr>
+        <div>
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Coupen Code</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Minimum Price</th>
+                      <th scope="col">Maximum Price</th>
+                      <th scope="col">Trash</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in coupen %}
+                    <tr>
+                      <th scope="row">{{i.pk}}</th>
+                      <td>{{i.coupen}}</td>
+                      <td> ₹{{i.price}}</td>
+                      <td> ₹{{i.minimum_price}}</td>
+                      <td> ₹{{i.maximum_price}}</td>
+                      <td><a href="{% url 'trashCoupen' i.id %}" class="" style="color: #8d8d8d;font-size: 25px;"><i class="fas fa-trash-alt"></i></a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+              </table>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

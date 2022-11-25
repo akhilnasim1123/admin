@@ -139,9 +139,14 @@ def updateItem(request):
 
 @login_required(login_url=login_page)
 def pay_page(request):
+    data = request.POST['city']
+    print(data)
     if request.user.is_authenticated:
         print('authenticated')
         customer = request.user
+        idid = Account.objects.get(id=customer.id)
+        print(idid,'thisn is user id')
+        
         order = Order.objects.get(account=customer, complete=False)
         items = order.orderitems_set.all()
         cartItems = order.get_cart_items
@@ -160,7 +165,7 @@ def pay_page(request):
             discounded = 'Yes'
         else:
             discounded = 'No'
-        address = request.POST.get('address')
+        address = request.POST.get('addresses')
         city = request.POST.get('city')
         state = request.POST.get('state')
         pincode = request.POST.get('pincode')
@@ -232,9 +237,8 @@ def pay_page(request):
         product.delete()
 
         payMode = request.POST.get('payment_mode')
-        if (payMode == 'Paid by Razorpay' or payMode == 'Paid by Paypal'):
+        if (payMode == 'Paid by Razorpay' or payMode == 'Paid by Paypal' or payMode == 'COD'):
             return JsonResponse({"status": "success"})
-
         context = {'cartItems': cartItems}
         return render(request, 'shipping/success.html', context)
     order = Order.objects.get(account=customer, complete=False)
@@ -242,6 +246,7 @@ def pay_page(request):
     cartItems = order.get_cart_items
     context = {'cartItems': cartItems}
     return render(request, 'shipping/success.html', context)
+
 
 
 def deletecart(request, id, value):

@@ -1,0 +1,100 @@
+{% extends 'base1.html' %}
+
+
+{% block content %}
+{% for message in messages %}
+<p class="text-danger">{{message}}</p>
+{%endfor%}
+<section>
+    <div class="d-flex justify-content-center">
+    <h4 class="text-dark" style="width: 50%;">Category Offer</h4>
+    <h4 class="text-secondary" style="width: 50%;">Product Offer</h4>
+</div>
+    <div class="d-flex align-items-center">
+       
+        <div class="bg-secondary pt-3" style="width: 50%; height: 250px;">
+            <div class="">
+                <form action="{% url 'categoryOffer' %}" method="post">
+                    {% csrf_token %}
+                {% for category_field in categoryForm %}
+                <label for=""></label>
+                <div>{{category_field}}</div>
+                {% endfor %}
+                <button type="submit" class="btn bg-dark mt-3 text-white" style="margin-left: 15%; width: 63%;"> Create </button>
+            </form>
+            </div>
+
+</div>
+<div class="bg-dark pt-3" style="width: 50%;height: 250px;">
+
+    <div class="">
+        <form action="{% url 'productOffer' %}" method="post">
+            {% csrf_token %}
+        {% for product_field in productForm %}
+        <label for=""></label>
+        <div>{{product_field}}</div>
+        {% endfor %}
+        <button type="submit" class="btn bg-secondary mt-3 text-white" style="margin-left: 15%; width: 63%;"> Create </button>
+    </form>
+    </div>
+</div>
+</div>
+</section>
+<section class="mt-5">
+    <div class="d-flex justify-content-center">
+        <div class="" style="width: 48%;">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Category Offer</th>
+
+                      <th scope="col">Trash</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in category %}
+                    <tr>
+                      <th scope="row">{{i.pk}}</th>
+                      <td>{{i.category}}</td>
+                      <td> {{i.categoryOffer}}%/-</td>
+                      <td><a href="{% url 'trashCategoryOffer' i.id %}" class="" style="color: #8d8d8d;font-size: 25px;"><i class="fas fa-trash-alt"></i></a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+              </table>
+        </div>
+<div style="width: 2%;"></div>
+
+
+        <div class="" style="width: 48%;">
+            <table class="table bg-secondary text-light table-hover">
+                <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Product</th>
+                      <th scope="col">Product Offer</th>
+
+                      <th scope="col">Trash</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in product %}
+                    <tr>
+                      <th scope="row">{{i.pk}}</th>
+                      <td>{{i.product}}</td>
+                      <td> {{i.productOffer}}%/-</td>
+                      <td><a href="{% url 'trashProductOffer' i.id %}" class="" style="color: #cacaca;font-size: 25px;"><i class="fas fa-trash-alt"></i></a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+              </table>
+        </div>
+
+    </div>
+</section>
+
+{% endblock content %}

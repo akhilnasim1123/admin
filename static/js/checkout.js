@@ -40,7 +40,7 @@ $(document).ready(function () {
 
                     var options = {
                         "key": "rzp_test_JgN88azXlg3vAo", // Enter the Key ID generated from the Dashboard
-                        "amount": response.total_price*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "amount": response.total_price * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                         "currency": "INR",
                         "name": "Torque.in",
                         "description": "Thank You For Buying From us",
@@ -55,7 +55,7 @@ $(document).ready(function () {
                                 "city": city,
                                 "state": state,
                                 "pincode": pincode,
-                                "payment_mode":"Paid by Razorpay",
+                                "payment_mode": "Paid by Razorpay",
                                 "payment_id": responses.razorpay_payment_id,
                                 csrfmiddlewaretoken: token,
 
@@ -68,19 +68,14 @@ $(document).ready(function () {
                                     swal("Congratulations!", "Your Order is Placed", "success").then((value) => {
                                         window.location.href = '/'
                                     });
-
                                 }
                             });
-
                         },
-
-
                         "prefill": {
                             "name": name,
-                            "email":email,
+                            "email": email,
                             "contact": phone
                         },
-
                         "theme": {
                             "color": "#3399cc"
                         }
@@ -88,18 +83,11 @@ $(document).ready(function () {
                     var rzp1 = new Razorpay(options);
                     rzp1.on('payment.failed', function (response) {
                         alert(response.error.code);
-
                     });
 
                     rzp1.open();
-
                 }
-
             });
         }
-
-
     });
-
-
 });

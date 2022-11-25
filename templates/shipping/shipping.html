@@ -85,7 +85,7 @@ input [type=text]{
                                     {{i.city}},{{i.state}}
                               </p>
                                
-                               <input type="radio" id="address" name="address" value="" onclick="addressSelection('{{i.id}}')">
+                               <input type="radio" id="address" name="address"  onclick="addressSelection('{{i.id}}')">
                               <hr>
                           {% endfor %}
                         </div>
@@ -107,7 +107,7 @@ input [type=text]{
                           </div>
                              {% if order %}
                   
-                          <form class="mt-2" method="post" id="form-checkout" action="{% url 'pay_page' %}">
+                          <form class="mt-2" method="post" id="form-checkout" >
                   
                               {% csrf_token %}
 
@@ -128,7 +128,7 @@ input [type=text]{
 
 
                             <div class="form-outline form-white mt-2">
-                              <input name="address" type="text" id="address-es" class="form-control " siez="17"
+                              <input name="addresses" type="text" id="address-es" class="form-control " siez="17"
                                 placeholder="Address" />
 
                             </div>
@@ -156,9 +156,10 @@ input [type=text]{
                             </div>
 
 {% if discound %}
-<button type="submit" class="cod-button btn text-white btn-block " name="butt" value="{{ discound }}" style="width: 100%;background-color: #387445">
+<button type="submit" class="cod-button btn text-white btn-block "  style="width: 100%;background-color: #387445">
   <div class="d-flex justify-content-evenly">
     <input type="hidden" name="payment_mode" value="COD">
+    <input type="hidden" name="butt" value="{{ discound }}">
     <input type="hidden" name="check" value="1" hidden>
     <input type="hidden" name="coupens" value="{{coupen}}" hidden>
 
@@ -169,9 +170,10 @@ input [type=text]{
 
 </button>
 {% else %}
-                          <button type="submit" class="cod-button btn text-white btn-block" name="butt" value="{{ order.get_cart_total}}" style="width: 100%;background-color: #387445">
+                          <button type="submit" class="cod-button btn text-white btn-block"  style="width: 100%;background-color: #387445">
                             <div class="d-flex justify-content-evenly">
                               <input type="hidden" name="payment_mode" value="COD">
+                              <input type="hidden"name="butt" value="{{ order.get_cart_total}}">
                               <input type="hidden" name="check" value="0" hidden>
                               <div><span>₹{{ order.get_cart_total|floatformat:2 }}/-</span></div>
       <div> <span>COD Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>

@@ -5,9 +5,9 @@ from django.db import models
 
 class Coupen(models.Model):
     coupen = models.CharField(max_length=10)
-    price =  models.CharField(max_length=200,default='200')
-    minimum_price = models.CharField(max_length=100,default='500')
-    maximum_price = models.CharField(max_length=100,default='5000')
+    price =  models.IntegerField(default='200')
+    minimum_price = models.IntegerField(default='500')
+    maximum_price = models.IntegerField(default='5000')
 
     def __str__(self):
         return self.coupen

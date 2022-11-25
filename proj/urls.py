@@ -37,6 +37,11 @@ urlpatterns = [
     path('orders-details/<int:id>',views.order_view,name='order_view'),
     path('banner',views.banner,name='banner'),
     path('dashboard',views.dashboard,name='dashboard'),
+    path('offers',views.Offers,name='Offers'),
+    path('prouductOffer',views.prouductOffer,name='productOffer'),
+    path('categoryOffer',views.categoryOffer,name='categoryOffer'),
+    path('trashProductOffer/<int:id>',views.trashProductOffer,name='trashProductOffer'),
+    path('trashCategoryOffer/<int:id>',views.trashCategoryOffer,name='trashCategoryOffer'),
 
 
 ]

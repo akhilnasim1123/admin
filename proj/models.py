@@ -97,7 +97,22 @@ class BannerManagement(models.Model):
 
     def __str__(self):
         return self.name
-        
+
+
+class CategoryOffer(models.Model):
+    category = models.ForeignKey(Category,on_delete=models.CASCADE,blank=True,null=True)
+    categoryOffer = models.IntegerField(blank=True,null=True)
+
+    def __str__(self):
+        return self.category.category_name
+
+class ProductOffer(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
+    productOffer= models.IntegerField(blank=True,null=True)
+  
+
+    def __str__(self):
+        return self.product.product_name
         
 
 

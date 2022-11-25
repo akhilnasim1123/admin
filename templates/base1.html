@@ -1,71 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-   <!-- CSS only -->
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/fontawesome.min.css"
+        integrity="sha384-z4tVnCr80ZcL0iufVdGQSUzNvJsKjEtqYZjiQrrYKlpGow+btDHDfQWkFjoaz/Zr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row flex-nowrap">
-            <div class="col-3 col-md-3 col-xl-2 px-sm-2 px-0 bg-dark" style="position:fixed;">
+            <div class="col-3 col-md-3 col-xl-2 px-sm-2 px-0 bg-dark" style="height:714px;position:fixed;overflow-y: scroll;overflow-x: scroll;">
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <a href="/"
+                        class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                         <span class="fs-5 d-none d-sm-inline"><span class="text-danger">T</span>orque.in</span>
-                         <hr>
+                        <hr>
                     </a>
 
-                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link align-middle px-0">
-                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Home</span>
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                        id="menu">
+                        <li class="nav-item mt-3">
+                            <a href="#" class="nav-link align-middle px-0 ">
+                                <i class="fs-4 bi-house" hidden></i> <span class="ms-1 d-none d-sm-inline"
+                                    style="color: white;">Home</span>
                             </a>
 
                         </li>
-                        <li>
-                            <a href="{% url 'dashboard' %}" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Dashboard</span> </a>
+                        <li class="mt-3">
+                            <a href="{% url 'dashboard' %}" data-bs-toggle="collapse"
+                                class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-speedome" hidden></i> <span class="ms-1 d-none d-sm-inline"
+                                    style="color: white;">Dashboard</span> </a>
 
                         </li>
-                        <li>
+                        <li class="mt-3">
                             <a href="{% url 'order_list' %}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Orders</span></a>
+                                <i class="fs-4 bi-table" hidden></i> <span class="ms-1 d-none d-sm-inline"
+                                    style="color: white;">Orders</span></a>
                         </li>
-                        <li>
-                            <a href="{% url 'admin_user' %}" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                                <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Users</span></a>
+                        <li class="mt-3">
+                            <a href="{% url 'admin_user' %}" data-bs-toggle="collapse"
+                                class="nav-link px-0 align-middle ">
+                                <i class="fs-4 bi-people" hidden></i> <span class="ms-1 d-none d-sm-inline"
+                                    style="color: white;">Users</span></a>
 
                         </li>
-                        <li>
-                            <a href="{% url 'product_list' %}" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Products</span> </a>
+                        <li class="mt-3">
+                            <a href="{% url 'product_list' %}" data-bs-toggle="collapse"
+                                class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-grid" hidden></i> <span class="ms-1 d-none d-sm-inline"
+                                    style="color: white;">Products</span> </a>
 
                         </li>
-                        <li>
+                        <li class="mt-3">
                             <a href="{% url 'banner' %}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Banner Management</span> </a>
+                                <i class="fa-solid fa-image " hidden></i><span class="ms-1  d-none d-sm-inline"
+                                    style="color: white;">Banner</span> </a>
                         </li>
-                          <li>
+                        <li class="mt-3">
                             <a href="{% url 'category_view' %}" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Category</span> </a>
+                                <i class="fs-4 bi-people" hidden></i> <span class="ms-1 d-none d-sm-inline"
+                                    style="color: white;">Category</span> </a>
                         </li>
 
-                        <li>
+                        <li class="mt-3">
+                            <a href="{% url 'coupen' %}" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people" hidden></i> <span class="ms-1 d-none d-sm-inline"
+                                    style="color: white;">Coupon Management</span> </a>
+                        </li>
+
+                        <li class="mt-3">
+                            <a href="{% url 'Offers' %}" class="nav-link px-0 align-middle">
+                                <i class="fs-4 bi-people" hidden></i> <span class="ms-1 d-none d-sm-inline"
+                                    style="color: white;">Offers</span> </a>
+                        </li>
+
+                        <li class="mt-3">
                             <a href="" class="nav-link px-0 align-middle">
-                                <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline" style="color: white;">Sales Report</span> </a>
+                                <i class="fs-4 bi-people" hidden></i> <span class="ms-1 d-none d-sm-inline"
+                                    style="color: white;">Sales Report</span> </a>
                         </li>
 
                     </ul>
                     <hr>
                     <a href="{% url 'logout' %}"><button class="btn">Log Out</button></a>
                     <div class="dropdown pb-4">
-                         <a href="{% url 'logout' %}"><button class="btn">Log Out</button></a>
-                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-<!--                 <a href="{% url 'logout' %}"><button class="btn">Log Out</button></a>-->
+                        <a href="{% url 'logout' %}"><button class="btn">Log Out</button></a>
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                            id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <!--                 <a href="{% url 'logout' %}"><button class="btn">Log Out</button></a>-->
                             <span class="d-none d-sm-inline mx-1">Akhil</span>
                         </a>
 
@@ -73,85 +111,87 @@
                 </div>
             </div>
             <div class=" col-md-12 pt-5  mx-5 " style="width:93%;padding-left:14rem;">
-{% block content %}
+                {% block content %}
 
-{% endblock %}
+                {% endblock %}
             </div>
         </div>
     </div>
 </body>
 <style>
-    body{
-        background-color:#eee;
+    body {
+        background-color: #eee;
     }
 
-    .nav-link:hover{
-        background-color:#525252 !important;
+    .nav-link:hover {
+        background-color: #525252 !important;
     }
 
-    .nav-link .fa{
-        transition:all 1s;
+    .nav-link .fa {
+        transition: all 1s;
     }
 
-    .nav-link:hover .fa{
-        transform:rotate(360deg);
+    .nav-link:hover .fa {
+        transform: rotate(360deg);
     }
+
     :root {
-    --price-tag-background: #d1d5db;
-    --price-tag-height: 2rem;
-}
+        --price-tag-background: #d1d5db;
+        --price-tag-height: 2rem;
+    }
 
-.price-tag {
-    background: var(--price-tag-background);
-    color: #fff;
+    .price-tag {
+        background: var(--price-tag-background);
+        color: #fff;
 
-    /* Center the price */
-    align-items: center;
-    display: flex;
-    justify-content: center;
+        /* Center the price */
+        align-items: center;
+        display: flex;
+        justify-content: center;
 
-    /* Used to position the triangle */
-    position: relative;
+        /* Used to position the triangle */
+        position: relative;
 
-    /* Size */
-    height: var(--price-tag-height);
+        /* Size */
+        height: var(--price-tag-height);
 
-    /* Spacing */
-    padding: 0.25rem 0.5rem;
-}
+        /* Spacing */
+        padding: 0.25rem 0.5rem;
+    }
 
-/* The triangle */
-.price-tag::before {
-    content: '';
+    /* The triangle */
+    .price-tag::before {
+        content: '';
 
-    border-color: transparent var(--price-tag-background) transparent transparent;
-    border-style: solid;
-    border-width: calc(var(--price-tag-height) / 2) calc(var(--price-tag-height) / 2) calc(var(--price-tag-height) / 2) 0rem;
+        border-color: transparent var(--price-tag-background) transparent transparent;
+        border-style: solid;
+        border-width: calc(var(--price-tag-height) / 2) calc(var(--price-tag-height) / 2) calc(var(--price-tag-height) / 2) 0rem;
 
-    /* Position */
-    left: 0px;
-    position: absolute;
-    top: 0px;
-    transform: translate(-100%, 0px);
-}
+        /* Position */
+        left: 0px;
+        position: absolute;
+        top: 0px;
+        transform: translate(-100%, 0px);
+    }
 
-/* The dot */
-.price-tag::after {
-    content: '';
+    /* The dot */
+    .price-tag::after {
+        content: '';
 
-    /* Make it like a cirle */
-    background: #fff;
-    border-radius: 9999rem;
+        /* Make it like a cirle */
+        background: #fff;
+        border-radius: 9999rem;
 
-    /* Position */
-    left: 0;
-    position: absolute;
-    top: 50%;
-    transform: translate(-0.5rem, -50%);
+        /* Position */
+        left: 0;
+        position: absolute;
+        top: 50%;
+        transform: translate(-0.5rem, -50%);
 
-    /* Size */
-    height: 0.5rem;
-    width: 0.5rem;
-}
-        </style>
+        /* Size */
+        height: 0.5rem;
+        width: 0.5rem;
+    }
+</style>
+
 </html>

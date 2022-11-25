@@ -9,8 +9,8 @@ from account.forms import RegistrationForm
 from account.models import Account
 from account.views import order_userside
 from cart.models import OrderedItems
-from proj.forms import BannerForm, ItemsForm, SubForm
-from proj.models import BannerManagement, Product, Category, ShippingAddress, SubCategory
+from proj.forms import BannerForm, CategoryOfferForm, ItemsForm, ProductOfferForm, SubForm
+from proj.models import BannerManagement, CategoryOffer, Product, Category, ProductOffer, ShippingAddress, SubCategory
 
 
 # admin login page -------------------------------->
@@ -320,3 +320,51 @@ def dashboard(request):
     }
     print(razorpay)
     return render(request, 'dashboard/maindash.html', context)
+
+
+def Offers(request):
+    categoryForm = CategoryOfferForm()
+    productForm = ProductOfferForm()
+    category = CategoryOffer.objects.all().order_by('id')
+    product= ProductOffer.objects.all().order_by('id')
+    context={
+        'categoryForm':categoryForm,
+        'productForm':productForm,
+        'category':category,
+        'product':product,
+
+    }
+    return render(request,'admin/offers.html',context)
+
+def prouductOffer(request):
+    if request.method == 'POST':
+        form = ProductOfferForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            messages.error(request,form.errors)
+    return redirect('Offers')        
+
+
+def categoryOffer(request):
+    if request.method == 'POST':
+        form = CategoryOfferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('Offers')
+        else:
+            messages.error(request,form.errors)
+            return redirect(request.path)  
+    return redirect('Offers')   
+
+
+def trashCategoryOffer(request,id):
+    category = CategoryOffer.objects.get(id=id)
+    category.delete()
+    return redirect(Offers)
+
+def trashProductOffer(request,id):
+    product = ProductOffer.objects.get(id=id)
+    product.delete()
+    return redirect(Offers)
+    
