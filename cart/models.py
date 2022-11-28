@@ -37,7 +37,8 @@ class OrderedItems(models.Model):
     tracking_no                 = models.CharField(max_length=150,null=True)
     ordered                     = models.DateTimeField(auto_now_add=True)
     coupen                      = models.ForeignKey(Coupen,on_delete=models.SET_NULL,blank=True,null=True)
-
+    product_offer               = models.ForeignKey(ProductOffer,on_delete=models.SET_NULL,blank=True,null=True)
+    category_offer              = models.ForeignKey(CategoryOffer,on_delete=models.SET_NULL,blank=True,null=True)
 
 
 

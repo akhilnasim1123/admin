@@ -42,7 +42,7 @@
 </div>
 </td>
 <td class="pt-5">
-  <form name="editform" action="{% url 'cancel' i.id '1' %}" method="post">
+  <form name="editform" action="{% url 'cancel' i.id '2' %}" method="post">
     {% csrf_token %}
     <input class="btn bg-danger text-white" type="submit" name="Edit" value="Cancel">
 </form>

@@ -14,7 +14,7 @@ from twilio.rest import Client
 from account.forms import AccountAuthenticationForm, RegistrationForm, UserEditForm
 from account.models import Account, Profile
 from cart.models import OrderedItems
-from proj.models import BannerManagement, Category, Order, Product, ShippingAddress
+from proj.models import BannerManagement, Category, CategoryOffer, Order, Product, ProductOffer, ShippingAddress
 from wishlist.models import Wishlist
 from account.helpers import *
 from .helpers import send_forget_password_mail
@@ -57,6 +57,7 @@ def registration_view(request):
 
 
 def home(request):
+
     if request.user.is_authenticated:
         print('authenticated')
         customer = request.user
@@ -142,33 +143,103 @@ def product_view(request, id):
             items = order.orderitems_set.all()
             cartItems = order.get_cart_items
             val = Product.objects.get(id=id)
-            wishlist = Wishlist.objects.get(Product=val, account=customer)
+            offer = 0
+            price = 0
+            pro = Product.objects.get(id=id)
+
+            if val.quantity < 0:
+                messages.error(request, 'Out Of Stock')
+            productoff = ProductOffer.objects.filter(product=pro).exists()
+            categoryoff = CategoryOffer.objects.filter(
+                category=pro.category).exists()
+            if productoff and categoryoff:
+                productoff = ProductOffer.objects.get(product=pro)
+                categoryoff = CategoryOffer.objects.get(category=pro.category)
+                if productoff.productOffer > categoryoff.categoryOffer:
+                    offer = productoff.productOffer
+                    print(offer, 'hgjgbjhgjh')
+                elif productoff.productOffer < categoryoff.categoryOffer:
+                    offer = categoryoff.categoryOffer
+                    print(offer, 'jhhgftdrsrtdrdtrdtrdr')
+                    print(offer)
+                wishlist = Wishlist.objects.get(Product=val, account=customer)
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
 
-            context = {'key5': val, 'items': items, 'wishlist': wishlist,
-                       'order': order, 'cartItems': cartItems}
-            return render(request, 'product_view.html', context)
+                context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer,
+                           'order': order, 'cartItems': cartItems}
+                return render(request, 'product_view.html', context)
+            else:
+                context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer,
+                           'order': order, 'cartItems': cartItems}
+                return render(request, 'product_view.html', context)
         except:
             order = Order.objects.get(account=customer, complete=False)
             items = order.orderitems_set.all()
             val = Product.objects.get(id=id)
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
+            pro = Product.objects.get(id=id)
+            productoff = ProductOffer.objects.filter(product=pro).exists()
+            categoryoff = CategoryOffer.objects.filter(
+                category=pro.category).exists()
+            print(categoryoff)
+            print(productoff)
+            if productoff:
+                offer = 0
+                price = 0
+                productoff = ProductOffer.objects.get(product=pro)
+                offer = productoff.productOffer
+                offer = 100/offer
+                price = val.price
+                val.price = val.price/int(offer)
+            elif categoryoff:
+                offer = 0
+                price = 0
+                cat = pro.category
+                categoryoff = CategoryOffer.objects.get(category=cat)
+                offer = categoryoff.categoryOffer
+                # offer = 100/offer
+                print(offer)
+                price = val.price
+                val.price = val.price-val.price*offer/100
+            elif productoff and categoryoff:
+                offer = 0
+                price = 0
+                cat = pro.category
+                productoff = ProductOffer.objects.get(product=pro)
+                categoryoff = CategoryOffer.objects.get(category=cat)
+                print(cat, 'uyoytytutuygu')
+                print(categoryoff)
+                if productoff.productOffer > categoryoff.categoryOffer:
+                    offer = productoff.productOffer
+                    print(offer, 'hgjgbjhgjh')
+                elif productoff.productOffer < categoryoff.categoryOffer:
+                    offer = categoryoff.categoryOffer
+                    print(offer, 'jhhgftdrsrtdrdtrdtrdr')
+                offer = 100/offer
+                price = val.price
+                val.price = val.price/int(offer)
+                print(val.price)
+            print(offer)
             cartItems = order.get_cart_items
-            context = {'key5': val, 'cartItems': cartItems}
+            context = {'key5': val, 'cartItems': cartItems,
+                       'offer': offer, 'price': price}
             print("An exception occurred")
+
             return render(request, 'product_view.html', context)
 
     elif request.user is None:
         order = []
         items = []
         cartItems = []
+        offer
+
     order = []
     items = []
     cartItems = []
     val = Product.objects.get(id=id)
-    context = {'key5': val, 'items': items,
+    context = {'key5': val, 'items': items, 'offer': offer,
                'order': order, 'cartItems': cartItems}
     return render(request, 'product_view.html', context)
 
@@ -320,7 +391,7 @@ def address_edit(request, id):
     details.city = request.POST.get('city')
     details.state = request.POST.get('state')
     details.phone = request.POST.get('phone')
-    details.pincode=request.POST.get('pincode')
+    details.pincode = request.POST.get('pincode')
     details.save()
     id = details.account.id
     return redirect(address_view, id)
@@ -477,5 +548,3 @@ def editProfile(request):
 
     form = UserEditForm(instance=instance)
     return render(request, 'userprofile/editprofile.html', {'form': form})
-
-

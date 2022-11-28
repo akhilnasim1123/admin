@@ -42,6 +42,6 @@ urlpatterns = [
     path('categoryOffer',views.categoryOffer,name='categoryOffer'),
     path('trashProductOffer/<int:id>',views.trashProductOffer,name='trashProductOffer'),
     path('trashCategoryOffer/<int:id>',views.trashCategoryOffer,name='trashCategoryOffer'),
-
+    path('product-adding-2',views.product2,name='productAdding'),
 
 ]

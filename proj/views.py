@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_control
-
+from django.http import HttpResponseRedirect
 from account.forms import RegistrationForm
 from account.models import Account
 from account.views import order_userside
@@ -40,8 +40,8 @@ def admin_auth(request):
         if admin is not None:
             if admin.is_superuser:
                 print('yes')
-
-                request.session['email'] = email
+                ad = admin.is_superuser
+                request.session['email'] = ad
                 login(request, admin)
                 return redirect('admin_page')
             else:
@@ -183,7 +183,7 @@ def editData(request, id):
 def deleteData(request, id):
     delete = Product.objects.get(id=id)
     delete.delete()
-    return redirect('product_list')
+    return redirect('productAdding')
 
 
 def searchdata(request):
@@ -237,10 +237,13 @@ def cancel(request, id, val):
     user_id = pro.account.id
     pro.save()
     if val == '1':
-        return redirect('order_list')
+        print('here')
+        return redirect(order_list)
     else:
+        print('user')
         return redirect(order_userside, user_id)
 
+    
 
 def order_view(request, id):
     order = OrderedItems.objects.get_or_create(id=id)
@@ -367,4 +370,34 @@ def trashProductOffer(request,id):
     product = ProductOffer.objects.get(id=id)
     product.delete()
     return redirect(Offers)
+
+
+
+
+def product2(request):
+    categorys = Category.objects.all()
+    sub_category = SubCategory.objects.all()
+    product_details = Product.objects.all().order_by('id')
+    if request.method == 'POST':
+        product = request.POST.get('productname')
+        description = request.POST.get('description')
+        categoryid = request.POST.get('categoryid')
+        price = request.POST.get('price')
+        subcat = request.POST.get('subcat')
+        stock = request.POST.get('stock')
+        image1 = request.FILES.get('image1')
+        image2 = request.FILES.get('image2')
+        image3 = request.FILES.get('image3')
+        categoryid = Category.objects.get(id=categoryid)
+        subcat=SubCategory.objects.get(id=subcat)
+        Product.objects.create(product_name=product,price=price,desc=description,sub=subcat,category=categoryid,
+        quantity=stock,image1=image1,image2=image2,image3=image3)
+        return redirect(product2)
+
+    context = {
+        'category':categorys,
+        'subcategory':sub_category,
+        'product':product_details,
+    }
+    return render(request,'admin/product_adding.html',context)
     

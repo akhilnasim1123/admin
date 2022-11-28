@@ -27,11 +27,14 @@ class Product(models.Model):
     desc                    = models.CharField(max_length=600)
     quantity                = models.IntegerField(default=0)
     image1                  = models.ImageField(upload_to="media/images")
-    image2                  = models.ImageField(upload_to="media/images")
-    image3                  = models.ImageField(upload_to="media/images")
-    image4                  = models.ImageField(upload_to="media/images")
+    image2                  = models.ImageField(upload_to="media/images",null=True,blank=True)
+    image3                  = models.ImageField(upload_to="media/images",null=True,blank=True)
+    image4                  = models.ImageField(upload_to="media/images",null=True,blank=True)
     category                = models.ForeignKey(Category, on_delete=models.CASCADE)
     sub                     = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+    product_off             = models.IntegerField(null=True,blank=True)
+    
+
 
     def __str__(self):
         return self.product_name
@@ -69,7 +72,7 @@ class OrderItems(models.Model):
     product                 = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
     order                   = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
     quantity                = models.IntegerField(default=0, null=True, blank=True)
-
+    discound                = models.IntegerField(default=0,null=True, blank=True)
 
     def __str__(self):
         return '{} {}'.format(self.order.id, self.order.tracking_no)

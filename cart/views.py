@@ -12,7 +12,7 @@ from account.models import Account
 from account.views import login_page
 from cart.models import OrderedItems
 from coupen.models import Coupen
-from proj.models import Order, OrderItems, Product, ShippingAddress
+from proj.models import CategoryOffer, Order, OrderItems, Product, ProductOffer, ShippingAddress
 
 
 def cart(request):
@@ -24,22 +24,18 @@ def cart(request):
         order, created = Order.objects.get_or_create(
             account=customer, complete=False)
         items = OrderItems.objects.all().order_by('id')
+        
         # for i in items:
         #     print(i.get_total)
         cartItems = order.get_cart_items
         itm = OrderItems.objects.filter(account=customer)
-
+        product_id =0
         # count = itm.product.quantity
         # price= itm.product.price
         # print(count)
-        for i in itm:
-            count = i.product.quantity
-            price = i.product.price
-            pro_id = i.product.id
-            print(count)
-            print(price)
-            print(pro_id)
-
+        
+            
+       
         context = {'items': items, 'order': order, 'cartItems': cartItems}
         return render(request, 'cart/cart.html', context)
     elif request.user is None:
