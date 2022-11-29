@@ -20,6 +20,7 @@ class OrderedItems(models.Model):
         ('pending','pending'),
         ('out for shipping','out for shipping'),
         ('completed','completed'),
+        ('delivered','delivered'),
 
     }
     product                     = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
@@ -37,9 +38,9 @@ class OrderedItems(models.Model):
     tracking_no                 = models.CharField(max_length=150,null=True)
     ordered                     = models.DateTimeField(auto_now_add=True)
     coupen                      = models.ForeignKey(Coupen,on_delete=models.SET_NULL,blank=True,null=True)
-    product_offer               = models.ForeignKey(ProductOffer,on_delete=models.SET_NULL,blank=True,null=True)
-    category_offer              = models.ForeignKey(CategoryOffer,on_delete=models.SET_NULL,blank=True,null=True)
-
+    discound                    = models.IntegerField(default=0)
+    is_return                   = models.BooleanField(default=False,null=True,blank=True)
+    reason                      = models.CharField(max_length=100,null=True,blank=True)
 
 
    

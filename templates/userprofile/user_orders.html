@@ -13,8 +13,8 @@
 <hr>
 </div>
 <div class="">
-    <div class=" card col-md-12">
-        <table class="table table-light text-dark ">
+    <div class=" col-md-12">
+        <table class="table text-dark ">
 <thead>
 
 </thead>
@@ -28,10 +28,10 @@
 <td class="pt-5">{{ i.price }}</td>
 <td class="pt-5">{{ i.active }}</td>
 <td class="pt-5">{{ i.quantity }}</td>
-<td  class="pt-5">
-    <div>
-      {% if i.status == 'pending' %}
 
+      {% if i.status == 'pending' %}
+      <td  class="pt-5">
+        <div>
   <form name="editform" action="{% url 'order_details' i.id %}" method="post">
       {% csrf_token %}
       <input class="btn bg-success text-white" type="submit" name="Edit" value="View">
@@ -46,8 +46,22 @@
     {% csrf_token %}
     <input class="btn bg-danger text-white" type="submit" name="Edit" value="Cancel">
 </form>
+
+{% elif i.status == 'out of delivery' %}
+
+<td><i>{{i.status}}</i></td>
 <td></td>
-{%else%}
+{% elif i.status == 'delivered' %}
+
+<td class="text-success mt-3"><i class="mt-5">{{i.status}}</i></td>
+
+<td>
+    <a href="{% url 'returnProduct' i.id %}"><button class="btn btn-danger mt-3">Return</button></a>
+</td>
+
+
+{% else %}
+<td></td>
 <td></td>
 <td></td>
 {% endif %}

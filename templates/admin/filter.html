@@ -31,8 +31,9 @@
     <option value="pending">Pending</option>
     <option value="delivered">Delivered</option>
     <option value="out of shipping">Out of Shipping</option>
-    <option value="is_returned">Return</option> 
+    <option value="is_returned">Return</option>   
     <option value="Cancelled">Cancelled</option>
+    
   </select>
   <button class="btn bg-dark" type="submit">Submit</button>
 </form>
@@ -42,7 +43,7 @@
 </div>
 
             <div class="col-md-12">
-                <table class="table text-dark">
+                <table class="table table-light text-dark">
   <thead>
     <tr>
       
@@ -52,13 +53,15 @@
       <th scope="col">Quantity</th>
         <th scope="col">Status</th>
         <th scope="col">Time</th>
-
+        <th scope="col " ></th>
+        <th scope="col " ></th>
+        <th scope="col " ></th>
 
 
     </tr>
   </thead>
-  {% if order %}
-{% for i in order %}
+  {% if status %}
+{% for i in status %}
   <tbody>
 
     <tr>
@@ -67,55 +70,28 @@
       <td>{{ i.product }}</td>
       <td>{{ i.price }}</td>
         <td>{{ i.quantity }}</td>
-        <td><i>{{ i.status }}</i></td>
-        <td><b>{{ i.ordered }}</b></td>
- 
-
+        <td>{{ i.status }}</td>
+        <td>{{ i.ordered }}</td>
+        <td></td>
         
       <td>
           <form name="editform" action="{% url 'order_view' i.id %}" method="post">
               {% csrf_token %}
-              <input class="btn bg-warning text-white" type="submit" name="Edit" value="View">
+              <input class="btn bg-success text-white" type="submit" name="Edit" value="View">
 
           </form>
       </td>
-
-        {% if i.status == 'pending'%}
-
-        <td class="">
-          <form name="editform" action="{% url 'cancel' i.id '1' %}" method="post">
-            {% csrf_token %}
-            <input class="btn bg-danger text-white" type="submit" name="Edit" value="Cancel">
-        </form>   
-      </td>
-      <td>
-        <a href="{% url 'statusEdit' i.id %}">
-          <button class="btn btn-success">
-            Confirm
-          </button>
-        </a>
-      </td>
-      {% elif i.status == 'delivered' %}
       <td class="">
-          <i>Delivered</i>
-    </td>
-    {% elif i.status == 'is_returned' %}
-    <td class="">
-      <i>Return</i>
-</td>
-      {% elif i.status != 'Cancelled' %}
-
-      <td>
-        <a href="{% url 'statusEdit' i.id %}">
-          <button class="btn btn-success">
-            Confirm
-          </button>
-        </a>
-      </td>
-
+        <div >
+        {% if i.status == 'pending' %}
+        <form name="editform" action="{% url 'cancel' i.id '1' %}" method="post">
+          {% csrf_token %}
+          <input class="btn bg-danger text-white" type="submit" name="Edit" value="Cancel">
+      
+      </form>
       {% endif %}
-     
-
+      </div>
+      </td>
     </tr>
 
   </tbody>

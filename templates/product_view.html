@@ -15,24 +15,21 @@
 
   <div class="" style="width:60%;">
     <div class="" style="display:flex;">
-      {% if offer %}
-      <div style="width:61%; height:auto;">
-  <h4 style="font-size:50px">{{ key5.product_name }}</h4>
-        </div>
-        
-               <div class="d-flex justify-content-between text-center" style="width:39%;">
-                <div class="price-tag text-dark" style="width:50%;font-size:25px"><b> <del class="" >₹ {{ price }}</del> </b></div>
 
-          
-          <div class="price-tag text-danger" style="width:50%;font-size:25px"><b> ₹{{ key5.price|floatformat:0 }} </b></div>
-      </div>
-                  {% else %}
+
                   <div style="width:80%; height:auto;">
                     <h4 style="font-size:50px">{{ key5.product_name }}</h4>
                           </div>
-        <div class="price-tag text-danger" style="width:20%;font-size:25px"><b> ₹{{ key5.price }} </b></div>
+                          {% if get_product_price == 0 %}
+        <div class="price-tag text-danger" style="width:20%;font-size:25px"><b> ₹{{ key5.get_product_price }} </b></div>
+{% else %}
+<div class="price-tag text-dark" style="width:20%;font-size:25px"><b> <del>₹{{ key5.price }}</del> </b></div>
 
-  {% endif %}
+
+<div class="price-tag text-danger" style="width:20%;font-size:25px"><b> ₹{{ key5.get_product_price }} </b></div>
+
+{% endif %}
+
 
     </div>
     <div class="d-flex justify-content-between">

@@ -14,7 +14,7 @@ from twilio.rest import Client
 from account.forms import AccountAuthenticationForm, RegistrationForm, UserEditForm
 from account.models import Account, Profile
 from cart.models import OrderedItems
-from proj.models import BannerManagement, Category, CategoryOffer, Order, Product, ProductOffer, ShippingAddress
+from proj.models import BannerManagement, Category, Order, Product,  ShippingAddress
 from wishlist.models import Wishlist
 from account.helpers import *
 from .helpers import send_forget_password_mail
@@ -127,10 +127,8 @@ def logout_page(request):
     if 'user_exist' in request.session:
         del request.session['user_exist']
         print('hey')
-
+        logout(request)
         return redirect('home')
-    logout(request)
-    return redirect('home')
 
 
 def product_view(request, id):
@@ -149,19 +147,6 @@ def product_view(request, id):
 
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
-            productoff = ProductOffer.objects.filter(product=pro).exists()
-            categoryoff = CategoryOffer.objects.filter(
-                category=pro.category).exists()
-            if productoff and categoryoff:
-                productoff = ProductOffer.objects.get(product=pro)
-                categoryoff = CategoryOffer.objects.get(category=pro.category)
-                if productoff.productOffer > categoryoff.categoryOffer:
-                    offer = productoff.productOffer
-                    print(offer, 'hgjgbjhgjh')
-                elif productoff.productOffer < categoryoff.categoryOffer:
-                    offer = categoryoff.categoryOffer
-                    print(offer, 'jhhgftdrsrtdrdtrdtrdr')
-                    print(offer)
                 wishlist = Wishlist.objects.get(Product=val, account=customer)
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
@@ -179,48 +164,7 @@ def product_view(request, id):
             val = Product.objects.get(id=id)
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
-            pro = Product.objects.get(id=id)
-            productoff = ProductOffer.objects.filter(product=pro).exists()
-            categoryoff = CategoryOffer.objects.filter(
-                category=pro.category).exists()
-            print(categoryoff)
-            print(productoff)
-            if productoff:
-                offer = 0
-                price = 0
-                productoff = ProductOffer.objects.get(product=pro)
-                offer = productoff.productOffer
-                offer = 100/offer
-                price = val.price
-                val.price = val.price/int(offer)
-            elif categoryoff:
-                offer = 0
-                price = 0
-                cat = pro.category
-                categoryoff = CategoryOffer.objects.get(category=cat)
-                offer = categoryoff.categoryOffer
-                # offer = 100/offer
-                print(offer)
-                price = val.price
-                val.price = val.price-val.price*offer/100
-            elif productoff and categoryoff:
-                offer = 0
-                price = 0
-                cat = pro.category
-                productoff = ProductOffer.objects.get(product=pro)
-                categoryoff = CategoryOffer.objects.get(category=cat)
-                print(cat, 'uyoytytutuygu')
-                print(categoryoff)
-                if productoff.productOffer > categoryoff.categoryOffer:
-                    offer = productoff.productOffer
-                    print(offer, 'hgjgbjhgjh')
-                elif productoff.productOffer < categoryoff.categoryOffer:
-                    offer = categoryoff.categoryOffer
-                    print(offer, 'jhhgftdrsrtdrdtrdtrdr')
-                offer = 100/offer
-                price = val.price
-                val.price = val.price/int(offer)
-                print(val.price)
+          
             print(offer)
             cartItems = order.get_cart_items
             context = {'key5': val, 'cartItems': cartItems,

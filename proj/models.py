@@ -7,6 +7,8 @@ from account.models import Account
 class Category(models.Model):
     category_id             = models.AutoField
     category_name           = models.CharField(max_length=100)
+    offer_name              = models.CharField(max_length=100,null=True,blank=True)
+    category_offer          = models.IntegerField(null=True,blank=True,default=0)
 
     def __str__(self):
         return self.category_name
@@ -32,14 +34,33 @@ class Product(models.Model):
     image4                  = models.ImageField(upload_to="media/images",null=True,blank=True)
     category                = models.ForeignKey(Category, on_delete=models.CASCADE)
     sub                     = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
-    product_off             = models.IntegerField(null=True,blank=True)
+    offer_name              = models.CharField(max_length=100,null = True,blank=True)
+    product_offer           = models.IntegerField(null = True,blank=True,default=0)
     
 
 
     def __str__(self):
         return self.product_name
 
-    # Create your models here.
+
+
+    @property
+    def get_product_price(self):
+        if self.product_offer == 0 and self.category.category_offer==0:
+            product_price = self.price
+        elif self.product_offer < self.category.category_offer:
+            product_price = self.price - float((self.price * self.category.category_offer)/100)
+        else:
+            product_price = self.price - float((self.price * self.product_offer)/100)
+        product_price = float(product_price)
+        return product_price
+
+
+
+
+
+
+
 
 
 class Order(models.Model):
@@ -79,7 +100,7 @@ class OrderItems(models.Model):
 
     @property
     def get_total(self):
-        total = self.product.price * self.quantity
+        total = self.product.get_product_price * self.quantity
         return total
 
 
@@ -102,20 +123,6 @@ class BannerManagement(models.Model):
         return self.name
 
 
-class CategoryOffer(models.Model):
-    category = models.ForeignKey(Category,on_delete=models.CASCADE,blank=True,null=True)
-    categoryOffer = models.IntegerField(blank=True,null=True)
-
-    def __str__(self):
-        return self.category.category_name
-
-class ProductOffer(models.Model):
-    product = models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)
-    productOffer= models.IntegerField(blank=True,null=True)
-  
-
-    def __str__(self):
-        return self.product.product_name
         
 
 

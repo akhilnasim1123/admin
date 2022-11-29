@@ -9,8 +9,8 @@ from account.forms import RegistrationForm
 from account.models import Account
 from account.views import order_userside
 from cart.models import OrderedItems
-from proj.forms import BannerForm, CategoryOfferForm, ItemsForm, ProductOfferForm, SubForm
-from proj.models import BannerManagement, CategoryOffer, Product, Category, ProductOffer, ShippingAddress, SubCategory
+from proj.forms import BannerForm, ItemsForm, ProductEditForm, SubForm
+from proj.models import BannerManagement, Product, Category,  ShippingAddress, SubCategory
 
 
 # admin login page -------------------------------->
@@ -121,7 +121,8 @@ def category(request):
     if 'email' in request.session:
         if request.method == 'POST':
             category_name = request.POST.get('category_name')
-            Category.objects.create(category_name=category_name)
+            category_offer = request.POST.get('category_offer')
+            Category.objects.create(category_name=category_name,category_offer=category_offer)
             return redirect('category')
         return render(request, 'category.html')
     return redirect('admin_log')
@@ -219,7 +220,7 @@ def test(request):
 
 
 def order_list(request):
-    order = OrderedItems.objects.all()
+    order = OrderedItems.objects.all().order_by('ordered')
     return render(request, 'admin/orders.html', {'order': order})
 
 
@@ -277,7 +278,7 @@ def dashboard(request):
     order = OrderedItems.objects.all()
     total_revenue = 0
     for item in order:
-        total_revenue = total_revenue + int(item.price)
+        total_revenue = float(total_revenue) + float(item.price)
     razorpay = OrderedItems.objects.filter(payment='Paid by Razorpay').count()
     paypal = OrderedItems.objects.filter(payment='Paid by Paypal').count()
     cash_on_delivery = OrderedItems.objects.filter(payment='COD').count()
@@ -285,24 +286,24 @@ def dashboard(request):
     cancel = OrderedItems.objects.filter(status='Cancelled')
     refund = 0
     for money in cancel:
-        refund = refund + int(money.price)
+        refund = refund + float(money.price)
 
     refund = total_revenue - refund
 
     cod = OrderedItems.objects.filter(payment='COD')
     cod_total = 0
     for price in cod:
-        cod_total = cod_total + int(price.price)
+        cod_total = cod_total + float(price.price)
 
     payp = OrderedItems.objects.filter(payment='Paid by Paypal')
     paypal_total = 0
     for pp in payp:
-        paypal_total = paypal_total+int(pp.price)
+        paypal_total = paypal_total+float(pp.price)
 
     razor = OrderedItems.objects.filter(payment='Paid by Razorpay')
     razorpay_total = 0
     for rp in razor:
-        razorpay_total = razorpay_total + int(rp.price)
+        razorpay_total = razorpay_total + float(rp.price)
 
     print(total_revenue)
 
@@ -325,56 +326,8 @@ def dashboard(request):
     return render(request, 'dashboard/maindash.html', context)
 
 
-def Offers(request):
-    categoryForm = CategoryOfferForm()
-    productForm = ProductOfferForm()
-    category = CategoryOffer.objects.all().order_by('id')
-    product= ProductOffer.objects.all().order_by('id')
-    context={
-        'categoryForm':categoryForm,
-        'productForm':productForm,
-        'category':category,
-        'product':product,
 
-    }
-    return render(request,'admin/offers.html',context)
-
-def prouductOffer(request):
-    if request.method == 'POST':
-        form = ProductOfferForm(request.POST)
-        if form.is_valid():
-            form.save()
-        else:
-            messages.error(request,form.errors)
-    return redirect('Offers')        
-
-
-def categoryOffer(request):
-    if request.method == 'POST':
-        form = CategoryOfferForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('Offers')
-        else:
-            messages.error(request,form.errors)
-            return redirect(request.path)  
-    return redirect('Offers')   
-
-
-def trashCategoryOffer(request,id):
-    category = CategoryOffer.objects.get(id=id)
-    category.delete()
-    return redirect(Offers)
-
-def trashProductOffer(request,id):
-    product = ProductOffer.objects.get(id=id)
-    product.delete()
-    return redirect(Offers)
-
-
-
-
-def product2(request):
+def productAdding(request):
     categorys = Category.objects.all()
     sub_category = SubCategory.objects.all()
     product_details = Product.objects.all().order_by('id')
@@ -384,6 +337,8 @@ def product2(request):
         categoryid = request.POST.get('categoryid')
         price = request.POST.get('price')
         subcat = request.POST.get('subcat')
+        offer_name = request.POST.get('OfferName')
+        offer = request.POST.get('offer')
         stock = request.POST.get('stock')
         image1 = request.FILES.get('image1')
         image2 = request.FILES.get('image2')
@@ -391,8 +346,8 @@ def product2(request):
         categoryid = Category.objects.get(id=categoryid)
         subcat=SubCategory.objects.get(id=subcat)
         Product.objects.create(product_name=product,price=price,desc=description,sub=subcat,category=categoryid,
-        quantity=stock,image1=image1,image2=image2,image3=image3)
-        return redirect(product2)
+        quantity=stock,image1=image1,image2=image2,image3=image3,offer_name=offer_name,product_offer=offer)
+        return redirect(productAdding)
 
     context = {
         'category':categorys,
@@ -401,3 +356,99 @@ def product2(request):
     }
     return render(request,'admin/product_adding.html',context)
     
+
+
+def productEdit(request,id):
+    form = ProductEditForm()
+    instance = Product.objects.get(id=id)
+    if request.method == 'POST':
+        form = ProductEditForm(request.POST,request.FILES,instance=instance)
+        if form.is_valid():
+            print(id)
+            form.save(productAdding)
+    form = ProductEditForm(instance=instance)
+    return render(request,'admin/productEdit.html',{'form': form,'id':id})
+
+
+def Offers(request):
+    product = Product.objects.exclude(offer_name=None)
+    category = Category.objects.exclude(offer_name=None)
+    productoff = Product.objects.all().order_by('id')
+    categoryoff = Category.objects.all().order_by('id')
+    print(productoff)
+    context ={
+        'productoff':productoff,
+        'categoryoff':categoryoff, 
+        'product':product,
+        'category':category,      
+    }
+    return render(request,'admin/offers.html',context)
+
+
+def categoryOffer(request):
+    if request.method == 'POST':
+        offer = request.POST.get('offer_name')
+        pers = request.POST.get('pers')
+        category = request.POST.get('category')
+        cat = Category.objects.get(id=category)
+        cat.offer_name = offer
+        cat.category_offer = pers
+        cat.save()
+        return redirect(Offers)
+def productOffer(request):
+    if request.method == 'POST':
+       offer = request.POST.get('offer_name')
+       pers = request.POST.get('pers')
+       product = request.POST.get('product')
+       pro = Product.objects.get(id=product)
+       pro.offer_name = offer
+       pro.product_offer = pers
+       pro.save()
+       return redirect(Offers)
+
+
+def filterOrder(request):
+    if request.method == 'POST':
+        filter = request.POST.get('status')
+        status = OrderedItems.objects.filter(status = filter)
+
+        return render(request,'admin/filter.html',{'status':status})
+def statusEdit(request,id):
+    order = OrderedItems.objects.get(id=id)
+    if order.status == 'pending':
+        order.status = 'out of delivery'
+        order.save()
+        return redirect(order_list)
+    elif order.status == 'out of delivery':
+        order.status = 'delivered'
+        order.save()
+        return redirect(order_list)
+    else:
+        return redirect(order_list)
+
+def returnProduct(request,id):
+    order = OrderedItems.objects.get(id=id)
+    product = Product.objects.get(id=order.product.id)
+    if request.method == 'POST':
+        reason = request.POST.get('reason')
+        order.reason = reason
+        order.is_return = True
+        order.status = 'is_returned'
+        product.quantity = order.quantity + product.quantity
+        order.save()
+        return redirect(order_userside,order.account.id)
+    return render(request,'userprofile/return.html',{'product':product,'id':id})
+
+def deleteProOffer(request,id):
+    offer = Product.objects.get(id=id)
+    offer.product_offer = 0
+    offer.offer_name = None
+    offer.save()
+    return redirect(Offers)
+def deleteCatOffer(request,id):
+    offer = Category.objects.get(id=id)
+    offer.category_offer =0 
+    offer.offer_name = None
+    offer.save()
+    return redirect(Offers)
+

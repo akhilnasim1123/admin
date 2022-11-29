@@ -12,7 +12,7 @@ from account.models import Account
 from account.views import login_page
 from cart.models import OrderedItems
 from coupen.models import Coupen
-from proj.models import CategoryOffer, Order, OrderItems, Product, ProductOffer, ShippingAddress
+from proj.models import  Order, OrderItems, Product,  ShippingAddress
 
 
 def cart(request):
@@ -207,10 +207,9 @@ def pay_page(request):
         user_order = OrderedItems()
 
         for item in orItems:
-
+            user_order = OrderedItems()
             orItemss = item
             prod_qunt = Product.objects.get(id=orItemss.product.id)
-
             user_order.account = customer
             user_order.order = order
             user_order.shippingaddress = saddress
@@ -218,10 +217,11 @@ def pay_page(request):
             user_order.quantity = orItemss.quantity
             prod_qunt.quantity -= user_order.quantity
             user_order.coupen_applied = discounded
-            user_order.total_price = order.get_cart_total
-            user_order.price = value
+            user_order.total_price = user_order.quantity * prod_qunt.price
+            user_order.price = item.get_total
             user_order.coupen = coupen
             user_order.product = prod_qunt
+            user_order.discound = user_order.product.price-user_order.product.get_product_price
             user_order.payment_id = request.POST.get('payment_id')
             user_order.payment = request.POST.get('payment_mode')
 
@@ -298,3 +298,4 @@ def addressSelect(request,id):
         'state':address.state,
         'pincode':address.pincode
     })
+    

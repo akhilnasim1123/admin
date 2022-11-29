@@ -59,6 +59,29 @@
                               <input id="stock" name="stock"  type="number" min="0" class="form-control ">
                               </div>
 
+                              <div class="mt-5  col-md-2">
+                                <label for="stock" class="">
+                                </label>
+                                <input id="stock"  min="0" class="form-control " hidden>
+                                </div>
+
+                              <div class="mt-5  col-md-4">
+                                <label for="stock" class="">Offer Name
+                                </label>
+                                <input id="stock" name="OfferName"  type="text" min="0" class="form-control ">
+                                </div>
+                                <div class="mt-5  col-md-4">
+                                  <label for="stock" class="">Offer
+                                  </label>
+                                  <input id="stock" name="offer"  type="number" min="0" class="form-control ">
+                                  </div>
+
+                                  <div class="mt-5  col-md-2">
+                                    <label for="stock" class="">
+                                    </label>
+                                    <input id="stock"   min="0" class="form-control " hidden>
+                                    </div>
+    
 
 
 
@@ -152,7 +175,7 @@
                   <td> {{i.price}}/-</td>
                   <td> {{i.quantity}}</td>
                   <td>
-                    <form name="editform" action="{% url 'editpage' id=i.id %}" method="post">
+                    <form name="editform" action="{% url 'productEdit' id=i.id %}" method="post">
                         {% csrf_token %}
                         <input class="btn bg-success text-white" type="submit" name="Edit" value="Edit">
           

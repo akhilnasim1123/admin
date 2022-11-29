@@ -16,10 +16,20 @@
             <div class="">
                 <form action="{% url 'categoryOffer' %}" method="post">
                     {% csrf_token %}
-                {% for category_field in categoryForm %}
+    
                 <label for=""></label>
-                <div>{{category_field}}</div>
-                {% endfor %}
+                <div class="mx-5">
+                    <input type="text" name="offer_name" class="mt-3" placeholder="offername">
+                    <input type="number" name="pers" class="mt-3" placeholder="How Much">
+                    <select name="category" class="mt-3" id="">
+                        <option value="" >-----------</option>
+                        {% for cat in categoryoff %}
+                        <option value="{{cat.id}}">{{cat.category_name}}</option>
+                        {% endfor %}
+                    
+                    </select>
+                </div>
+
                 <button type="submit" class="btn bg-dark mt-3 text-white" style="margin-left: 15%; width: 63%;"> Create </button>
             </form>
             </div>
@@ -28,12 +38,19 @@
 <div class="bg-dark pt-3" style="width: 50%;height: 250px;">
 
     <div class="">
-        <form action="{% url 'productOffer' %}" method="post">
+        <form action="{% url 'productOffer'  %}" method="post">
             {% csrf_token %}
-        {% for product_field in productForm %}
-        <label for=""></label>
-        <div>{{product_field}}</div>
-        {% endfor %}
+            <div class="mx-5">
+
+        <input type="text" class="mt-3" name="offer_name" placeholder="offername">
+        <input type="number" class="mt-3" name="pers" placeholder="How Much">
+        <select name="product" class="mt-3" id="">
+            <option value="">-----------</option>
+            {% for pro in productoff %}
+            <option value="{{pro.id}}">{{pro.product_name}}</option>
+            {% endfor %}
+        </select>
+    </div>
         <button type="submit" class="btn bg-secondary mt-3 text-white" style="margin-left: 15%; width: 63%;"> Create </button>
     </form>
     </div>
@@ -48,19 +65,21 @@
                     <tr>
                       <th scope="col">#</th>
                       <th scope="col">Category</th>
-                      <th scope="col">Category Offer</th>
+                      <th scope="col">Offer Name</th>
 
-                      <th scope="col">Trash</th>
+                      <th scope="col">Off</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for i in category %}
                     <tr>
                       <th scope="row">{{i.pk}}</th>
-                      <td>{{i.category}}</td>
-                      <td> {{i.categoryOffer}}%/-</td>
-                      <td><a href="{% url 'trashCategoryOffer' i.id %}" class="" style="color: #8d8d8d;font-size: 25px;"><i class="fas fa-trash-alt"></i></a>
-                      </td>
+                      <td>{{i.category_name}}</td>
+                      <td>{{i.offer_name}}</td>
+                      <td> {{i.category_offer}}%/-</td>
+                      <td>
+                        <a href="{% url 'deleteCatOffer' i.id %}" class="" style="color: #cacaca;font-size: 25px;"><i class="fas fa-trash-alt"></i></a>
+                                            </td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -77,17 +96,20 @@
                       <th scope="col">Product</th>
                       <th scope="col">Product Offer</th>
 
-                      <th scope="col">Trash</th>
+                      <th scope="col">Off</th>
                     </tr>
                   </thead>
                   <tbody>
                     {% for i in product %}
                     <tr>
                       <th scope="row">{{i.pk}}</th>
-                      <td>{{i.product}}</td>
-                      <td> {{i.productOffer}}%/-</td>
-                      <td><a href="{% url 'trashProductOffer' i.id %}" class="" style="color: #cacaca;font-size: 25px;"><i class="fas fa-trash-alt"></i></a>
-                      </td>
+                      <td>{{i.product_name}}</td>
+                      <td>{{i.offer_name}}</td>
+                      <td> {{i.product_offer}}%/-</td>
+                      <td>
+                        <a href="{% url 'deleteProOffer' i.id %}" class="" style="color: #cacaca;font-size: 25px;"><i class="fas fa-trash-alt"></i></a>
+
+                                           </td>
                     </tr>
                     {% endfor %}
                     </tbody>
