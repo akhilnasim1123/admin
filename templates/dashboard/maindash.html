@@ -89,11 +89,12 @@
 
 
 <script>
-  var xValues = ["Orders", 'Cancelled'];
-  var yValues = [ {{ order_data }}, {{cancel_data}}];
+  var xValues = ["Orders", 'Cancelled','Return'];
+  var yValues = [ {{ order_data }}, {{cancel_data}},{{returned}}];
   var barColors = [
     "#093D8A",
     "#910009",
+    "#8e5ea2",
 
   ];
   

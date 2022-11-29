@@ -37,16 +37,23 @@ def user_loginpage(request):
 
 
 def registration_view(request):
+    referal_code ='Torque.in'+str(random.randint(1111111, 9999999))
+    print(referal_code)
     context = {}
+    re = 'asdfk'
+
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
+
             form.save()
+
             # email = form.cleaned_data.get('email')
             # raw_password = form.cleaned_data.get('password1')
             # account = (email=email, password=raw_password)
             # account = authenticate(email=email, password=raw_password)
             # login(request, account)
+
             return redirect('loginpage')
         else:
             context['registration_form'] = form
@@ -103,6 +110,7 @@ def login_page(request):
                 print('success')
                 request.session['user_exist'] = email
                 login(request, user)
+
                 return redirect('home')
             else:
                 messages.error(request, 'Invalid Details')

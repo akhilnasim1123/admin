@@ -1,4 +1,6 @@
 # Create your models here.
+import random
+import this
 import phonenumber_field
 import regex as regex
 from django.contrib.auth.models import AbstractUser, BaseUserManager, User
@@ -45,11 +47,24 @@ class Account(AbstractUser):
     first_name                  = models.CharField(max_length=100)
     last_name                   = models.CharField(max_length=100)
     phone                       = models.CharField(max_length=14) 
-
+    referal_code                = models.CharField(max_length=50,blank=True,null=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
+    # def save(self,*args, **kwargs):
+    #     referal_code = self.cleaned_data.get("referal_code")
+    #     if referal_code == "":
+    #         referal_code ='Torque.in'+str(random.randint(1111111, 9999999))
+    #         self.referal_code = referal_code
+    #         refer = self.referal_code
+    #         return refer
+    #     super().save(refer, **kwargs)
+
+        
+
+
+    
 
 
 class Profile(models.Model):

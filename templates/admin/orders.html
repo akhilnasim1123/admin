@@ -27,10 +27,10 @@
   <form action="{% url 'filterOrder' %}" method="post" class="d-flex">
     {% csrf_token %}
   <select  name="status" class="bg-dark text-white form-control" style="width: 50%;" id="">
-    <option value="" class="option"></option>
+    <option value="orderes"></option>
     <option value="pending">Pending</option>
     <option value="delivered">Delivered</option>
-    <option value="out of shipping">Out of Shipping</option>
+    <option value="out of delivery">Out of Shipping</option>
     <option value="is_returned">Return</option> 
     <option value="Cancelled">Cancelled</option>
   </select>
@@ -59,25 +59,22 @@
   </thead>
   {% if order %}
 {% for i in order %}
+<a href="">
   <tbody>
 
     <tr>
-
+      
       <td>{{ i.account }}</td>
-      <td>{{ i.product }}</td>
+     <td>{{ i.product }}</td>
       <td>{{ i.price }}</td>
         <td>{{ i.quantity }}</td>
         <td><i>{{ i.status }}</i></td>
         <td><b>{{ i.ordered }}</b></td>
- 
+  
 
         
       <td>
-          <form name="editform" action="{% url 'order_view' i.id %}" method="post">
-              {% csrf_token %}
-              <input class="btn bg-warning text-white" type="submit" name="Edit" value="View">
-
-          </form>
+        <a href="{% url 'order_view' i.id %}" class="text-hover text-warning" style="text-decoration: none;"> View </a>
       </td>
 
         {% if i.status == 'pending'%}
@@ -118,7 +115,7 @@
 
     </tr>
 
-  </tbody>
+  </tbody></a>
 {% endfor %}
                     {% endif %}
                     

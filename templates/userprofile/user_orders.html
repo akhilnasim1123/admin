@@ -26,7 +26,7 @@
 <td style="width: 20%;"><a href="{% url 'product_view' i.product.id %}"><img class="" style="width: 100%;" src="/media/{{ i.product.image1 }}" alt=""></a></td>
 <td class="pt-5">{{ i.product }}</td>
 <td class="pt-5">{{ i.price }}</td>
-<td class="pt-5">{{ i.active }}</td>
+<td class="pt-5">{{ i.status }}</td>
 <td class="pt-5">{{ i.quantity }}</td>
 
       {% if i.status == 'pending' %}

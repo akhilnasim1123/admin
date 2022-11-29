@@ -274,6 +274,7 @@ def banner(request):
 
 def dashboard(request):
     cancel_data = OrderedItems.objects.filter(status='Cancelled').count()
+    returned = OrderedItems.objects.filter(status='is_returned').count()
     order_data = OrderedItems.objects.all().count()
     order = OrderedItems.objects.all()
     total_revenue = 0
@@ -311,6 +312,7 @@ def dashboard(request):
     print(order_data)
     context = {
         'cancel_data': cancel_data,
+        'returned':returned,
         'order_data': order_data,
         'total_revenue': total_revenue,
         'razorpay': razorpay,
@@ -409,10 +411,15 @@ def productOffer(request):
 
 def filterOrder(request):
     if request.method == 'POST':
+        
         filter = request.POST.get('status')
-        status = OrderedItems.objects.filter(status = filter)
+        if filter == 'orderes':
+            return redirect(order_list)
+        else:
+            status = OrderedItems.objects.filter(status = filter)
 
-        return render(request,'admin/filter.html',{'status':status})
+            return render(request,'admin/filter.html',{'status':status})
+        
 def statusEdit(request,id):
     order = OrderedItems.objects.get(id=id)
     if order.status == 'pending':

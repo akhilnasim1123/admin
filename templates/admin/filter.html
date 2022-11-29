@@ -27,10 +27,11 @@
   <form action="{% url 'filterOrder' %}" method="post" class="d-flex">
     {% csrf_token %}
   <select  name="status" class="bg-dark text-white form-control" style="width: 50%;" id="">
-    <option value="" class="option"></option>
+
+    <option value="orderes"></option>
     <option value="pending">Pending</option>
     <option value="delivered">Delivered</option>
-    <option value="out of shipping">Out of Shipping</option>
+    <option value="out of delivery">Out of Shipping</option>
     <option value="is_returned">Return</option>   
     <option value="Cancelled">Cancelled</option>
     
@@ -74,13 +75,9 @@
         <td>{{ i.ordered }}</td>
         <td></td>
         
-      <td>
-          <form name="editform" action="{% url 'order_view' i.id %}" method="post">
-              {% csrf_token %}
-              <input class="btn bg-success text-white" type="submit" name="Edit" value="View">
-
-          </form>
-      </td>
+        <td>
+          <a href="{% url 'order_view' i.id %}" class="text-hover text-warning" style="text-decoration: none;"> View </a>
+        </td>
       <td class="">
         <div >
         {% if i.status == 'pending' %}
