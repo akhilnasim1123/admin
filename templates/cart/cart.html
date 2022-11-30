@@ -48,12 +48,12 @@
 
                 <button 
                   class="value-button decrease-button btn bg-black text-white border-dark" 
-                  onclick="decreaseValue(this,`{{item.product.id}}`,`{{item.product.quantity}}`,`{{item.product.price}}`)"
+                  onclick="decreaseValue(this,`{{item.product.id}}`,`{{item.product.quantity}}`,`{{item.product.get_product_price}}`)"
                   title="Azalt" data-action="remove" style="width: 36px;">-</button>
                   <div class="number mt-2" style="margin-left: 8px;">{{item.quantity}}</div>
                 <button 
                   class="value-button increase-button text-center bg-black text-white  btn border-dark mx-2" 
-                  onclick="increaseValue(this,`{{item.product.id}}`,`{{item.product.quantity}}`,`{{item.product.price}}`)"
+                  onclick="increaseValue(this,`{{item.product.id}}`,`{{item.product.quantity}}`,`{{item.product.get_product_price}}`)"
                   title="Arrtır" data-action="add"
                   >+
                 </button>

@@ -58,13 +58,11 @@ background-color: red;
 .pro-card{
   height:auto;
   display:flex;
-  justify-content: align-items:center;
-  space-around;
+  justify-content:center;
+  align-items:center;
   background-color: #e8e8e8;
-}.cart-img{
-
 }
-.cart-icon{
-
+a{
+    text-decoration: none;
 }
 

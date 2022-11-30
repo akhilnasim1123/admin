@@ -14,7 +14,7 @@ from twilio.rest import Client
 from account.forms import AccountAuthenticationForm, RegistrationForm, UserEditForm
 from account.models import Account, Profile
 from cart.models import OrderedItems
-from proj.models import BannerManagement, Category, Order, Product,  ShippingAddress
+from proj.models import BannerManagement, Category, Order, Product,  ShippingAddress, SubCategory
 from wishlist.models import Wishlist
 from account.helpers import *
 from .helpers import send_forget_password_mail
@@ -75,7 +75,9 @@ def home(request):
             items = order.orderitems_set.all()
             cartItems = order.get_cart_items
             products = Product.objects.all()
-            data = {'products': products, 'items': items,
+            category = Category.objects.all().order_by('id')
+            sub = SubCategory.objects.all().order_by('id')
+            data = {'products': products, 'items': items,'category':category,'sub':sub,
                     'order': order, 'cartItems': cartItems}
             return render(request, 'page.html', data)
         except:
@@ -137,6 +139,9 @@ def logout_page(request):
         print('hey')
         logout(request)
         return redirect('home')
+    logout(request)
+    return redirect('home')
+
 
 
 def product_view(request, id):

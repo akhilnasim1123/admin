@@ -2,54 +2,132 @@
 {% load static %}
 
 {% block content %}
+<div class="row w-100">
+  <div class="col-2 text-center bg-dark text-white sidebar text-black" style="overflow-y: scroll;height: 642px;scroll-behavior: smooth;">
 
-<div class="container">
+    <div class="mt-5 w-75 bg-danger">
+      <a href="" style="text-decoration: none;"><p class="text-white text-center" style="font-size: 20px;"><b>CATEGORY</p></b></a>
+    </div>
+    <div>
+    <table class="table bg-dark text-white mt-5 table-hover w-100">
+      <tbody>
+      {% for cat in category %}
+      <tr>
+        <td class="col dropdown text-white">
+
+  <a href="#" class="category_name "><b>{{ cat.category_name }} <i class="fas fa-angle-right dropdown"></i></b></a>
+<div class="cat-menu">
+{% for i in sub %}
+   <div><a>{{i.sub_name}}</a></div>
+   {% endfor %}
+  </div>
+      </td>
+    </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+    </div>
+<div class="mt-5 w-75 bg-danger">
+  <a href="" style="text-decoration: none;"><p class="text-white  " style="font-size: 20px;"><b>PRODUCTS</p></b></a>
+</div>
+<div>
+  <table class="table bg-dark mt-5 table-hover w-100">
+    <tbody>
+    {% for pro in products %}
+    <tr>
+    <td class="col">
+      <a href="{% url 'product_view' id=pro.id %}"><p class=""><b>{{ pro.product_name }}</b></p></a>
+    </td>
+  </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+</div>
+
+  </div>
+  <div class="col-10 " style="">
+
+    <div class="container">
 <h5 class="text-black mt-3"><span class="text-danger" style="width: 10%; font-size:40px;"><b>|</b></span>Engine</h5>
 </div>
-<div class="pro-card"  style="">
 
-    <div class="container" style=" height:auto; display:flex; align-items:center;   text-align:center">
+<div class="pro-card bg-white"  style="height: 300px;display: flex;flex-direction: column;width: 100%;">
+  <div class="container">
+  <div class="container row" >
+
 {% for product in products %}
+<div class="col-3">
+<a href="{% url 'product_view' id=product.id %}" class="card product-card  " style="width: 100%;height:350px;text-align:center; display:flex;flex-direction:column; align-items:center;justify-content:center; text-decoration: none; color:black;">
+    
+  <div style="width:100%;height: 60%;background-image: url(/media/{{product.image1}});background-size:cover;background-repeat: no-repeat;">
 
-<a href="{% url 'product_view' id=product.id %}" class="card pt-3 mx-2" style="width: 17%;height: 83%;text-align:center; display:flex;flex-direction:column; align-items:center;justify-content:center; text-decoration: none; color:black;">
-    <div style="width:100%">
-  <img src="/media/{{ product.image1 }}" class="card-img-top" alt="..." style="width:80%">
 
 </div>
     <div style="    width: 100%;
-    height: auto;
-    padding-left: 130px; margin-top: 10px;">
+    height: 10%;
+    padding-left: 150px; margin-top: 10px;">
     <div class="text-dark d-flex align-items-center justify-content-center bg-danger text-white" style="
     width: 100%;
         text-align:center;
 
 ">
-    <span class="tag " style="font-size:16px;height:25px">₹{{ product.price }}</span>
-
-
+    <span class="tag mt-1" style="font-size:16px;height:30px">₹{{ product.get_product_price }}</span>
     </div>
-    
-  
         </div>
-        
-      
-    <hr>
-  <div class="card-body d-flex align-items-center justify-content-center" style="width:100%; text-align:center;">
+
+        <div class="d-flex justify-content-around text-secondary" style="width: 100%;height: 10%;">
+          <p><del><b>{{ product.price }}</b></del></p>
+          <p><b>Best Offer</b></p>
+        </div>
+
+  <div class="card-body text-center" style="width:100%; height: 20%;">
  
       <div>
-    <h5 class="card-title" style="font-size:14px;margin-top:-18px;">{{ product.product_name }}</h5>
+    <h5 class="card-title" style="font-size:14px;">{{ product.product_name }}</h5>
 </div>
 
   </div>
 
 </a>
-
+</div>
 {% endfor %}
+</div>
+    </div></div>
     </div>
-    </div>
+  </div>
+</div>
 <style>
-
+a{
+    text-decoration: none;
+    color: rgb(213, 213, 213);
+}
+.sidebar a:hover{
+    color: cyan;
+}
+table:hover{
+  background-color: blue;
+}
+.product-card:hover{
+  box-shadow: 100rem;
+}
+.sidebar::-webkit-scrollbar{
+  display: none;
+}li{
+  list-style: none;
+}
 
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.category_name').click(function(){
+      $(this).next('.cat-menu').slideToggle();
+    });
+  });
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 {% endblock content %}

@@ -19,7 +19,8 @@
         integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -66,8 +67,8 @@
                         <div class="cart-icon" style="width: 44px;margin-top: -9px;">
                             <a class="d-flex" style="text-decoration:none;" href="{% url 'cart' %}">
                                 <img class="cart-img" src="{% static '/images/6+cart.png' %}" style="width:100%;">
-                                <p id="cart-total " class="bg-danger text-white text-center rounded"
-                                    style="display:block;width: 20px; height: 21px;border:radius:50%;margin-left: -21px;font-size: 13px;">
+                                <p id="cart-total-ppp" class="bg-danger text-white text-center rounded"
+                                    style="display:block;width: 20px; height: 21px;border-radius:50%;margin-left: -21px;font-size: 13px;">
                                     {{ cartItems }}</p>
 
                             </a>
