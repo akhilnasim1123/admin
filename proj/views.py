@@ -423,10 +423,10 @@ def filterOrder(request):
 def statusEdit(request,id):
     order = OrderedItems.objects.get(id=id)
     if order.status == 'pending':
-        order.status = 'out of delivery'
+        order.status = 'Shipped'
         order.save()
         return redirect(order_list)
-    elif order.status == 'out of delivery':
+    elif order.status == 'Shipped':
         order.status = 'delivered'
         order.save()
         return redirect(order_list)
@@ -443,6 +443,7 @@ def returnProduct(request,id):
         order.status = 'is_returned'
         product.quantity = order.quantity + product.quantity
         order.save()
+        product.save()
         return redirect(order_userside,order.account.id)
     return render(request,'userprofile/return.html',{'product':product,'id':id})
 

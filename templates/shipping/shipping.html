@@ -52,7 +52,7 @@ input [type=text]{
                               <div style="width: 120px;">
                                 <h5 class="mb-0">₹{{ item.get_total|floatformat:2 }}/-</h5>
                               </div>
-                              <a href="{% url 'deletecart' item.id '2' %} " style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+                              <a href="#" style="color: #cecece;" onclick="trashCart('{{item.id}}')"><i class="fas fa-trash-alt"></i></a>
                             </div>
                           </div>
                         </div>

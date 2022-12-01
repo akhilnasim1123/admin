@@ -2,6 +2,7 @@
 import json
 import random
 from random import randint
+import uuid
 
 from django.contrib import messages
 from django.http import JsonResponse
@@ -111,11 +112,21 @@ def updateItem(request):
     print('productId:', productId)
     account = request.user
     product = Product.objects.get(id=productId)
-    order, created = Order.objects.get_or_create(
-        account=account, complete=False)
-
-    orderItem, created = OrderItems.objects.get_or_create(
+    if request.user.is_authenticated:
+        order, created = Order.objects.get_or_create(
+            account=account, complete=False)
+        orderItem, created = OrderItems.objects.get_or_create(
         order=order, product=product)
+    else:
+        print('sjkdfa')
+        
+        request.session['guestUser']= str(uuid.uuid4())
+        print(request.session['guestUser'])
+        order, created = Order.objects.get_or_create(
+           session_id=request.session['guest-user'], complete=False)
+
+        orderItem, created = OrderItems.objects.get_or_create(
+        product=product,session_id=request.session['guest-user'])
 
     if action == 'add':
         if product.quantity <= 0 and orderItem.quantity > product.quantity:
@@ -245,16 +256,25 @@ def pay_page(request):
 
 
 
-def deletecart(request, id, value):
-
+def deletecart(request, id):
+    print('asdhfnkjahsdfkahsfdkhashhafdskhaksfhakshdfkashhasfdhkash')
     delete = OrderItems.objects.get(id=id)
 
     delete.delete()
+    total = delete.order.get_cart_total
+    count = delete.order.get_cart_items
+    values = {
+        'total':total,
+        'count':count,
+    }
+    
 
-    if value == 1:
-        return redirect(cart)
-    else:
-        return redirect(shoppingaddress)
+    return JsonResponse(values,safe=False)
+
+    # if value == 1:
+    #     return redirect(cart)
+    # else:
+    #     return redirect(shoppingaddress)
 
 
 def razorpay(request):

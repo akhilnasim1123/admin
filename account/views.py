@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import never_cache
@@ -145,6 +145,8 @@ def logout_page(request):
 
 
 def product_view(request, id):
+    digit = str(uuid.uuid4())
+    print(digit)
     if request.user.is_authenticated:
         print('authenticated')
         customer = request.user
@@ -157,10 +159,11 @@ def product_view(request, id):
             offer = 0
             price = 0
             pro = Product.objects.get(id=id)
-
+            wishlist = Wishlist.objects.get(product=val, account=customer)
+            print(wishlist)
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
-                wishlist = Wishlist.objects.get(Product=val, account=customer)
+
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
 
@@ -177,10 +180,14 @@ def product_view(request, id):
             val = Product.objects.get(id=id)
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
-          
+            wishlist = Wishlist.objects.filter(product=val, account=customer).exists()
+            if wishlist:
+                wishlist = wishlist
+
+            print(wishlist)
             print(offer)
             cartItems = order.get_cart_items
-            context = {'key5': val, 'cartItems': cartItems,
+            context = {'key5': val, 'cartItems': cartItems,'wishlist':wishlist,
                        'offer': offer, 'price': price}
             print("An exception occurred")
 
@@ -196,7 +203,7 @@ def product_view(request, id):
     items = []
     cartItems = []
     val = Product.objects.get(id=id)
-    context = {'key5': val, 'items': items, 'offer': offer,
+    context = {'key5': val, 'items': items,
                'order': order, 'cartItems': cartItems}
     return render(request, 'product_view.html', context)
 
@@ -339,7 +346,7 @@ def address_view(request, id):
 def delete_address(request, id, user_id):
     delete = ShippingAddress.objects.filter(id=id)
     delete.delete()
-    return redirect(address_view, user_id)
+    return JsonResponse('deleted',safe=False)
 
 
 def address_edit(request, id):
@@ -366,24 +373,20 @@ def order_userside(request, id):
     return render(request, 'userprofile/user_orders.html', context)
 
 
-def add_wishlist(request, product_id, user_id, id):
+def add_wishlist(request, product_id, user_id):
+    print('kjdfsdfsjjshguhuhnadsf')
     product = Product.objects.get(id=product_id)
     user = Account.objects.get(id=user_id)
     if Wishlist.objects.filter(product=product, account=user).exists():
         wishlist = Wishlist.objects.filter(product=product, account=user)
         if wishlist:
             wishlist.delete()
-            if id == '1':
-                return redirect('product_view', product_id)
-            else:
-                return redirect('wishlists', user_id)
-        else:
-            return redirect('wishlists', product_id)
+            return JsonResponse('deleted',safe=False)
     else:
         product = Product.objects.get(id=product_id)
         user = Account.objects.get(id=user_id)
         wishlist = Wishlist.objects.create(product=product, account=user)
-        return redirect('product_view', product_id)
+        return JsonResponse('added',safe=False)
 
 
 def wishlist_userside(request, id):

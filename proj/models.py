@@ -70,7 +70,7 @@ class Order(models.Model):
     complete                = models.BooleanField(default=False, null=True, blank=False)
     transaction_id          = models.CharField(max_length=200, null=True)
     tracking_no             = models.CharField(max_length=150, null=True)
-
+    session_id              = models.CharField(max_length=500,null=True, blank=True)
 
     def __str__(self):
         return '{} - {}'.format(self.id, self.tracking_no)
@@ -94,6 +94,7 @@ class OrderItems(models.Model):
     order                   = models.ForeignKey(Order, on_delete=models.CASCADE, blank=True, null=True)
     quantity                = models.IntegerField(default=0, null=True, blank=True)
     discound                = models.IntegerField(default=0,null=True, blank=True)
+    session_id              = models.CharField(max_length=500,null=True, blank=True)
 
     def __str__(self):
         return '{} {}'.format(self.order.id, self.order.tracking_no)

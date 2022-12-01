@@ -21,7 +21,7 @@
         <h5 class="text-black"><span class="text-danger" style="width: 10%; font-size:40px;"><b>|</b></span>Address</h5>
     </div>
     {% for data in datas %}
-    <div class="card bg-light mt-3">
+    <div class="card bg-light mt-3 " id="address-of-user">
         <div class="container">
             <form action="{% url 'addressedit' data.id %}" method="post">
                 {% csrf_token %}
@@ -59,12 +59,12 @@
    
     <a href="" > <Button class="btn border border-danger" type=""> Edit</Button></a>
 
-    <a href="{% url 'deleteaddress' data.id user.id %}" class="mx-5" style="color: #dd0000;font-size: 25px;"><i class="fas fa-trash-alt"></i></a>
+    <a href="#" onclick="addressTrash('{{data.id}}','{{user.id}}')" class="mx-5" style="color: #dd0000;font-size: 25px;"><i class="fas fa-trash-alt"></i></a>
 
 </div>
 </form>
 </div>
-{% endfor %}
 </div>
+{% endfor %}
 
 {% endblock content %}
