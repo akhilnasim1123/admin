@@ -97,7 +97,7 @@ class OrderItems(models.Model):
     session_id              = models.CharField(max_length=500,null=True, blank=True)
 
     def __str__(self):
-        return '{} {}'.format(self.order.id, self.order.tracking_no)
+        return str(self.product.id)
 
     @property
     def get_total(self):

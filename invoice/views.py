@@ -8,6 +8,23 @@ from xhtml2pdf import pisa
 from cart.models import OrderedItems
 
 
+
+def guest(request):
+    guest_user = request.session.session_key 
+    print("session exist", guest_user)
+
+
+    if guest_user == None:
+        guest_user = request.session.create()
+        print("session created", guest_user)
+
+    return guest_user
+
+
+
+
+
+
 def order_details_user_side(request,id):
     order = OrderedItems.objects.get(id=id)
     payment=order.payment

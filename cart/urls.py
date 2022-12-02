@@ -9,7 +9,7 @@ urlpatterns =[
     path('deletecart/<int:id>',views.deletecart,name='deletecart'),
     path('razorpay',views.razorpay,name='razorpay'),
     path('success',views.success,name='success'),
-    path('addressSelect/<int:id>',views.addressSelect,name='addressSelect')
-
+    path('addressSelect/<int:id>',views.addressSelect,name='addressSelect'),
+    path('guest',views.guest,name='guest'),
 
 ]

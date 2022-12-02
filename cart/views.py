@@ -5,31 +5,44 @@ from random import randint
 import uuid
 
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from account.models import Account
 from account.views import login_page
+
+
 from cart.models import OrderedItems
 from coupen.models import Coupen
+from invoice.views import guest
 from proj.models import  Order, OrderItems, Product,  ShippingAddress
+
+#guest user func
 
 
 def cart(request):
 
+ 
+
+    if cart:
+        print("Guest cart items are")
+
+    else:
+        print("Nop!")
     if request.user.is_authenticated:
         print('authenticated')
         customer = request.user
-        print('customer')
-        order, created = Order.objects.get_or_create(
+        print('customer') 
+        order = Order.objects.filter(
             account=customer, complete=False)
-        items = OrderItems.objects.all().order_by('id')
-        
+        items = OrderItems.objects.filter(account=customer)
+        print(items)     
         # for i in items:
         #     print(i.get_total)
-        cartItems = order.get_cart_items
-        itm = OrderItems.objects.filter(account=customer)
+        for i in order:
+            cartItems = i.get_cart_items
+        # items = OrderItems.objects.filter(account=customer)
         product_id =0
         # count = itm.product.quantity
         # price= itm.product.price
@@ -40,18 +53,20 @@ def cart(request):
         context = {'items': items, 'order': order, 'cartItems': cartItems}
         return render(request, 'cart/cart.html', context)
     else:
-        order, created = Order.objects.get_or_create(
-            session_id=request.session['guestUser'], complete=False)
+        user = guest(request)
+        order = Order.objects.filter(
+            session_id=user, complete=False)
+        items = OrderItems.objects.filter(session_id=user) 
 
-        items = OrderItems.objects.filter(session_id=request.session['guestUser'])
-  
-        cartItems = order.get_cart_items
+        print("The items in cart are",items)
+
+        cartItems=0
+        for  i  in order:
+            cartItems = i.get_cart_items
         context = {'items': items, 'order': order, 'cartItems': cartItems}
         return render(request, 'cart/cart.html', context)
 
-
-
-@login_required(login_url=login_page)
+@login_required(login_url='login_page')
 def shippingaddress(request):
     if request.user.is_authenticated:
         discound = 0
@@ -111,21 +126,22 @@ def updateItem(request):
     print('productId:', productId)
     account = request.user
     product = Product.objects.get(id=productId)
+    
     if request.user.is_authenticated:
+        print('asdjfaidfhaousdgiviufah')
         order, created = Order.objects.get_or_create(
             account=account, complete=False)
         orderItem, created = OrderItems.objects.get_or_create(
-        order=order, product=product)
+        order=order, product=product,account=account)
+        print(orderItem)
     else:
-        print('sjkdfa')
-        
-        request.session['guestUser']= 'guestUser'
-        print(request.session['guestUser'])
+        print('sjkdfajhkjhbkhjhggjgg')
+        guestUser = guest(request) 
         order, created = Order.objects.get_or_create(
-           session_id=request.session['guestUser'], complete=False)
+           session_id=guestUser, complete=False)
 
         orderItem, created = OrderItems.objects.get_or_create(
-        product=product,order=order,session_id=request.session['guestUser'])
+        product=product,order=order,session_id=guestUser)
 
     if action == 'add':
         if product.quantity <= 0 and orderItem.quantity > product.quantity:

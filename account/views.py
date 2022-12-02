@@ -10,11 +10,13 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import never_cache
 from twilio.rest import Client
-
 from account.forms import AccountAuthenticationForm, RegistrationForm, UserEditForm
 from account.models import Account, Profile
+
 from cart.models import OrderedItems
-from proj.models import BannerManagement, Category, Order, Product,  ShippingAddress, SubCategory
+from invoice.views import guest
+
+from proj.models import BannerManagement, Category, Order, OrderItems, Product,  ShippingAddress, SubCategory
 from wishlist.models import Wishlist
 from account.helpers import *
 from .helpers import send_forget_password_mail
@@ -24,6 +26,16 @@ from .helpers import send_forget_password_mail
 
 
 def landing_page(request):
+    if not request.session.session_key:
+        request.session.save()
+        print(request.session.session_key)
+    if 'user_exist' in request.session:
+        banner = BannerManagement.objects.all()
+
+        context = {
+            'banner': banner
+        }
+        return render(request, 'landing/index.html', context)
     banner = BannerManagement.objects.all()
 
     context = {
@@ -64,8 +76,9 @@ def registration_view(request):
 
 
 def home(request):
-
-    if request.user.is_authenticated:
+    print(request.session.session_key)
+    # if request.user.is_authenticated:
+    if 'user_exist' in request.session:
         print('authenticated')
         customer = request.user
         print('customer')
@@ -81,12 +94,24 @@ def home(request):
                     'order': order, 'cartItems': cartItems}
             return render(request, 'page.html', data)
         except:
-            print("An exception occurred")
-    elif request.user is None:
-        order = []
-        items = []
-        cartItems = []
-    order = []
+                # order = []
+                # items = []
+                # cartItems = []
+                print("An exception occurred")
+                # products = Product.objects.all()
+                # category = Category.objects.all().order_by('id')
+                # sub = SubCategory.objects.all().order_by('id')
+                # data = {
+                #     'products': products,
+                #     'sub':sub,
+                #     'category':category,
+                #     'cartItems': cartItems,
+                #     'items': items,
+                #     'order': order,
+                # }
+                # return render(request, 'page.html', data)
+
+    order=[]
     items = []
     cartItems = []
     products = Product.objects.all()
@@ -115,8 +140,30 @@ def login_page(request):
 
                 print('success')
                 request.session['user_exist'] = email
-                login(request, user)
-
+                guestUser = request.session.session_key
+                print('guest user id', guestUser)
+                if guestUser:
+                    guestItem = OrderItems.objects.filter(session_id=guestUser)
+                    print("Guest cart is", guestItem)
+                    add = OrderItems() 
+                    if guestItem:
+                        items = guestItem
+                        print('guestUser')
+                        for item in items:
+                            print(item.product)
+                            add.account = user 
+                            check = None
+                            # check = OrderItems.objects.get(account=user,product=item.product) 
+                            # if check:
+                            #         add.quantity = check.quantity + item.quantity
+                            #         add.product = check.product
+                            # else:
+                            add.product = item.product
+                            add.quantity = item.quantity
+                            add.order = item.order
+                            add.save()
+                            guestItem.delete() 
+                login(request, user)   
                 return redirect('home')
             else:
                 messages.error(request, 'Invalid Details')
@@ -141,6 +188,9 @@ def logout_page(request):
     if 'user_exist' in request.session:
         del request.session['user_exist']
         print('hey')
+        guestUser = request.session.session_key
+        items = OrderItems.objects.filter(session_id=guestUser)
+        items.delete()
         logout(request)
         return redirect('home')
     logout(request)
