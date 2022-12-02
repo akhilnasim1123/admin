@@ -53,3 +53,22 @@ function addressTrash(addressId,userId){
     });
 
 }
+
+function displayOrder(){
+    console.log('orderes');
+    document.getElementById('user-orders').classList.remove('hidden')
+    document.getElementById('user-profile').classList.add('hidden')
+    document.getElementById('user-wishlist').classList.add('hidden')
+}
+function displayWishlist(){
+    console.log('orderes');
+    document.getElementById('user-orders').classList.add('hidden')
+    document.getElementById('user-profile').classList.add('hidden')
+    document.getElementById('user-wishlist').classList.remove('hidden')
+}
+function displayProfile(){
+    console.log('orderes');
+    document.getElementById('user-orders').classList.add('hidden')
+    document.getElementById('user-profile').classList.remove('hidden')
+    document.getElementById('user-wishlist').classList.add('hidden')
+}

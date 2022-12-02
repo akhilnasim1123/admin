@@ -113,6 +113,8 @@ class ShippingAddress(models.Model):
     state                   = models.CharField(max_length=200, null=True)
     pincode                 = models.CharField(max_length=10, null=True)
     phone                   = models.CharField(max_length=30)
+    email                   = models.CharField(max_length=100,null=True,blank=True)
+    name                    = models.CharField(max_length=100,null=True,blank=True)
     
 
 

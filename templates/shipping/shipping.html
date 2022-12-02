@@ -77,7 +77,84 @@ input [type=text]{
  {% if address %}
  
  <div class="mb-3">
-  <p><b>Address</b></p>
+  <div class="d-flex justify-content-between">
+  <p ><b>Address</b></p>
+
+  <div>
+  <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#myModal">
+    Add Address
+  </button>
+  <div class="modal fade" id="myModal" style="width: 100%;">
+    <div class="modal-dialog ">
+      <div class="d-flex justify-content-between"> 
+      <label for="" class="text-white"><b>Address</b></label>
+      <a href="#"></a><button type="button" class="close text-white" data-dismiss="modal">&times;</button></div>
+      <div class="modal-content " style="height: 450px;">
+        {% for message in messages %} 
+        <p class="text-center text-danger">{{message}}</p>
+        {% endfor %}
+        {% if order %}
+        <!-- Modal Header -->
+        <form class="mt-2" method="post" action="{% url 'addressAdd' %}" id="form-checkouts" >
+                  
+          {% csrf_token %}
+
+        <div class="form-outline form-white mt-5">
+              <input name="names" type="text" class="form-control "
+                placeholder="Name"  id="name-tests" value=""/>
+
+            </div>
+            <div  class="form-outline form-white mt-2">
+            <input type="email" class="form-control " value="{{order.account.email}}" name="emails" />
+            </div>
+
+         <div  class="form-outline form-white mt-2">
+              <input name="phones" type="tel" id="phones" class="form-control "
+                placeholder="Phone Number"  maxlength="19" value=""/>
+
+            </div>
+
+
+        <div class="form-outline form-white mt-2">
+          <input name="addressess" type="text" id="address-ess" class="form-control " siez="17"
+            placeholder="Address" />
+
+        </div>
+        <div class="form-outline form-white mt-2">
+          <input name="citys" type="text" id="citys" class="form-control form-control-md" siez="17"
+            placeholder="city"  />
+
+        </div>
+
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div class="form-outline form-white mt-2">
+              <input name="states" type="text" id="states" class="form-control" style="margin-left: 51px;width: 80%;"
+                placeholder="State"  />
+    
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-outline form-white mt-2">
+              <input name="pincodes" type="number" id="pincodes" class="form-control" style="margin-left: -3px;width: 80%;"
+                placeholder="pincode"  maxlength="9" />
+
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn bg-dark text-white " style="width: 80%; margin-left: 10%;">Add</button>
+        </form>
+{% endif %}
+
+
+        
+      </div>
+    </div>
+  </div>
+
+
+  </div>
+  </div>
   <hr>
   {% for i in address %}          
                                <p>
@@ -105,101 +182,99 @@ input [type=text]{
                           <div class="d-flex justify-content-between align-items-center mb-4">
 
                           </div>
-                             {% if order %}
-                  
+                          {% if order %}
                           <form class="mt-2" method="post" id="form-checkout" >
                   
-                              {% csrf_token %}
+                            {% csrf_token %}
 
-                            <div class="form-outline form-white">
-                                  <input name="name" type="text" class="form-control "
-                                    placeholder="Name"  id="name-test" value=""/>
+                          <div class="form-outline form-white">
+                                <input name="name" type="text" class="form-control "
+                                  placeholder="Name"  id="name-test" value=""hidden/>
 
-                                </div>
-
-                                <input type="email" value="{{order.account.email}}" name="email" hidden/>
-
-
-                             <div  class="form-outline form-white mt-2">
-                                  <input name="phone" type="tel" id="phone" class="form-control "
-                                    placeholder="Phone Number"  maxlength="19" value=""/>
-
-                                </div>
-
-
-                            <div class="form-outline form-white mt-2">
-                              <input name="addresses" type="text" id="address-es" class="form-control " siez="17"
-                                placeholder="Address" />
-
-                            </div>
-                            <div class="form-outline form-white mt-2">
-                              <input name="city" type="text" id="city" class="form-control form-control-md" siez="17"
-                                placeholder="city"  />
-
-                            </div>
-
-                            <div class="row mb-4">
-                              <div class="col-md-6">
-                                <div class="form-outline form-white mt-2">
-                                  <input name="state" type="text" id="state" class="form-control "
-                                    placeholder="State"  />
-                        
-                                </div>
                               </div>
-                              <div class="col-md-6">
-                                <div class="form-outline form-white mt-2">
-                                  <input name="pincode" type="number" id="pincode" class="form-control "
-                                    placeholder="pincode"  maxlength="9" />
-                  
-                                </div>
+
+                              <input type="email" value="{{order.account.email}}" name="email" hidden/>
+
+
+                           <div  class="form-outline form-white mt-2">
+                                <input name="phone" type="tel" id="phone" class="form-control "
+                                  placeholder="Phone Number"  maxlength="19" value="" hidden/>
+
+                              </div>
+
+
+                          <div class="form-outline form-white mt-2">
+                            <input name="addresses" type="text" id="address-es" class="form-control " siez="17"
+                              placeholder="Address" hidden/>
+
+                          </div>
+                          <div class="form-outline form-white mt-2">
+                            <input name="city" type="text" id="city" class="form-control form-control-md" siez="17"
+                              placeholder="city"  hidden/>
+
+                          </div>
+
+                          <div class="row mb-4">
+                            <div class="col-md-6">
+                              <div class="form-outline form-white mt-2">
+                                <input name="state" type="text" id="state" class="form-control "
+                                  placeholder="State"  hidden/>
+                      
                               </div>
                             </div>
+                            <div class="col-md-6">
+                              <div class="form-outline form-white mt-2">
+                                <input name="pincode" type="number" id="pincode" class="form-control "
+                                  placeholder="pincode"  maxlength="9"hidden />
+                
+                              </div>
+                            </div>
+                          </div>
 
 {% if discound %}
 <button type="submit" class="cod-button btn text-white btn-block "  style="width: 100%;background-color: #387445">
-  <div class="d-flex justify-content-evenly">
-    <input type="hidden" name="payment_mode" value="COD">
-    <input type="hidden" name="butt" value="{{ discound }}">
-    <input type="hidden" name="check" value="1" hidden>
-    <input type="hidden" name="coupens" value="{{coupen}}" hidden>
+<div class="d-flex justify-content-evenly">
+  <input type="hidden" name="payment_mode" value="COD">
+  <input type="hidden" name="butt" value="{{ discound }}">
+  <input type="hidden" name="check" value="1" hidden>
+  <input type="hidden" name="coupens" value="{{coupen}}" hidden>
 
-    <div><span>₹{{ discound|floatformat:2 }}/-</span></div>
+  <div><span>₹{{ discound|floatformat:2 }}/-</span></div>
 <div> <span>COD Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>
-  
-  </div>
+
+</div>
 
 </button>
 {% else %}
-                          <button type="submit" class="cod-button btn text-white btn-block"  style="width: 100%;background-color: #387445">
-                            <div class="d-flex justify-content-evenly">
-                              <input type="hidden" name="payment_mode" value="COD">
-                              <input type="hidden"name="butt" value="{{ order.get_cart_total}}">
-                              <input type="hidden" name="check" value="0" hidden>
-                              <div><span>₹{{ order.get_cart_total|floatformat:2 }}/-</span></div>
-      <div> <span>COD Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>
-                            
-                            </div>
-
-                          </button>
-                        {% endif %}  
-
-
-                            
-                          <button type="button" class="btn mt-2 text-white btn-secondary payWithRazorpay btn-block"  style="width: 100%;">
-                            <div class="d-flex justify-content-evenly">
-
-                              <div> <span>RazorPay<i class="fas fa-long-arrow-alt-right  ms-2"></i></span></div>
-                            </div>
-                          </button>
-
-                          <div class="mt-2">
+                        <button type="submit" class="cod-button btn text-white btn-block"  style="width: 100%;background-color: #387445">
+                          <div class="d-flex justify-content-evenly">
+                            <input type="hidden" name="payment_mode" value="COD">
+                            <input type="hidden"name="butt" value="{{ order.get_cart_total}}">
+                            <input type="hidden" name="check" value="0" hidden>
+                            <div><span>₹{{ order.get_cart_total|floatformat:2 }}/-</span></div>
+    <div> <span>COD Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>
                           
-                          <div  id="paypal-button-container"></div>
-                          
-                        </div>
-                              </form>
-                                {% endif %}
+                          </div>
 
+                        </button>
+                      {% endif %}  
+
+
+                          
+                        <button type="button" class="btn mt-2 text-white btn-secondary payWithRazorpay btn-block"  style="width: 100%;">
+                          <div class="d-flex justify-content-evenly">
+
+                            <div> <span>RazorPay<i class="fas fa-long-arrow-alt-right  ms-2"></i></span></div>
+                          </div>
+                        </button>
+
+                        <div class="mt-2">
+                        
+                        <div  id="paypal-button-container"></div>
+                        
+                      </div>
+                            </form>
+                              {% endif %}
                         </div>
                       </div>
 
@@ -220,7 +295,14 @@ input [type=text]{
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://www.paypal.com/sdk/js?client-id=AU9bfhFhG6kK53IK6MsaXC0jJR6gpKiW1fvkculvVBm6Reb7hra5aQ0rgpBp3kPDQL-9tSta3Tu1RIIe&currency=USD"></script>
+<style>
+  .form-control{
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 2%;
+  }
 
+</style>
 <script>
 
   paypal.Buttons({
@@ -228,25 +310,25 @@ input [type=text]{
     // Sets up the transaction when a payment button is clicked
     
     onClick : function(data,actions){
-      var name = $("[name='name']").val();
-      var phone = $("[name='phone']").val();
+      // var name = $("[name='name']").val();
+      // var phone = $("[name='phone']").val();
 
-      var address = $("[name='address']").val();
-      var city = $("[name='city']").val();
-      var state = $("[name='state']").val();
-      var pincode = $("[name='pincode']").val();
-      var token = $("[name='csrfmiddlewaretoken']").val();
+      // var address = $("[name='address']").val();
+      // var city = $("[name='city']").val();
+      // var state = $("[name='state']").val();
+      // var pincode = $("[name='pincode']").val();
+      // var token = $("[name='csrfmiddlewaretoken']").val();
   
-      if(phone == "" || name == "" || address == "" || city == "" || state == "" || pincode == "")
-          {
-              swal("Alert!", "All fields are mandatory!","error");
+      // if(phone == "" || name == "" || address == "" || city == "" || state == "" || pincode == "")
+      //     {
+      //         swal("Alert!", "All fields are mandatory!","error");
   
-              return false;
-          }
-      else{
-              return true;
+      //         return false;
+      //     }
+      // else{
+      //         return true;
 
-         }
+      //    }
 
     },
     
@@ -271,23 +353,23 @@ input [type=text]{
         // const element = document.getElementById('paypal-button-container');
         // element.innerHTML = '<h3>Thank you for your payment!</h3>';
         // Or go to another URL:  actions.redirect('thank_you.html');       
-        var name = $("[name='name']").val();
-        var phone = $("[name='phone']").val();
+        // var name = $("[name='name']").val();
+        // var phone = $("[name='phone']").val();
   
-        var address = $("[name='address']").val();
-        var city = $("[name='city']").val();
-        var state = $("[name='state']").val();
-        var pincode = $("[name='pincode']").val();
+        // var address = $("[name='address']").val();
+        // var city = $("[name='city']").val();
+        // var state = $("[name='state']").val();
+        // var pincode = $("[name='pincode']").val();
         var token = $("[name='csrfmiddlewaretoken']").val();
         
         
         data = {
-          "name": name,
-          "phone": phone,
-          "address": address,
-          "city": city,
-          "state": state,
-          "pincode": pincode,
+          // "name": name,
+          // "phone": phone,
+          // "address": address,
+          // "city": city,
+          // "state": state,
+          // "pincode": pincode,
           "payment_mode":"Paid by Paypal",
           "payment_id":orderData.id,
           csrfmiddlewaretoken:token,

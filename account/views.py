@@ -90,8 +90,12 @@ def home(request):
     items = []
     cartItems = []
     products = Product.objects.all()
+    category = Category.objects.all().order_by('id')
+    sub = SubCategory.objects.all().order_by('id')
     data = {
         'products': products,
+        'sub':sub,
+        'category':category,
         'cartItems': cartItems,
         'items': items,
         'order': order,
@@ -156,6 +160,8 @@ def product_view(request, id):
             items = order.orderitems_set.all()
             cartItems = order.get_cart_items
             val = Product.objects.get(id=id)
+            related_products = Product.objects.filter(sub=val.sub)
+            print(related_products)
             offer = 0
             price = 0
             pro = Product.objects.get(id=id)
@@ -167,7 +173,7 @@ def product_view(request, id):
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
 
-                context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer,
+                context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer,'related_products':related_products,
                            'order': order, 'cartItems': cartItems}
                 return render(request, 'product_view.html', context)
             else:
@@ -178,6 +184,7 @@ def product_view(request, id):
             order = Order.objects.get(account=customer, complete=False)
             items = order.orderitems_set.all()
             val = Product.objects.get(id=id)
+            related_products = Product.objects.filter(sub=val.sub)
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
             wishlist = Wishlist.objects.filter(product=val, account=customer).exists()
@@ -187,7 +194,7 @@ def product_view(request, id):
             print(wishlist)
             print(offer)
             cartItems = order.get_cart_items
-            context = {'key5': val, 'cartItems': cartItems,'wishlist':wishlist,
+            context = {'key5': val, 'cartItems': cartItems,'wishlist':wishlist,'related_products':related_products,
                        'offer': offer, 'price': price}
             print("An exception occurred")
 
@@ -203,7 +210,9 @@ def product_view(request, id):
     items = []
     cartItems = []
     val = Product.objects.get(id=id)
-    context = {'key5': val, 'items': items,
+    related_products = Product.objects.filter(sub=val.sub)
+    print(related_products)
+    context = {'key5': val, 'items': items,'related_products':related_products,
                'order': order, 'cartItems': cartItems}
     return render(request, 'product_view.html', context)
 
@@ -302,12 +311,27 @@ def user_profile(request, id):
         return redirect(login_page)
     user = Account.objects.get(id=id)
     data = ShippingAddress.objects.filter(account=id).first()
-    cartItems = []
+    account = Account.objects.get(id=id)
+    orders = OrderedItems.objects.filter(account=account).order_by('id')
+    order = Order.objects.get(account=account, complete=False)
+    items = order.orderitems_set.all()
+    cartItems = order.get_cart_items
+    account = Account.objects.get(id=id)
+    wishlst = Wishlist.objects.filter(account=account)
+
+    try:
+        order = Order.objects.get(account=account, complete=False)
+        items = order.orderitems_set.all()
+        cartItems = order.get_cart_items
+        context = {'cartItems': cartItems, 'wishlst': wishlst}
+    except:
+        cartItems = []
     datas = {
         'data': data,
         'cartItems': cartItems,
         'user': user,
-
+        'orders': orders, 
+        'wishlst': wishlst
     }
     return render(request, 'userprofile/profile.html', datas)
 
@@ -362,15 +386,16 @@ def address_edit(request, id):
 
 
 def order_userside(request, id):
-    account = Account.objects.get(id=id)
-    orders = OrderedItems.objects.filter(account=account).order_by('id')
-    order = Order.objects.get(account=account, complete=False)
-    items = order.orderitems_set.all()
-    cartItems = order.get_cart_items
-    context = {
-        'orders': orders, 'cartItems': cartItems,
-    }
-    return render(request, 'userprofile/user_orders.html', context)
+    pass
+#     account = Account.objects.get(id=id)
+#     orders = OrderedItems.objects.filter(account=account).order_by('id')
+#     order = Order.objects.get(account=account, complete=False)
+#     items = order.orderitems_set.all()
+#     cartItems = order.get_cart_items
+#     context = {
+#         'orders': orders, 'cartItems': cartItems,
+#     }
+#     return render(request, 'userprofile/user_orders.html', context)
 
 
 def add_wishlist(request, product_id, user_id):
@@ -390,23 +415,24 @@ def add_wishlist(request, product_id, user_id):
 
 
 def wishlist_userside(request, id):
+    pass
     # try:
-    account = Account.objects.get(id=id)
-    wishlst = Wishlist.objects.filter(account=account)
-    try:
-        order = Order.objects.get(account=account, complete=False)
-        items = order.orderitems_set.all()
-        cartItems = order.get_cart_items
-        context = {'cartItems': cartItems, 'wishlst': wishlst}
-        return render(request, 'userprofile/wishlist.html', context)
-    except:
-        print("An exception occurred")
+    # account = Account.objects.get(id=id)
+    # wishlst = Wishlist.objects.filter(account=account)
+    # try:
+    #     order = Order.objects.get(account=account, complete=False)
+    #     items = order.orderitems_set.all()
+    #     cartItems = order.get_cart_items
+    #     context = {'cartItems': cartItems, 'wishlst': wishlst}
+    #     return render(request, 'userprofile/wishlist.html', context)
+    # except:
+    #     print("An exception occurred")
 
-    print(wishlst)
-    context = {
-        'wishlst': wishlst
-    }
-    return render(request, 'userprofile/wishlist.html', context)
+    # print(wishlst)
+    # context = {
+    #     'wishlst': wishlst
+    # }
+    # return render(request, 'userprofile/wishlist.html', context)
     # except:
     #     wishlst = []
     #     context = {
@@ -508,3 +534,27 @@ def editProfile(request):
 
     form = UserEditForm(instance=instance)
     return render(request, 'userprofile/editprofile.html', {'form': form})
+
+
+def addressAdd(request):
+    if request.method == 'POST':
+        address = ShippingAddress()
+        address.account = request.user
+        address.name = request.POST.get('names')
+        address.email = request.POST.get('emails')
+        address.phone = request.POST.get('phones')
+        address.address = request.POST.get('addressess')
+        address.city = request.POST.get('citys')
+        address.state = request.POST.get('states')
+        address.pincode =request.POST.get('pincodes')
+
+        if ShippingAddress.objects.filter(address=address.address,city=address.city,state=address.state,pincode=address.pincode).exists():
+            messages.error(request,'this address already exist !')
+            return redirect('shipping')
+        elif ShippingAddress.objects.filter(account=request.user).count() > 4: 
+            messages.error(request,'minimum 4 address !')
+            return redirect('shipping') 
+        else:
+            address.save()
+            return redirect('shipping')
+

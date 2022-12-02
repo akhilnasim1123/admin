@@ -23,7 +23,7 @@ urlpatterns = [
     path('user-orders/<int:id>',views.order_userside,name='order_userside'),
     path('add-wishlist/<int:product_id>/<int:user_id>',views.add_wishlist,name='add_wishlist'),
     path('wishlists/<int:id>',views.wishlist_userside,name='wishlists'),
-
+    path('addressAdd',views.addressAdd,name='addressAdd'),
     path('edit-profile',views.editProfile,name='editprofile'),
     path('password-change/<int:id>',views.password_change,name='password_change'),
   

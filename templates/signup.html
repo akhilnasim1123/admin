@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,11 +12,11 @@
 
 </head>
 <body>
-    <section class="vh-auto" style="background-color: gray;">
+    <section class="vh-auto h-100 login-back" style="background-color: gray;">
         <div class="container py-5 h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-              <div class="card shadow-2-strong" style="border-radius: 1rem;">
+              <div class="card shadow-2-strong log-back" style="border-radius: 1rem;background-color: #0a131a;">
                 <div class="card-body p-5  pt-4 mt-5 text-center">
       <div class="button" style="display: flex;justify-content: space-between;">
         
@@ -23,7 +24,7 @@
         <button class="btn bg-danger text-light" style="width: 100%; height: 50px;">Sign Up</button>
     </div>
     <div style="width: 45%;">
-        <a href="{% url 'loginpage' %}"><button class="btn bg-white text-black" style="width: 100%; height: 50px;">Log In</button></a>
+        <a href="{% url 'loginpage' %}"><button class="btn  text-light" style="width: 100%; height: 50px;background-color: #0a131a;">Log In</button></a>
     </div>
 
       </div>
@@ -77,5 +78,14 @@
           </div>
         </div>
       </section>
+      <style>
+          .login-back{
+          background-image: url("{% static '/images/Picsart_22-11-07_20-07-52-533.jpg' %}");
+          
+        }
+        .log-back{
+          filter: opacity(0.8);
+        }
+      </style>
 </body>
 </html>

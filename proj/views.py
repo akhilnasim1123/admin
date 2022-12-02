@@ -7,7 +7,7 @@ from django.views.decorators.cache import cache_control
 from django.http import HttpResponseRedirect
 from account.forms import RegistrationForm
 from account.models import Account
-from account.views import order_userside
+from account.views import  user_profile
 from cart.models import OrderedItems
 from proj.forms import BannerForm, ItemsForm, ProductEditForm, SubForm
 from proj.models import BannerManagement, Product, Category,  ShippingAddress, SubCategory
@@ -242,7 +242,7 @@ def cancel(request, id, val):
         return redirect(order_list)
     else:
         print('user')
-        return redirect(order_userside, user_id)
+        return redirect(user_profile, user_id)
 
     
 

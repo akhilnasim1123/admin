@@ -39,21 +39,20 @@ def cart(request):
        
         context = {'items': items, 'order': order, 'cartItems': cartItems}
         return render(request, 'cart/cart.html', context)
-    elif request.user is None:
-        order = []
-        items = []
-        cartItems = []
-    order = []
-    items = []
-    cartItems = []
+    else:
+        order, created = Order.objects.get_or_create(
+            session_id=request.session['guestUser'], complete=False)
 
-    messages.error(request, 'Cart is Empty')
-    context = {'items': items, 'order': order, 'cartItems': cartItems}
-    return render(request, 'cart/cart.html', context)
+        items = OrderItems.objects.filter(session_id=request.session['guestUser'])
+  
+        cartItems = order.get_cart_items
+        context = {'items': items, 'order': order, 'cartItems': cartItems}
+        return render(request, 'cart/cart.html', context)
+
 
 
 @login_required(login_url=login_page)
-def shoppingaddress(request):
+def shippingaddress(request):
     if request.user.is_authenticated:
         discound = 0
         print('authenticated')
@@ -120,13 +119,13 @@ def updateItem(request):
     else:
         print('sjkdfa')
         
-        request.session['guestUser']= str(uuid.uuid4())
+        request.session['guestUser']= 'guestUser'
         print(request.session['guestUser'])
         order, created = Order.objects.get_or_create(
-           session_id=request.session['guest-user'], complete=False)
+           session_id=request.session['guestUser'], complete=False)
 
         orderItem, created = OrderItems.objects.get_or_create(
-        product=product,session_id=request.session['guest-user'])
+        product=product,order=order,session_id=request.session['guestUser'])
 
     if action == 'add':
         if product.quantity <= 0 and orderItem.quantity > product.quantity:
@@ -146,8 +145,10 @@ def updateItem(request):
 
 @login_required(login_url=login_page)
 def pay_page(request):
-    data = request.POST['city']
-    print(data)
+    # data = request.POST['city']
+
+    # data = request.POST['city']
+
     if request.user.is_authenticated:
         print('authenticated')
         customer = request.user
@@ -253,6 +254,7 @@ def pay_page(request):
     cartItems = order.get_cart_items
     context = {'cartItems': cartItems}
     return render(request, 'shipping/success.html', context)
+
 
 
 
