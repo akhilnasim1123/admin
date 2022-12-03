@@ -127,7 +127,6 @@ def home(request):
     }
     return render(request, 'page.html', data)
 
-
 def login_page(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -189,12 +188,13 @@ def logout_page(request):
         del request.session['user_exist']
         print('hey')
         guestUser = request.session.session_key
+        logout(request)
         items = OrderItems.objects.filter(session_id=guestUser)
         items.delete()
-        logout(request)
         return redirect('home')
     logout(request)
     return redirect('home')
+
 
 
 
@@ -206,9 +206,10 @@ def product_view(request, id):
         customer = request.user
         print('customer')
         try:
-            order = Order.objects.get(account=customer, complete=False)
-            items = order.orderitems_set.all()
-            cartItems = order.get_cart_items
+            order = Order.objects.filter(account=customer, complete=False)
+            for item in order:
+                items = item.orderitems_set.all()
+                cartItems = item.get_cart_items
             val = Product.objects.get(id=id)
             related_products = Product.objects.filter(sub=val.sub)
             print(related_products)
@@ -231,8 +232,10 @@ def product_view(request, id):
                            'order': order, 'cartItems': cartItems}
                 return render(request, 'product_view.html', context)
         except:
-            order = Order.objects.get(account=customer, complete=False)
-            items = order.orderitems_set.all()
+            order = Order.objects.filter(account=customer, complete=False)
+            for i in order:
+                items = i.orderitems_set.all()
+                cartItems = i.get_cart_items
             val = Product.objects.get(id=id)
             related_products = Product.objects.filter(sub=val.sub)
             if val.quantity < 0:
@@ -243,7 +246,7 @@ def product_view(request, id):
 
             print(wishlist)
             print(offer)
-            cartItems = order.get_cart_items
+            
             context = {'key5': val, 'cartItems': cartItems,'wishlist':wishlist,'related_products':related_products,
                        'offer': offer, 'price': price}
             print("An exception occurred")

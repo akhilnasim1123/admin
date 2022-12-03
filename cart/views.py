@@ -66,15 +66,19 @@ def cart(request):
         context = {'items': items, 'order': order, 'cartItems': cartItems}
         return render(request, 'cart/cart.html', context)
 
+
 @login_required(login_url='login_page')
 def shippingaddress(request):
     if request.user.is_authenticated:
         discound = 0
         print('authenticated')
         customer = request.user
-        order = Order.objects.get(account=customer, complete=False)
-        items = order.orderitems_set.all()
-        cartItems = order.get_cart_items
+        order = Order.objects.filter(account=customer, complete=False)
+        items =0
+        cartItems=0
+        for i in order:
+            items = i.orderitems_set.all()
+            cartItems = i.get_cart_items
         address = ShippingAddress.objects.filter(
             account=customer).order_by('id')
         coupen = None
@@ -129,7 +133,7 @@ def updateItem(request):
     
     if request.user.is_authenticated:
         print('asdjfaidfhaousdgiviufah')
-        order, created = Order.objects.get_or_create(
+        order , created= Order.objects.get_or_create(
             account=account, complete=False)
         orderItem, created = OrderItems.objects.get_or_create(
         order=order, product=product,account=account)
@@ -156,8 +160,8 @@ def updateItem(request):
             orderItem.quantity = (orderItem.quantity - 1)
 
     orderItem.save()
+    print('saved')
     return JsonResponse('Item was Added', safe=False)
-
 
 @login_required(login_url=login_page)
 def pay_page(request):
