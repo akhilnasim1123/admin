@@ -48,5 +48,6 @@ urlpatterns = [
     path('returnProduct/<int:id>',views.returnProduct,name='returnProduct'),
     path('deleteProOffer/<int:id>',views.deleteProOffer,name='deleteProOffer'),
     path('deleteCatOffer/<int:id>',views.deleteCatOffer,name='deleteCatOffer'),
+    path('sales-report',views.salesReport,name='salesReport'),
 
 ]

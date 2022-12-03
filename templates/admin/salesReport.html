@@ -1,0 +1,77 @@
+{% extends 'base1.html' %}
+
+
+{% block content %}
+
+<!-- <div cla>
+    <div class="" style="width: 50%;">
+        <form action="{% url 'filterOrder' %}" method="post" class="d-flex">
+          {% csrf_token %}
+        <select  name="status" class="bg-dark text-white form-control" style="width: 50%;" id="">
+      
+          <option value="orderes"></option>
+          <option value="pending">Pending</option>
+          <option value="delivered">Delivered</option>
+          <option value="Shipped">Shipped</option>
+          <option value="is_returned">Return</option>   
+          <option value="Cancelled">Cancelled</option>
+          
+        </select>
+        <button class="btn bg-dark" type="submit">Submit</button>
+      </form>
+      </div>
+</div> -->
+
+<form action="{% url 'salesReport' %}" method="post">
+    {% csrf_token %}
+    <input id="datepicker" name="datepicker" onclick="datepick()" class="bg-light" width="276"/>
+</form>
+
+
+<div class="table-responsive mt-5">
+    <table class="table table-striped table-hover table-bordered table-sm table-light border-light w-100">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Product</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Price</th>     
+          <th scope="col">Customer</th>   
+          <th scope="col">Time</th>   
+          <th scope="col">Payment</th>   
+         </tr>
+      </thead>
+      <tbody>
+        {% if orders %}
+        {% for order in orders %}
+        <tr>
+          <th scope="row"></th>
+          <td>{{ order.product }}</td>
+          <td>{{ order.quantity }}</td>
+          <td>{{ order.price }}</td>
+          <td>{{ order.account }}</td>
+          <td>{{ order.ordered }}</td>
+          <td>{{ order.payment }}</td>
+        </tr>
+{% endfor %}
+{% else %}
+<tr><p class="text-center">There is no Order at This Date</p></tr>
+      </tbody>
+  {% endif %}
+    </table>
+
+
+    <script>
+        $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap4',
+            format:'yyyy-mm-dd'
+        });
+        </script>
+
+  </div>
+
+
+
+
+
+{% endblock content %}

@@ -156,6 +156,6 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 ACCOUNT_SID = env('account_sid')
 AUTH_TOKEN = env('auth_token')
 
-
+DATE_INPUT_FORMATE = ['%m-%d-%Y']
 
 

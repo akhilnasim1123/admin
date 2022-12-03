@@ -1,6 +1,10 @@
+from datetime import timezone
+import datetime
+from time import strftime
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.forms import DateTimeField
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_control
@@ -459,4 +463,26 @@ def deleteCatOffer(request,id):
     offer.offer_name = None
     offer.save()
     return redirect(Offers)
+
+from django.utils import timezone
+
+def salesReport(request):
+    orders = OrderedItems.objects.filter(status='delivered').order_by('ordered')
+    if request.method == 'POST':
+        date = request.POST.get('datepicker')
+        date = date+" 12:59:55.4645+00:00"
+        print(date)
+        date =strftime(date)
+        print(date)
+        print(timezone.now())
+        date = OrderedItems.objects.filter(ordered__lte=date, status='delivered').order_by('ordered')
+        print(date)
+        if date:
+            return render(request,'admin/salesReport.html',{'orders':date})  
+        else:
+            orders = []
+            return render(request,'admin/salesReport.html',{'orders':orders})  
+
+                  
+    return render(request,'admin/salesReport.html',{'orders':orders})
 

@@ -1,3 +1,4 @@
+from time import strftime
 from django.db import models
 
 from account.models import *
@@ -11,8 +12,14 @@ class CustomDateTimeField(models.DateTimeField):
         val = self.value_from_object(obj)
         if val:
             val.replace(microsecond=0)
+            val.replace
+            
             return val.isoformat()
         return ''
+
+
+
+
 
 
 class OrderedItems(models.Model):
@@ -46,8 +53,13 @@ class OrderedItems(models.Model):
    
 
    
+
+
+    def __str__(self):
+        return str(self.ordered.strftime("%Y-%m-%d"))
     def __str__(self):
         return str(self.account)
+
 
 
 
