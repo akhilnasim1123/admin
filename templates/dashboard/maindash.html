@@ -2,9 +2,13 @@
 {% load static %}
 
 {% block content %}
+<div>
+  <canvas id="line-order"  style="width:auto;max-width:100%"></canvas>
+</div>
+<hr>
 
 
-<div class="text-center ">
+<div class="text-center mt-5">
 <b class="" style="font-size: 20px;">Order Details</b>
 </div>
 <section class="d-flex justify-content-center align-items-center mt-5">
@@ -62,8 +66,14 @@
       </div>
 
   </div>
+
+
+
+
+
 </section>
 <hr>
+
 
 
 <!-- <section class="card bg-light" style="height: 239px;margin-top: 20px;">
@@ -140,5 +150,20 @@
 });
 </script>
 
-
+<script>
+  new Chart(document.getElementById("line-order"), {
+    type: 'line',
+    data:  {
+  labels: 'jhguguhf',
+  datasets: [{
+    label: 'Orders',
+    data: [65, 59, 80, 81, 56, 55, 40],
+    fill: false,
+    borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1
+  }]
+}
+    
+});
+</script>
   {% endblock content %}

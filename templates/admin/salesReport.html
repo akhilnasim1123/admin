@@ -21,16 +21,22 @@
       </form>
       </div>
 </div> -->
-
-<form action="{% url 'salesReport' %}" method="post">
+<div class="d-flex">
+<form action="{% url 'salesReport' %}" style="width: 50%;" method="post">
     {% csrf_token %}
     <input id="datepicker" name="datepicker" onclick="datepick()" class="bg-light" width="276"/>
 </form>
+<div class="d-flex">
+
+<button class="btn btn-dark btn-xs ml-3 mb-3 mx-5" style="width:50;" id="download-pdf">Download as Pdf</button>
+<a href=" {% url 'export_as_excel'  %}" class="btn btn-dark btn-xs ml-3 mb-3 mx-5"> Download as Excel</a></span>
+</div>
+</div>
 
 
 <div class="table-responsive mt-5">
-    <table class="table table-striped table-hover table-bordered table-sm table-light border-light w-100">
-      <thead>
+    <table class="table table-striped table-hover table-bordered table-sm table-light border-light w-100" id="example">
+      <thead >
         <tr>
           <th scope="col">#</th>
           <th scope="col">Product</th>
@@ -60,6 +66,9 @@
   {% endif %}
     </table>
 
+       <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
         $('#datepicker').datepicker({
@@ -67,6 +76,46 @@
             format:'yyyy-mm-dd'
         });
         </script>
+        <script>
+            
+        </script>
+        <script>
+            $('input[name="daterangenew"]').daterangepicker({
+              maxDate: new Date()
+            });
+          </script>
+          
+          <script type="text/javascript">
+              document.getElementById('download-pdf').onclick = function(){
+                  var element  = document.getElementById('example')
+                  var opt = {
+                      margin : 0.1 ,
+                      filename: 'myfile.pdf',
+                      image    : {type: 'jpeg',quality :0.98},
+                      html2canvas :{scale :2},
+                      jsPDF : {unit: 'in',format: 'letter',orientation:'landscape'}
+                  };
+                  html2pdf(element,opt);
+    };
+          
+          </script>
+          <!-- <script type="text/javascript">
+            window.onload = function () {
+                //Reference the DropDownList.
+                var ddlYears = document.getElementById("ddlYears");
+          
+                //Determine the Current Year.
+                var currentYear = (new Date()).getFullYear();
+          
+                //Loop and add the Year values to DropDownList.
+                for (var i = 2022; i >= 2015; i--) {
+                    var option = document.createElement("OPTION");
+                    option.innerHTML = i;
+                    option.value = i;
+                    ddlYears.appendChild(option);
+                }
+            };
+          </script> -->
 
   </div>
 

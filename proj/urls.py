@@ -49,5 +49,5 @@ urlpatterns = [
     path('deleteProOffer/<int:id>',views.deleteProOffer,name='deleteProOffer'),
     path('deleteCatOffer/<int:id>',views.deleteCatOffer,name='deleteCatOffer'),
     path('sales-report',views.salesReport,name='salesReport'),
-
+    path('export-as-excel',views.export_as_excel,name='export_as_excel')
 ]

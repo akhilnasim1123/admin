@@ -11,11 +11,11 @@ from django.views.decorators.cache import cache_control
 from django.http import HttpResponseRedirect
 from account.forms import RegistrationForm
 from account.models import Account
-from account.views import  user_profile
+from account.views import  order_userside, user_profile
 from cart.models import OrderedItems
 from proj.forms import BannerForm, ItemsForm, ProductEditForm, SubForm
-from proj.models import BannerManagement, Product, Category,  ShippingAddress, SubCategory
-
+from proj.models import BannerManagement, Order, Product, Category,  ShippingAddress, SubCategory
+import xlwt
 
 # admin login page -------------------------------->
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -470,12 +470,14 @@ def salesReport(request):
     orders = OrderedItems.objects.filter(status='delivered').order_by('ordered')
     if request.method == 'POST':
         date = request.POST.get('datepicker')
-        date = date+" 12:59:55.4645+00:00"
+        dd = date
+        date = date+" 12:59:59.4645+00:00"
+        day = dd+" 00:00:00.0000+00:00"
         print(date)
         date =strftime(date)
         print(date)
         print(timezone.now())
-        date = OrderedItems.objects.filter(ordered__lte=date, status='delivered').order_by('ordered')
+        date = OrderedItems.objects.filter(ordered__lte=date,ordered__gte=day, status='delivered').order_by('ordered')
         print(date)
         if date:
             return render(request,'admin/salesReport.html',{'orders':date})  
@@ -485,4 +487,34 @@ def salesReport(request):
 
                   
     return render(request,'admin/salesReport.html',{'orders':orders})
+
+def export_as_excel(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment;filename=SalesReport' +\
+        str(datetime.datetime.now())+'.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('SalesReport')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['product','quantity','account','payment', 'ordered', 'total_price','price']
+    for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+    font_style = xlwt.XFStyle()
+    # if value != None and tovalue != None and state == 'date':
+    #     print('hello')
+    #     rows = Order.objects.filter(orderd=True, date_ordered__lte = tovalue, date_ordered__gte = value).values_list('user__username','payment_method',  'date_ordered', 'total_price')
+    # elif value != None and tovalue == None and state == 'month':
+    #     rows = Order.objects.filter(orderd=True, date_ordered__month = value[1], date_ordered__year = value[0]).values_list('user__username','payment_method',  'date_ordered', 'total_price')
+    # elif value != None and tovalue == None and state == 'year':
+    #     rows = Order.objects.filter(orderd=True, date_ordered__year = value).values_list('user__username','payment_method',  'date_ordered', 'total_price')
+    # else:
+    rows = OrderedItems.objects.filter(status='delivered').order_by('ordered').values_list('product','quantity','account','payment', 'ordered', 'total_price','price')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+                ws.write(row_num, col_num, str(row[col_num]), font_style)
+    
+    wb.save(response)
+    return response
 
