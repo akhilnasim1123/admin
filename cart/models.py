@@ -45,7 +45,7 @@ class OrderedItems(models.Model):
     tracking_no                 = models.CharField(max_length=150,null=True)
     ordered                     = models.DateTimeField(auto_now_add=True)
     coupen                      = models.ForeignKey(Coupen,on_delete=models.SET_NULL,blank=True,null=True)
-    discound                    = models.IntegerField(default=0)
+    discound                    = models.IntegerField(default=0,null=True,blank=True)
     is_return                   = models.BooleanField(default=False,null=True,blank=True)
     reason                      = models.CharField(max_length=100,null=True,blank=True)
 

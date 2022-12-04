@@ -16,15 +16,12 @@ from account.views import login_page
 from cart.models import OrderedItems
 from coupen.models import Coupen
 from invoice.views import guest
-from proj.models import  Order, OrderItems, Product,  ShippingAddress
+from proj.models import Order, OrderItems, Product,  ShippingAddress
 
-#guest user func
+# guest user func
 
 
 def cart(request):
-
- 
-
     if cart:
         print("Guest cart items are")
 
@@ -40,8 +37,9 @@ def cart(request):
         print(items)     
         # for i in items:
         #     print(i.get_total)
-        for i in items:
-            cartItems = i.order.get_cart_items
+        cartItems = 0
+        for i in order:
+            cartItems = i.get_cart_items
         # items = OrderItems.objects.filter(account=customer)
         product_id =0
         # count = itm.product.quantity
@@ -163,8 +161,11 @@ def updateItem(request):
     print('saved')
     return JsonResponse('Item was Added', safe=False)
 
+
 @login_required(login_url=login_page)
 def pay_page(request):
+    # data = request.POST['city']
+    # print(data)
     # data = request.POST['city']
 
     # data = request.POST['city']
@@ -180,7 +181,6 @@ def pay_page(request):
         cartItems = order.get_cart_items
     else:
         return redirect(login_page)
-
     if request.method == "POST":
         value = request.POST.get('butt')
         discound_or_not = request.POST.get('check')
@@ -199,11 +199,9 @@ def pay_page(request):
         pincode = request.POST.get('pincode')
         account = customer
         order = order
-
         track_no = str(account.first_name)+str(random.randint(1111111, 9999999))
         while Order.objects.filter(tracking_no=track_no) is None:
             track_no = str(account.first_name)+str(random.randint(1111111, 9999999))
-
         order.tracking_no = track_no
         order.save()
         orItems = OrderItems.objects.filter(order=order)
@@ -233,12 +231,11 @@ def pay_page(request):
                 add.save()
             else:
                 add.save()
-
         saddress = add
-        
+        mode = []
         user_order = OrderedItems()
-
         for item in orItems:
+            print('inside item')
             user_order = OrderedItems()
             orItemss = item
             prod_qunt = Product.objects.get(id=orItemss.product.id)
@@ -256,15 +253,15 @@ def pay_page(request):
             user_order.discound = user_order.product.price-user_order.product.get_product_price
             user_order.payment_id = request.POST.get('payment_id')
             user_order.payment = request.POST.get('payment_mode')
-
+            mode = user_order.payment
             user_order.save()
-
             prod_qunt.save()
-        order.delete()
+            print(user_order)
+        user_order.save()
         product = OrderItems.objects.filter(order=order)
         product.delete()
-
         payMode = request.POST.get('payment_mode')
+        print(payMode)
         if (payMode == 'Paid by Razorpay' or payMode == 'Paid by Paypal' or payMode == 'COD'):
             return JsonResponse({"status": "success"})
         context = {'cartItems': cartItems}
@@ -276,8 +273,6 @@ def pay_page(request):
     return render(request, 'shipping/success.html', context)
 
 
-
-
 def deletecart(request, id):
     print('asdhfnkjahsdfkahsfdkhashhafdskhaksfhakshdfkashhasfdhkash')
     delete = OrderItems.objects.get(id=id)
@@ -286,12 +281,11 @@ def deletecart(request, id):
     total = delete.order.get_cart_total
     count = delete.order.get_cart_items
     values = {
-        'total':total,
-        'count':count,
+        'total': total,
+        'count': count,
     }
-    
 
-    return JsonResponse(values,safe=False)
+    return JsonResponse(values, safe=False)
 
     # if value == 1:
     #     return redirect(cart)
@@ -324,20 +318,19 @@ def success(request):
     # )
 
 
-def addressSelect(request,id):
+def addressSelect(request, id):
     print('asdfhakfhaskfhasff')
 
     print(id)
-   
+
     address = ShippingAddress.objects.get(id=id)
-    
+
     return JsonResponse({
-        'name':address.account.first_name,
+        'name': address.account.first_name,
         'email': address.account.email,
         'phone': address.account.phone,
-        'address':address.address,
-        'city':address.city,
-        'state':address.state,
-        'pincode':address.pincode
+        'address': address.address,
+        'city': address.city,
+        'state': address.state,
+        'pincode': address.pincode
     })
-    

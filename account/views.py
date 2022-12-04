@@ -139,7 +139,7 @@ def login_page(request):
 
                 print('success')
                 request.session['user_exist'] = email
-                guestUser = request.session.session_key
+                guestUser = guest(request)
                 print('guest user id', guestUser)
                 if guestUser:
                     guestItem = OrderItems.objects.filter(session_id=guestUser)
@@ -150,17 +150,23 @@ def login_page(request):
                         print('guestUser')
                         for item in items:
                             print(item.product)
-                            add.account = user 
+
                             check = None
-                            # check = OrderItems.objects.get(account=user,product=item.product) 
-                            # if check:
-                            #         add.quantity = check.quantity + item.quantity
-                            #         add.product = check.product
-                            # else:
-                            add.product = item.product
-                            add.quantity = item.quantity
-                            add.order = item.order
-                            add.save()
+                            check = OrderItems.objects.filter(account=user,product=item.product) 
+                            if check:
+                                for ch in check:
+                                    ch.quantity = ch.quantity + item.quantity
+                                    ch.save()
+                            else:
+                                add.account = user 
+                                add.product = item.product
+                                add.quantity = item.quantity
+                                add.order = item.order
+                                add.save()
+
+                            
+                            item.delete()
+                    
                 login(request, user)   
                 return redirect('home')
             else:
@@ -180,7 +186,6 @@ def login_page(request):
 
     return redirect('loginpage')
 
-
 def logout_page(request):
     print('prrr')
     if 'user_exist' in request.session:
@@ -189,16 +194,8 @@ def logout_page(request):
         guestUser = request.session.session_key
         logout(request)
         items = OrderItems.objects.filter(session_id=guestUser)
-        for i in items:
-
-            i.delete()
         items.delete()
         return redirect('home')
-    items = OrderItems.objects.filter(session_id=guestUser)
-    for i in items:
-
-        i.delete()
-    items.delete()
     logout(request)
     return redirect('home')
 
