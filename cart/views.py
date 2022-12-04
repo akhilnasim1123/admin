@@ -40,8 +40,8 @@ def cart(request):
         print(items)     
         # for i in items:
         #     print(i.get_total)
-        for i in order:
-            cartItems = i.get_cart_items
+        for i in items:
+            cartItems = i.order.get_cart_items
         # items = OrderItems.objects.filter(account=customer)
         product_id =0
         # count = itm.product.quantity
@@ -260,7 +260,7 @@ def pay_page(request):
             user_order.save()
 
             prod_qunt.save()
-
+        order.delete()
         product = OrderItems.objects.filter(order=order)
         product.delete()
 

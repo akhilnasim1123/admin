@@ -161,7 +161,6 @@ def login_page(request):
                             add.quantity = item.quantity
                             add.order = item.order
                             add.save()
-                            guestItem.delete() 
                 login(request, user)   
                 return redirect('home')
             else:
@@ -190,8 +189,16 @@ def logout_page(request):
         guestUser = request.session.session_key
         logout(request)
         items = OrderItems.objects.filter(session_id=guestUser)
+        for i in items:
+
+            i.delete()
         items.delete()
         return redirect('home')
+    items = OrderItems.objects.filter(session_id=guestUser)
+    for i in items:
+
+        i.delete()
+    items.delete()
     logout(request)
     return redirect('home')
 
@@ -347,9 +354,12 @@ def user_profile(request, id):
         customer = request.user
         print('customer')
         try:
-            order = Order.objects.get(account=customer, complete=False)
-            items = order.orderitems_set.all()
-            cartItems = order.get_cart_items
+            cartItems =0
+            items = 0
+            order = OrderItems.objects.filter(account=customer, complete=False)
+            for i in order:
+                items = i.order.orderitems_set.all()
+                cartItems = i.order.get_cart_items
             datas = {
                 'data': data,
                 'cartItems': cartItems}
@@ -366,17 +376,21 @@ def user_profile(request, id):
     data = ShippingAddress.objects.filter(account=id).first()
     account = Account.objects.get(id=id)
     orders = OrderedItems.objects.filter(account=account).order_by('id')
-    order = Order.objects.get(account=account, complete=False)
-    items = order.orderitems_set.all()
-    cartItems = order.get_cart_items
+    # if orders:
+    #         for i in orders:
+    #             items = i.order.orderitems_set.all()
+    #             cartItems = i.order.get_cart_items
+    # context = {'cartItems': cartItems, 'wishlst': wishlst}
     account = Account.objects.get(id=id)
     wishlst = Wishlist.objects.filter(account=account)
 
     try:
-        order = Order.objects.get(account=account, complete=False)
-        items = order.orderitems_set.all()
-        cartItems = order.get_cart_items
-        context = {'cartItems': cartItems, 'wishlst': wishlst}
+        orders = OrderedItems.objects.filter(account=account).order_by('id')
+        if orders:
+            for i in orders:
+                items = i.order.orderitems_set.all()
+                cartItems = i.order.get_cart_items
+                context = {'cartItems': cartItems, 'wishlst': wishlst}
     except:
         cartItems = []
     datas = {
