@@ -58,14 +58,12 @@
                   >+
                 </button>
               </div>
-
             </div>
-
 </div>
 
               </div>
               <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                <h5 class="mb-0">₹<span id="{{item.product.id}}">{{ item.get_total }}</span>/-</h5>
+                <h5 class="mb-0">₹<span id="{{item.product.id}}">{{ item.get_total|floatformat:2 }}</span>/-</h5>
               </div>
               <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                 <a href="#" onclick="trashCart('{{item.id}}')" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
@@ -83,13 +81,13 @@
           </div>
                <div class="" >
 
-                <h5 class="mb-0">Items: <span id="totalquantity">{{ order.get_cart_items }}</span></h5>
+                <h5 class="mb-0">Items: <span id="totalquantity">{{ get_cart_items|floatformat:2 }}</span></h5>
 
             </div>
 
             <div class="" >
               
-                <h5 class="mb-0">₹ <span id="carttotalprice">{{ order.get_cart_total }}</span></h5>
+                <h5 class="mb-0">₹ <span id="carttotalprice">{{ get_cart_total|floatformat:2 }}</span></h5>
 
             </div>
             </div>

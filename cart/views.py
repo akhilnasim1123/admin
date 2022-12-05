@@ -22,24 +22,27 @@ from proj.models import Order, OrderItems, Product,  ShippingAddress
 
 
 def cart(request):
-    if cart:
-        print("Guest cart items are")
+    # if cart:
+    #     print("Guest cart items are")
 
-    else:
-        print("Nop!")
+    # else:
+    #     print("Nop!")
     if request.user.is_authenticated:
         print('authenticated')
         customer = request.user
         print('customer') 
-        order = Order.objects.filter(
-            account=customer, complete=False)
+        print('kaasa noy arikalum kann urunkum vazhikalum')
         items = OrderItems.objects.filter(account=customer)
-        print(items)     
+        # print(items)     
         # for i in items:
         #     print(i.get_total)
+        # print(items.get_cart_items)
         cartItems = 0
-        for i in order:
+        for i in items:
             cartItems = i.get_cart_items
+            get_cart_items = i.get_cart_items
+            get_cart_total = i.get_cart_total
+            print(i.get_cart_items)
         # items = OrderItems.objects.filter(account=customer)
         product_id =0
         # count = itm.product.quantity
@@ -48,20 +51,28 @@ def cart(request):
         
             
        
-        context = {'items': items, 'order': order, 'cartItems': cartItems}
+        context = {'items': items, 'cartItems': cartItems,'get_cart_total':get_cart_total,'get_cart_items':get_cart_items}
         return render(request, 'cart/cart.html', context)
     else:
         user = guest(request)
         order = Order.objects.filter(
             session_id=user, complete=False)
         items = OrderItems.objects.filter(session_id=user) 
+        get_cart_items=0
+        get_cart_total=0
+        for i in items:
+            cartItems = i.get_cart_items
+            get_cart_items = i.get_cart_items
+            get_cart_total = i.get_cart_total
+            print(i.get_cart_items)
 
         print("The items in cart are",items)
 
         cartItems=0
         for  i  in order:
             cartItems = i.get_cart_items
-        context = {'items': items, 'order': order, 'cartItems': cartItems}
+        context = {'items': items, 'order': order, 'cartItems': cartItems,'get_cart_total':get_cart_total,'get_cart_items':get_cart_items
+        }
         return render(request, 'cart/cart.html', context)
 
 
@@ -71,12 +82,18 @@ def shippingaddress(request):
         discound = 0
         print('authenticated')
         customer = request.user
-        order = Order.objects.filter(account=customer, complete=False)
+        cartOrder = OrderItems.objects.filter(account=customer)
+        order = Order.objects.filter(account=customer)
         items =0
         cartItems=0
-        for i in order:
-            items = i.orderitems_set.all()
-            cartItems = i.get_cart_items
+        items = cartOrder
+        get_cart_total =0
+        get_cart_items =0
+        for i in cartOrder:
+
+            get_cart_items =get_cart_items + i.get_cart_items
+            get_cart_total = get_cart_total + i.get_cart_total
+
         address = ShippingAddress.objects.filter(
             account=customer).order_by('id')
         coupen = None
@@ -91,9 +108,9 @@ def shippingaddress(request):
                 cart = Order.objects.get(account=user)
                 print(cart.get_cart_total)
                 # items = OrderItems.objects.filter(cart=cart)
-                if int(coupen_discound.minimum_price) <= int(cart.get_cart_total) and int(coupen_discound.maximum_price) >= int(cart.get_cart_total):
+                if int(coupen_discound.minimum_price) <= int(get_cart_total) and int(coupen_discound.maximum_price) >= int(get_cart_total):
                     print('entered')
-                    discound =  cart.get_cart_total - int(coupen_discound.price) 
+                    discound =  get_cart_total - int(coupen_discound.price) 
                     print(discound)
                     messages.success(request,'coupen applied')
                 else:
@@ -111,10 +128,10 @@ def shippingaddress(request):
     # count =itm.product.quantity
 
     if discound is not None:
-            context = {'items': items, 'order': order,'coupen':coupen,
+            context = {'items': items, 'order': order,'coupen':coupen,'get_cart_total':get_cart_total,
                'cartItems': cartItems,'discound':discound, 'address': address}
     else:
-        context = {'items': items, 'order': order,
+        context = {'items': items, 'order': order,'get_cart_total':get_cart_total,
                 'cartItems': cartItems, 'address': address}
     return render(request, 'shipping/shipping.html', context)
 
@@ -130,11 +147,13 @@ def updateItem(request):
     product = Product.objects.get(id=productId)
     
     if request.user.is_authenticated:
+        order = 0
         print('asdjfaidfhaousdgiviufah')
-        order , created= Order.objects.get_or_create(
-            account=account, complete=False)
+        # order, created= Order.objects.get_or_create(
+        #     account=account)
+        print('varum varum prabhadam vidarnnidum puthiyaru thalam')
         orderItem, created = OrderItems.objects.get_or_create(
-        order=order, product=product,account=account)
+         product=product,account=account)
         print(orderItem)
     else:
         print('sjkdfajhkjhbkhjhggjgg')
@@ -176,9 +195,13 @@ def pay_page(request):
         idid = Account.objects.get(id=customer.id)
         print(idid,'thisn is user id')
         
-        order = Order.objects.get(account=customer, complete=False)
-        items = order.orderitems_set.all()
-        cartItems = order.get_cart_items
+        order = Order.objects.filter(account=customer)
+        print('sadgakjdhgkasghkjghkjah')
+        cartOrder = OrderItems.objects.filter(account=customer)
+        for i in cartOrder:
+            
+            cartItems = i.get_cart_items
+        items = cartOrder
     else:
         return redirect(login_page)
     if request.method == "POST":
@@ -199,12 +222,13 @@ def pay_page(request):
         pincode = request.POST.get('pincode')
         account = customer
         order = order
+        print('asdfaosdhfasdhfsdhfshfsfshfskjfdkjsfsdksjhdfkjsda')
         track_no = str(account.first_name)+str(random.randint(1111111, 9999999))
         while Order.objects.filter(tracking_no=track_no) is None:
             track_no = str(account.first_name)+str(random.randint(1111111, 9999999))
-        order.tracking_no = track_no
-        order.save()
-        orItems = OrderItems.objects.filter(order=order)
+        # order.tracking_no = track_no
+        # order.save()
+        orItems = OrderItems.objects.filter(account=account)
         #     messages.error(request, 'this address already exist')
         # else:
         add = ShippingAddress() 
@@ -213,7 +237,7 @@ def pay_page(request):
         add.state = state
         add.pincode = pincode
         add.account = customer
-        add.order = order
+        
         addrs = ShippingAddress.objects.filter(
             address=address, city=city, account=account).exists()
         if addrs:
@@ -240,7 +264,7 @@ def pay_page(request):
             orItemss = item
             prod_qunt = Product.objects.get(id=orItemss.product.id)
             user_order.account = customer
-            user_order.order = order
+            user_order.order = item.order
             user_order.shippingaddress = saddress
             user_order.tracking_no = track_no
             user_order.quantity = orItemss.quantity
@@ -258,7 +282,7 @@ def pay_page(request):
             prod_qunt.save()
             print(user_order)
         user_order.save()
-        product = OrderItems.objects.filter(order=order)
+        product = OrderItems.objects.filter(account=account)
         product.delete()
         payMode = request.POST.get('payment_mode')
         print(payMode)

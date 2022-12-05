@@ -251,7 +251,7 @@ input [type=text]{
                             <input type="hidden" name="payment_mode" value="COD">
                             <input type="hidden"name="butt" value="{{ order.get_cart_total}}">
                             <input type="hidden" name="check" value="0" hidden>
-                            <div><span>₹{{ order.get_cart_total|floatformat:2 }}/-</span></div>
+                            <div><span>₹{{ get_cart_total|floatformat:2 }}/-</span></div>
     <div> <span>COD Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>
                           
                           </div>

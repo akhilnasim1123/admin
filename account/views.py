@@ -78,42 +78,50 @@ def registration_view(request):
 def home(request):
     print(request.session.session_key)
     # if request.user.is_authenticated:
+
     if 'user_exist' in request.session:
         print('authenticated')
         customer = request.user
         print('customer')
-        try:
-            order, create = Order.objects.get_or_create(
-                account=customer, complete=False)
-            items = order.orderitems_set.all()
-            cartItems = order.get_cart_items
-            products = Product.objects.all()
-            category = Category.objects.all().order_by('id')
-            sub = SubCategory.objects.all().order_by('id')
-            data = {'products': products, 'items': items,'category':category,'sub':sub,
-                    'order': order, 'cartItems': cartItems}
-            return render(request, 'page.html', data)
-        except:
-                # order = []
-                # items = []
-                # cartItems = []
-                print("An exception occurred")
-                # products = Product.objects.all()
-                # category = Category.objects.all().order_by('id')
-                # sub = SubCategory.objects.all().order_by('id')
-                # data = {
-                #     'products': products,
-                #     'sub':sub,
-                #     'category':category,
-                #     'cartItems': cartItems,
-                #     'items': items,
-                #     'order': order,
-                # }
-                # return render(request, 'page.html', data)
+        cartItems=0
+        # try:
+        order= Order.objects.filter(account=customer,complete=False)
+        cart = OrderItems.objects.filter(
+            account=customer)
+        items = cart
 
-    order=[]
-    items = []
-    cartItems = []
+        for i in cart:
+            cartItems = i.get_cart_items
+        print(cartItems)
+        products = Product.objects.all()
+        category = Category.objects.all().order_by('id')
+        sub = SubCategory.objects.all().order_by('id')
+        data = {'products': products, 'items': items,'category':category,'sub':sub,
+                'order': order, 'cartItems': cartItems}
+        return render(request, 'page.html', data)
+        # except:
+        #         # order = []
+        #         # items = []
+        #         # cartItems = []
+        #         print("An exception occurred")
+        #         # products = Product.objects.all()
+        #         # category = Category.objects.all().order_by('id')
+        #         # sub = SubCategory.objects.all().order_by('id')
+        #         # data = {
+        #         #     'products': products,
+        #         #     'sub':sub,
+        #         #     'category':category,
+        #         #     'cartItems': cartItems,
+        #         #     'items': items,
+        #         #     'order': order,
+        #         # }
+        #         # return render(request, 'page.html', data)
+    guestUser = request.session.session_key
+    order, created = Order.objects.get_or_create(session_id = guestUser)
+    items = OrderItems.objects.filter(session_id=guestUser)
+    cartItems=0
+    for i in items:
+        cartItems=i.get_cart_items
     products = Product.objects.all()
     category = Category.objects.all().order_by('id')
     sub = SubCategory.objects.all().order_by('id')
@@ -139,10 +147,16 @@ def login_page(request):
 
                 print('success')
                 request.session['user_exist'] = email
-                guestUser = guest(request)
+                guestUser = request.session.session_key
                 print('guest user id', guestUser)
                 if guestUser:
                     guestItem = OrderItems.objects.filter(session_id=guestUser)
+                    order = Order.objects.filter(session_id=guestUser).exists()
+                    if order:
+                        ord = Order.objects.filter(session_id=guestUser)
+                        for i in ord:
+                            i.account=user
+                            i.save()
                     print("Guest cart is", guestItem)
                     add = OrderItems() 
                     if guestItem:
@@ -152,20 +166,22 @@ def login_page(request):
                             print(item.product)
 
                             check = None
-                            check = OrderItems.objects.filter(account=user,product=item.product) 
+                            check = OrderItems.objects.filter(account=user,product=item.product).exists() 
                             if check:
+                                check = OrderItems.objects.filter(account=user,product=item.product)
                                 for ch in check:
                                     ch.quantity = ch.quantity + item.quantity
                                     ch.save()
                             else:
-                                add.account = user 
-                                add.product = item.product
-                                add.quantity = item.quantity
-                                add.order = item.order
-                                add.save()
+                                OrderItems.objects.create(account=user,product=item.product,quantity=item.quantity,order=item.order)
+                                # add.account = user 
+                                # add.product = item.product
+                                # add.quantity = item.quantity
+                                # add.order = item.order
+                                # add.save()  
+                                item.delete()        
 
-                            
-                            item.delete()
+                guestItem.delete()
                     
                 login(request, user)   
                 return redirect('home')
@@ -210,7 +226,7 @@ def product_view(request, id):
         customer = request.user
         print('customer')
         try:
-            order = Order.objects.filter(account=customer, complete=False)
+            order = Order.objects.filter(session_id=True, complete=False)
             for item in order:
                 items = item.orderitems_set.all()
                 cartItems = item.get_cart_items
@@ -222,6 +238,7 @@ def product_view(request, id):
             pro = Product.objects.get(id=id)
             wishlist = Wishlist.objects.get(product=val, account=customer)
             print(wishlist)
+
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
 
@@ -232,7 +249,7 @@ def product_view(request, id):
                            'order': order, 'cartItems': cartItems}
                 return render(request, 'product_view.html', context)
             else:
-                context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer,
+                context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer,'related_products':related_products,
                            'order': order, 'cartItems': cartItems}
                 return render(request, 'product_view.html', context)
         except:
@@ -250,6 +267,7 @@ def product_view(request, id):
 
             print(wishlist)
             print(offer)
+            print(val.quantity)
             
             context = {'key5': val, 'cartItems': cartItems,'wishlist':wishlist,'related_products':related_products,
                        'offer': offer, 'price': price}
@@ -257,20 +275,19 @@ def product_view(request, id):
 
             return render(request, 'product_view.html', context)
 
-    elif request.user is None:
-        order = []
-        items = []
-        cartItems = []
-        offer
 
-    order = []
-    items = []
-    cartItems = []
+    order, created = Order.objects.get_or_create(session_id = request.session.session_key)
+    items  = OrderItems.objects.filter(session_id=request.session.session_key)
+    cartItems = order.get_cart_items
+
     val = Product.objects.get(id=id)
+    if val.quantity < 0:
+        messages.error(request, 'Out Of Stock')
+    print(val.quantity)
     related_products = Product.objects.filter(sub=val.sub)
     print(related_products)
     context = {'key5': val, 'items': items,'related_products':related_products,
-               'order': order, 'cartItems': cartItems}
+            'order': order, 'cartItems': cartItems}
     return render(request, 'product_view.html', context)
 
 
@@ -461,7 +478,7 @@ def order_userside(request, id):
 #     }
 #     return render(request, 'userprofile/user_orders.html', context)
 
-
+# @login_required(login_page)
 def add_wishlist(request, product_id, user_id):
     print('kjdfsdfsjjshguhuhnadsf')
     product = Product.objects.get(id=product_id)

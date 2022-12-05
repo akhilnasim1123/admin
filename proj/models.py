@@ -103,6 +103,17 @@ class OrderItems(models.Model):
     def get_total(self):
         total = self.product.get_product_price * self.quantity
         return total
+    @property
+    def get_cart_items(self):
+
+        total =0
+        total = total + self.quantity
+        return total
+    @property
+    def get_cart_total(self):
+        total = 0
+        total = total + self.get_total
+        return total
 
 
 class ShippingAddress(models.Model):
