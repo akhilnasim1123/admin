@@ -93,11 +93,17 @@ def home(request):
         for i in cart:
             cartItems = i.get_cart_items
         print(cartItems)
-        products = Product.objects.all()
+        products = Product.objects.all().order_by('id')
+        filterProduct= Product.objects.filter(product_offer__gte=1)
+        filterCategory= Category.objects.filter(category_offer__gte=1)
+        print(filterProduct)
         category = Category.objects.all().order_by('id')
         sub = SubCategory.objects.all().order_by('id')
-        data = {'products': products, 'items': items,'category':category,'sub':sub,
-                'order': order, 'cartItems': cartItems}
+        for i in category:
+            sub = i.filtered
+            print(sub)
+        data = {'products': products, 'items': items,'category':category,'sub':sub,'filterProduct':filterProduct,
+                'filterCategory':filterCategory,'order': order, 'cartItems': cartItems}
         return render(request, 'page.html', data)
         # except:
         #         # order = []
@@ -226,9 +232,10 @@ def product_view(request, id):
         customer = request.user
         print('customer')
         try:
-            order = Order.objects.filter(session_id=True, complete=False)
-            for item in order:
-                items = item.orderitems_set.all()
+            order = Order.objects.filter(account=customer, complete=False)
+            items = OrderItems.objects.filter(account=customer)
+            cartItems=0
+            for item in items:
                 cartItems = item.get_cart_items
             val = Product.objects.get(id=id)
             related_products = Product.objects.filter(sub=val.sub)
@@ -254,9 +261,10 @@ def product_view(request, id):
                 return render(request, 'product_view.html', context)
         except:
             order = Order.objects.filter(account=customer, complete=False)
-            for i in order:
-                items = i.orderitems_set.all()
-                cartItems = i.get_cart_items
+            items = OrderItems.objects.filter(account=customer)
+            cartItems=0
+            for item in items:
+                cartItems = item.get_cart_items
             val = Product.objects.get(id=id)
             related_products = Product.objects.filter(sub=val.sub)
             if val.quantity < 0:
@@ -423,9 +431,11 @@ def address_view(request, id):
         customer = request.user
         print('customer')
         try:
-            order = Order.objects.get(account=customer, complete=False)
-            items = order.orderitems_set.all()
-            cartItems = order.get_cart_items
+            order = OrderItems.objects.filter(account=customer)
+            items = order
+            cartItems = 0
+            for i in order:
+                cartItems = cartItems + i.get_cart_items
             context = {'items': items,
                        'order': order, 'cartItems': cartItems}
             return render(request, 'address_view.html', context)
@@ -439,6 +449,11 @@ def address_view(request, id):
 
     account = Account.objects.get(id=id)
     datas = ShippingAddress.objects.filter(account=id).order_by('id')
+    order = OrderItems.objects.filter(account=customer)
+    items = order
+    cartItems = 0
+    for i in order:
+        cartItems = cartItems + i.get_cart_items
     context = {
         'datas': datas,
         'cartItems': cartItems,

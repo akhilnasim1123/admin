@@ -1,4 +1,4 @@
-from datetime import timezone
+from datetime import timedelta, timezone
 import datetime
 from time import strftime
 from django.contrib import messages
@@ -427,6 +427,10 @@ def filterOrder(request):
 def statusEdit(request,id):
     order = OrderedItems.objects.get(id=id)
     if order.status == 'pending':
+        order.status = 'out_of_delivery'
+        order.save()
+        return redirect(order_list)
+    if order.status == 'out_of_delivery':
         order.status = 'Shipped'
         order.save()
         return redirect(order_list)
@@ -471,19 +475,20 @@ def salesReport(request):
     if request.method == 'POST':
         date = request.POST.get('datepicker')
         dd = date
-        date = date+" 12:59:59.4645+00:00"
-        day = dd+" 00:00:00.0000+00:00"
-        print(date)
+        date = date+" 23:59:59.562476+00:00"
+        day = dd+" 00:00:00.000000+00:00"
+        print(day)
         date =strftime(date)
+        day=strftime(day)
         print(date)
         print(timezone.now())
-        date = OrderedItems.objects.filter(ordered__lte=date,ordered__gte=day, status='delivered').order_by('ordered')
-        print(date)
-        if date:
-            return render(request,'admin/salesReport.html',{'orders':date})  
-        else:
-            orders = []
-            return render(request,'admin/salesReport.html',{'orders':orders})  
+        date = OrderedItems.objects.filter(ordered__lte=date,ordered__gte=day, status='delivered')
+        # print(date)
+        # if date:
+        return render(request,'admin/salesReport.html',{'orders':date})  
+        # else:
+        #     orders = []
+        #     return render(request,'admin/salesReport.html',{'orders':orders})  
 
                   
     return render(request,'admin/salesReport.html',{'orders':orders})
@@ -517,4 +522,19 @@ def export_as_excel(request):
     
     wb.save(response)
     return response
+
+def weekly(request):
+    last_week = datetime.datetime.now().date() - timedelta(days=7)
+    print(last_week)
+    orders = OrderedItems.objects.filter(ordered__lte=datetime.datetime.now().date(),ordered__gte=last_week,status='delivered')
+    print('success')
+    print(orders)
+    return render(request,'admin/salesReport.html',{'orders':orders})
+def monthly(request):
+    last_month = datetime.datetime.now().date() - timedelta(days=30)
+    print(last_month)
+    orders = OrderedItems.objects.filter(ordered__lte=datetime.datetime.now().date(),ordered__gte=last_month,status='delivered')
+    print(orders)
+    print('success')
+    return render(request,'admin/salesReport.html',{'orders':orders})
 

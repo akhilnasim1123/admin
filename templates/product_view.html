@@ -20,8 +20,9 @@
                   <div style="width:80%; height:auto;">
                     <h4 style="font-size:50px">{{ key5.product_name }}</h4>
                           </div>
-                          {% if get_product_price == 0 %}
-        <div class="price-tag text-danger" style="width:20%;font-size:25px"><b> ₹{{ key5.get_product_price }} </b></div>
+                          {% if key5.get_product_price == key5.price %}
+        
+                          <div class="price-tag text-danger" style="width:20%;font-size:25px"><b> ₹{{ key5.get_product_price }} </b></div>
 {% else %}
 <div class="price-tag text-dark" style="width:20%;font-size:25px"><b> <del>₹{{ key5.price }}</del> </b></div>
 
@@ -32,23 +33,7 @@
 
 
     </div>
-    <div class="d-flex justify-content-between">
-   
-<button data-product="{{ key5.id }}" data-action="add" type="button" class="update-cart btn btn-dark btn-block btn-lg " data-mdb-ripple-color="dark" onclick="addToCart()">Add to Cart</button>
-
-<div class=" mx-3 " style="width: auto;">
-
-  {% if user.is_authenticated  %}
-{% if wishlist %}
- <a href="#" onclick="wishlist('{{key5.id}}','{{user.id}}')" id="wishlist-btn" style="text-decoration: none;"><i  class="fa fa-heart text-danger" style="font-size: 30px;"></i></a>
-
-{% else %}
-<a href="#" onclick="wishlist('{{key5.id}}','{{user.id}}')" id="wishlist-btn" style="text-decoration: none;"><i  class="bi bi-heart text-danger" style="font-size: 30px;"></i></a>
-  {% endif %}
-  {% endif %}
-</div>
-
-</div>
+  
 {%for message in messages%}
 <p class="text-danger mt-4"> {{message}}</p>
 {%endfor%}
@@ -57,15 +42,35 @@
   <p>{{ key5.desc }}</p>
       </div>
 
+      <div class="d-flex justify-content-between">
+   
+        <button data-product="{{ key5.id }}" data-action="add" type="button" class="update-cart btn btn-dark btn-block btn-lg " data-mdb-ripple-color="dark" onclick="addToCart()">Add to Cart</button>
+        
+        <div class=" mx-3 " style="width: auto;">
+        
+          {% if user.is_authenticated  %}
+        {% if wishlist %}
+         <a href="#" onclick="wishlist('{{key5.id}}','{{user.id}}')" id="wishlist-btn" style="text-decoration: none;"><i  class="fa fa-heart text-danger" style="font-size: 30px;"></i></a>
+        
+        {% else %}
+        <a href="#" onclick="wishlist('{{key5.id}}','{{user.id}}')" id="wishlist-btn" style="text-decoration: none;"><i  class="bi bi-heart text-danger" style="font-size: 30px;"></i></a>
+          {% endif %}
+          {% endif %}
+        </div>
+        
+        </div>
+
+
 </div>
 </div>
 <hr class="container">
 {% endif %}
 <div class="container">
-  <div class=""><h5><b>Engine</b></h5></div>
+  <div class=""><h5><b>Car</b></h5></div>
   <div>
-    The car engine parts require regular maintenance to ensure your car is running in a proper way. It is not easy to inspect all of them to specify the right moment for replacement so that the failure of one item will not cause issues with the whole unit. There is a maintenance schedule provided in the manual coming with your car. Anyway, when there is a need for quality and affordable spare parts, go to boodmo - India's largest online marketplace for car spare parts.
+    People buy cars; and soon the car become like their family member. They develop personal relationships with their cars because they perceive their car as an extension of the self. Car Accessories, after market modifications, car insurance and periodic service gives them a feeling of self-care. People also see power and freedom and adventure in their vehicles. If you are one of those car lovers, I am sure you will enjoy these car quotes.
   </div>
+  <div>“When it comes to cars, only two varieties of people are possible – cowards and fools.” <b>– Russell Baker</b></div>
 </div>
 <div class="mt-5">
   <div class="container">

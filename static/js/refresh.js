@@ -1,17 +1,21 @@
-function trashCart(itemId,total){
+function trashCart(itemId,user){
     console.log(itemId);
 
     $.ajax({
         method:'get',
-        url: "/cart/deletecart/"+itemId,
+        url: "/cart/deletecart/"+ itemId + '/' +user,
         success: function (response) {
             console.log(response);
                 console.log(document.getElementById('cart-user'+itemId));
+                console.log('delete cart');
                 document.getElementById(itemId).remove()
-                if (response.count != 0){
+
+                if (response.count > 0){
+                    console.log(response.count);
                 document.getElementById('carttotalprice').innerHTML = response.total
                 document.getElementById('totalquantity').innerHTML = response.count     
             }else{
+                console.log(response.count,'uhfdriahasdkjjhfa uisf hd iuahsdfjuiasff')
                 location.reload()
             }
         }

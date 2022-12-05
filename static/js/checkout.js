@@ -14,7 +14,7 @@ $(document).ready(function () {
         console.log(email)
 
         if (phone == "" || name == "" || address == "" || city == "" || state == "" || pincode == "") {
-            swal("Alert!", "All fields are mandatory!", "error");
+            swal("Alert!", "Check Your Address", "error");
 
             return false;
         }

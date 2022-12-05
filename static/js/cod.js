@@ -17,7 +17,7 @@ $(document).ready(function () {
         console.log(coupen)
 
         if (phone === "" || name === "" || address === "" || city === "" || state === "" || pincode === "") {
-            swal("Alert!", "All fields are mandatory!", "error");
+            swal("Alert!", "Check Your Address", "error");
 
         }
         else{

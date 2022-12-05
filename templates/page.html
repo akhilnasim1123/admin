@@ -2,23 +2,31 @@
 {% load static %}
 
 {% block content %}
-<div class="row w-100">
-  <div class="col-2 text-center bg-dark text-white sidebar text-black" style="overflow-y: scroll;height: 642px;scroll-behavior: smooth;">
+<div class="d-flex w-100" >
+  <div class=" text-center bg-light text-white sidebar text-black" style="position: fixed;z-index: 10; overflow-y: scroll;height: 642px;scroll-behavior: smooth;width: 15%;">
 
     <div class="mt-5 w-75 bg-danger">
       <a href="" style="text-decoration: none;"><p class="text-white text-center" style="font-size: 20px;"><b>CATEGORY</p></b></a>
     </div>
     <div>
-    <table class="table bg-dark text-white mt-5 table-hover w-100">
+    <table class="table bg-light text-dark mt-5 table-hover w-100">
       <tbody>
       {% for cat in category %}
       <tr>
-        <td class="col dropdown text-white">
+        <td class="col dropdown text-dark">
 
-  <a href="#" class="category_name "><b>{{ cat.category_name }} <i class="fas fa-angle-right dropdown"></i></b></a>
-<div class="cat-menu">
-{% for i in sub %}
-   <div><a>{{i.sub_name}}</a></div>
+  <a href="#{{cat.id}}" class="category_name "><b>{{ cat.category_name }} <i class="fas fa-angle-right dropdown"></i></b></a>
+<div class="cat-menu mx-2">
+{% for i in cat.filtered %}
+<div>
+<a href="#" id="" onclick="show('{{i.id}}')" class="sub_name">{{i}}<i class="fas fa-angle-right dropdown"></i></a>
+</div>
+   <div class="hidden mx-2" id="sub-menu{{i.id}}">
+    {% for item in i.Products %}
+    <div class=""><a href="{% url 'product_view' id=item.id %}" >{{item.product_name}}</a></div>
+    <hr>
+    {% endfor %}
+   </div>
    {% endfor %}
   </div>
       </td>
@@ -28,15 +36,26 @@
     </table>
     </div>
 <div class="mt-5 w-75 bg-danger">
-  <a href="" style="text-decoration: none;"><p class="text-white  " style="font-size: 20px;"><b>PRODUCTS</p></b></a>
+  <a href="" style="text-decoration: none;"><p class="text-white " style="font-size: 20px;"><b>OFFERS</p></b></a>
 </div>
 <div>
-  <table class="table bg-dark mt-5 table-hover w-100">
+  <table class="table bg-white text-dark mt-2 table-hover w-100">
     <tbody>
-    {% for pro in products %}
+      <tr class=" bg-secondary"><td class="">      <div ><b class="text-white w-75 " style="font-size: 15px;">PRODUCT</b></div></td></tr>
+
+    {% for pro in filterProduct %}
     <tr>
-    <td class="col">
-      <a href="{% url 'product_view' id=pro.id %}"><p class=""><b>{{ pro.product_name }}</b></p></a>
+    <td >
+      <a href="{% url 'product_view' id=pro.id %}"><p class=""><b style="font-size: 13px;">{{ pro.product_name }}</b></p></a>
+    </td>
+  </tr>
+    {% endfor %}
+<tr class="bg-secondary"><td>    <div ><b class="text-white" style="font-size: 15px;">CATEGORY</b></div></td></tr>
+    {% for pro in filterCategory %}
+
+    <tr>
+    <td >
+      <a href="{% url 'product_view' id=pro.id %}"><p class=""><b style="font-size: 13px;">{{ pro.category_name }}</b></p></a>
     </td>
   </tr>
     {% endfor %}
@@ -45,18 +64,20 @@
 </div>
 
   </div>
-  <div class="col-10 " style="">
+  <div class="d-flex flex-column justify-content-between" style="width: 85%;    margin-left: 15%; height: auto;">
+<!-- <div class="d-flex flex-column justify-content-between" > -->
+  {% for cat in category %}
+    <div class="container" id="{{cat.id}}">
+<h5 class="text-black mt-3"><span class="text-danger" style="width: 10%; font-size:40px;"><b>|</b></span>{{cat.category_name}}</h5>
 
-    <div class="container">
-<h5 class="text-black mt-3"><span class="text-danger" style="width: 10%; font-size:40px;"><b>|</b></span>Engine</h5>
 </div>
 
-<div class="pro-card mt-5 bg-white"  style="height: 300px;display: flex;flex-direction: column;width: 100%;">
+<div class="pro-card mt-2 bg-white"  style="display: flex;flex-direction: column;width: 100%;">
   <div class="container">
   <div class="container row" >
 
-{% for product in products %}
-<div class="col-3">
+{% for product in cat.products %}
+<div class="col-3 mt-3">
 <a href="{% url 'product_view' id=product.id %}" class="card product-card  " style="width: 100%;height:350px;text-align:center; display:flex;flex-direction:column; align-items:center;justify-content:center; text-decoration: none; color:black;">
     
   <div style="width:100%;height: 60%;background-image: url(/media/{{product.image1}});background-size:cover;background-repeat: no-repeat;">
@@ -74,12 +95,16 @@
     <span class="tag mt-1" style="font-size:16px;height:30px">₹{{ product.get_product_price }}</span>
     </div>
         </div>
-
+{% if product.get_product_price != product.price %}
         <div class="d-flex justify-content-around text-secondary" style="width: 100%;height: 10%;">
           <p><del><b>{{ product.price }}</b></del></p>
           <p><b>Best Offer</b></p>
         </div>
+{% else %}
+<div class="d-flex justify-content-around text-secondary" style="width: 100%;height: 10%;">
 
+</div>
+{% endif  %}
   <div class="card-body text-center" style="width:100%; height: 20%;">
  
       <div>
@@ -93,16 +118,21 @@
 {% endfor %}
 </div>
     </div></div>
+    {% endfor %}
     </div>
+  </div>
   </div>
 </div>
 <style>
 a{
     text-decoration: none;
-    color: rgb(213, 213, 213);
+    color: rgb(22, 22, 22);
+}
+a:hover{
+  color: rgb(202, 56, 56);
 }
 .sidebar a:hover{
-    color: cyan;
+    color: rgb(202, 56, 56);
 }
 table:hover{
   background-color: blue;
@@ -114,6 +144,8 @@ table:hover{
   display: none;
 }li{
   list-style: none;
+}.hidden{
+  display: none;
 }
 
 </style>
@@ -126,6 +158,31 @@ table:hover{
       $(this).next('.cat-menu').slideToggle();
     });
   });
+  // $(document).ready(function(){
+  //   $('#sub_name').click(function(){
+  //     $(this).next('.sub-menu').slideToggle();
+  //   });
+  // });
+</script>
+<script>
+let productIsShown = false
+function show(id){
+
+  if (productIsShown){
+    document.getElementById('sub-menu'+id).classList.add('hidden')
+    productIsShown = false
+
+  }else{
+    document.getElementById('sub-menu'+id).classList.remove('hidden')
+    productIsShown = true
+
+
+  }
+  
+}
+</script>
+<script type="text/javascript">
+
 
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>

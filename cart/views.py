@@ -38,10 +38,12 @@ def cart(request):
         #     print(i.get_total)
         # print(items.get_cart_items)
         cartItems = 0
+        get_cart_total =0
+        get_cart_items =0
         for i in items:
             cartItems = i.get_cart_items
-            get_cart_items = i.get_cart_items
-            get_cart_total = i.get_cart_total
+            get_cart_items =get_cart_items + i.get_cart_items
+            get_cart_total = get_cart_total + i.get_cart_total
             print(i.get_cart_items)
         # items = OrderItems.objects.filter(account=customer)
         product_id =0
@@ -62,8 +64,8 @@ def cart(request):
         get_cart_total=0
         for i in items:
             cartItems = i.get_cart_items
-            get_cart_items = i.get_cart_items
-            get_cart_total = i.get_cart_total
+            get_cart_items =get_cart_items + i.get_cart_items
+            get_cart_total = get_cart_total + i.get_cart_total
             print(i.get_cart_items)
 
         print("The items in cart are",items)
@@ -105,8 +107,8 @@ def shippingaddress(request):
             if coupen_check: 
                 coupen_discound = Coupen.objects.get(coupen=coupen)
                 user = Account.objects.get(id=customer.id)
-                cart = Order.objects.get(account=user)
-                print(cart.get_cart_total)
+                # cart = Order.objects.get(account=user)
+                # print(cart.get_cart_total)
                 # items = OrderItems.objects.filter(cart=cart)
                 if int(coupen_discound.minimum_price) <= int(get_cart_total) and int(coupen_discound.maximum_price) >= int(get_cart_total):
                     print('entered')
@@ -297,13 +299,21 @@ def pay_page(request):
     return render(request, 'shipping/success.html', context)
 
 
-def deletecart(request, id):
+def deletecart(request, id,user_id):
     print('asdhfnkjahsdfkahsfdkhashhafdskhaksfhakshdfkashhasfdhkash')
     delete = OrderItems.objects.get(id=id)
-
     delete.delete()
-    total = delete.order.get_cart_total
-    count = delete.order.get_cart_items
+    account = Account.objects.get(id=user_id)
+    delete = OrderItems.objects.filter(account=account)
+    total =0
+    count = 0
+    if delete:
+        for i in delete:
+            total = total + i.get_cart_total
+            count = count + i.get_cart_items
+    else:
+        total = 0
+        count = 0
     values = {
         'total': total,
         'count': count,
@@ -318,8 +328,10 @@ def deletecart(request, id):
 
 
 def razorpay(request):
-    cartitems = Order.objects.get(account=request.user)
-    total_price = cartitems.get_cart_total
+    items = OrderItems.objects.filter(account=request.user)
+    total_price =0
+    for item in items:
+        total_price = total_price + item.get_cart_total
 
     return JsonResponse({
         'total_price': total_price

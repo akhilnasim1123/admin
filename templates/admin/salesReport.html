@@ -22,10 +22,14 @@
       </div>
 </div> -->
 <div class="d-flex">
-<form action="{% url 'salesReport' %}" style="width: 50%;" method="post">
+    <div class="d-flex">
+<form action="{% url 'salesReport' %}" style="width: 60%;"  method="post" class="">
     {% csrf_token %}
-    <input id="datepicker" name="datepicker" onclick="datepick()" class="bg-light" width="276"/>
-</form>
+    <input id="datepicker" name="datepicker"  class="bg-light" width="276"/>
+  </form>
+  <a href="{% url 'weekly' %}" class="mx-4"><button class="btn bg-dark text-white">weekly</button></a>
+  <a href="{% url 'monthly' %}" class="mx-4"><button class="btn bg-dark text-white">Monthly</button></a>
+</div>
 <div class="d-flex">
 
 <button class="btn btn-dark btn-xs ml-3 mb-3 mx-5" style="width:50;" id="download-pdf">Download as Pdf</button>
@@ -72,6 +76,10 @@
 
     <script>
         $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap4',
+            format:'yyyy-mm-dd'
+        });
+        $('#datepick').datepicker({
             uiLibrary: 'bootstrap4',
             format:'yyyy-mm-dd'
         });

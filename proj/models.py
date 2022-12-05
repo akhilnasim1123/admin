@@ -7,11 +7,20 @@ from account.models import Account
 class Category(models.Model):
     category_id             = models.AutoField
     category_name           = models.CharField(max_length=100)
+    # sub                     = models.ManyToManyField(SubCategory)
     offer_name              = models.CharField(max_length=100,null=True,blank=True)
     category_offer          = models.IntegerField(null=True,blank=True,default=0)
 
     def __str__(self):
         return self.category_name
+    @property    
+    def filtered(self):
+        sub = self.subcategory_set.all()
+        return sub
+    @property
+    def products(self):
+        product = self.product_set.all()
+        return product
 
 
 class SubCategory(models.Model):
@@ -20,6 +29,12 @@ class SubCategory(models.Model):
 
     def __str__(self):
         return self.sub_name
+    @property
+    def Products(self):
+        product = self.product_set.all()
+        return product
+
+        
 
 
 class Product(models.Model):
