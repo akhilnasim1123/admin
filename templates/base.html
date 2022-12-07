@@ -35,15 +35,15 @@
 </head>
 
 <body class="d-flex flex-column">
-    <header class="header bg-white" style="position: fixed; width: 100%;z-index: 10;">
+    <header class="header bg-dark " style="position: fixed; width: 100%;z-index: 10;">
         <div class="container">
-            <div class="head">
+            <div class="head bg-dark">
                 <div class="logo" style="width: 45%;  height: auto;">
                     <p><a href="{% url 'landing_page' %}" style="text-decoration: none;"><span
-                                class="t text-danger">T</span><span class="text-black">orque</span></p></a>
+                                class="t text-danger">T</span><span class="text-white">orque</span></p></a>
                 </div>
-                <div class="content" style="width: 45%; height: auto;">
-                    <div class="cont">
+                <div class="content bg-dark" style="width: 45%; height: auto;">
+                    <div class="cont text-white bg-dark" >
                         <div>
                             <a class="headcontent" href="{% url 'home' %}">Online Store</a>
                         </div>
@@ -53,11 +53,11 @@
                         </div>
                         {% else %}
                         <div>
-                            <a class="headcontent" href="">My Account</a>
+                            <a class="headcontent" href="{% url 'loginpage' %}">My Account</a>
                         </div>
                         {% endif %}
                         <div>
-                            <a class="headcontent" href="">Contact Us</a>
+                            <a class="headcontent" href="{% url 'contact' %}">Contact Us</a>
                         </div>
                         {% if user.is_authenticated %}
                         <div>
@@ -85,7 +85,7 @@
 
                 </div>
             </div>
-            <hr class="hr">
+            <!-- <hr class="hr"> -->
         </div>
 
     </header>
@@ -128,12 +128,19 @@
         }
         const csrftoken = getToken('csrftoken');
     </script>
-
+<style>
+    .headcontent{
+        color: white;
+    }
+</style>
     {% block scripts %}
 
 
 
     {% endblock scripts %}
+
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script src="{% static 'js/checkout.js' %}"></script>

@@ -1,3 +1,5 @@
+import datetime
+from datetime import datetime, timedelta, timezone
 from time import strftime
 from django.db import models
 
@@ -9,13 +11,7 @@ from proj.models import *
 
 class CustomDateTimeField(models.DateTimeField):
     def value_to_string(self, obj):
-        val = self.value_from_object(obj)
-        if val:
-            val.replace(microsecond=0)
-            val.replace
-            
-            return val.isoformat()
-        return ''
+        return str(obj) 
 
 
 
@@ -48,24 +44,28 @@ class OrderedItems(models.Model):
     discound                    = models.IntegerField(default=0,null=True,blank=True)
     is_return                   = models.BooleanField(default=False,null=True,blank=True)
     reason                      = models.CharField(max_length=100,null=True,blank=True)
-
-
-   
-
-   
-
-
-    def __str__(self):
-        return str(self.ordered.strftime("%Y-%m-%d"))
+    delivered_at                = models.DateTimeField(null=True,blank=True)
+    return_date                 = models.DateTimeField(null=True,blank=True)
+    # def __str__(self):
+    #     return datetime.datetime.strftime(self.delivered_at)
     def __str__(self):
         return str(self.account)
-
-
-
 
     def get_total(self):
         total = self.product.price * self.quantity
         return total
+    @property
+    def returnPolicy(self):
+        Today = datetime.now()
+        if self.delivered_at == None:
+            self.delivered_at = datetime.now()
+        date = self.delivered_at + timedelta(days=7)
+        self.is_return =False
+        if Today < date:
+            self.is_return = True
+        return self.is_return
+
+
 
 
 

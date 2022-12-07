@@ -26,5 +26,5 @@ urlpatterns = [
     path('addressAdd',views.addressAdd,name='addressAdd'),
     path('edit-profile',views.editProfile,name='editprofile'),
     path('password-change/<int:id>',views.password_change,name='password_change'),
-  
+    path('contact-us',views.contact,name='contact'),
 ]

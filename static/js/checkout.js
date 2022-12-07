@@ -26,7 +26,7 @@ $(document).ready(function () {
                 url: "/cart/razorpay",
 
                 success: function (response) {
-
+                    console.log(response.items);
                     var options = {
                         "key": "rzp_test_JgN88azXlg3vAo", // Enter the Key ID generated from the Dashboard
                         "amount":100, //response.total_price * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise

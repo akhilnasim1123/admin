@@ -436,6 +436,7 @@ def statusEdit(request,id):
         return redirect(order_list)
     elif order.status == 'Shipped':
         order.status = 'delivered'
+        order.delivered_at=datetime.datetime.now()
         order.save()
         return redirect(order_list)
     else:
@@ -449,10 +450,11 @@ def returnProduct(request,id):
         order.reason = reason
         order.is_return = True
         order.status = 'is_returned'
+        order.return_date = datetime.datetime.now()
         product.quantity = order.quantity + product.quantity
         order.save()
         product.save()
-        return redirect(order_userside,order.account.id)
+        return redirect(user_profile,order.account.id)
     return render(request,'userprofile/return.html',{'product':product,'id':id})
 
 def deleteProOffer(request,id):
@@ -537,4 +539,7 @@ def monthly(request):
     print(orders)
     print('success')
     return render(request,'admin/salesReport.html',{'orders':orders})
+
+def progressGraph(request):
+    pass
 

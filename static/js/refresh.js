@@ -63,16 +63,28 @@ function displayOrder(){
     document.getElementById('user-orders').classList.remove('hidden')
     document.getElementById('user-profile').classList.add('hidden')
     document.getElementById('user-wishlist').classList.add('hidden')
+    document.getElementById('profiletorque').classList.remove('bg-dark', 'text-white')
+    document.getElementById('wishlist-torque').classList.remove('bg-dark', 'text-white')
+    document.getElementById('profiletorque').classList.remove('bg-dark', 'text-white')
+    document.getElementById('ordertorque').classList.add('bg-dark', 'text-white')
 }
 function displayWishlist(){
     console.log('orderes');
     document.getElementById('user-orders').classList.add('hidden')
     document.getElementById('user-profile').classList.add('hidden')
     document.getElementById('user-wishlist').classList.remove('hidden')
+    document.getElementById('ordertorque').classList.remove('bg-dark', 'text-white')
+    document.getElementById('wishlist-torque').classList.add('bg-dark', 'text-white')
+    document.getElementById('profiletorque').classList.remove('bg-dark', 'text-white')
+
+
 }
 function displayProfile(){
     console.log('orderes');
     document.getElementById('user-orders').classList.add('hidden')
     document.getElementById('user-profile').classList.remove('hidden')
     document.getElementById('user-wishlist').classList.add('hidden')
+    document.getElementById('wishlist-torque').classList.remove('bg-dark', 'text-white')
+    document.getElementById('profiletorque').classList.add('bg-dark', 'text-white')
+    document.getElementById('ordertorque').classList.remove('bg-dark', 'text-white')
 }

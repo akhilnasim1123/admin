@@ -378,41 +378,44 @@ def user_profile(request, id):
         try:
             cartItems =0
             items = 0
-            order = OrderItems.objects.filter(account=customer, complete=False)
+            order = OrderItems.objects.filter(account=customer)
+            items = order
             for i in order:
-                items = i.order.orderitems_set.all()
-                cartItems = i.order.get_cart_items
+                cartItems = i.get_cart_items
             datas = {
                 'data': data,
                 'cartItems': cartItems}
             return render(request, 'userprofile/profile.html', datas)
         except:
             print("An exception occurred")
-
-    elif request.user is None:
-
-        cartItems = []
     else:
         return redirect(login_page)
     user = Account.objects.get(id=id)
     data = ShippingAddress.objects.filter(account=id).first()
     account = Account.objects.get(id=id)
     orders = OrderedItems.objects.filter(account=account).order_by('id')
-    # if orders:
-    #         for i in orders:
-    #             items = i.order.orderitems_set.all()
-    #             cartItems = i.order.get_cart_items
-    # context = {'cartItems': cartItems, 'wishlst': wishlst}
+    if orders:
+            for i in orders:
+                print(i.returnPolicy)
+    print('heyyyyyyyyy')
+    cart = OrderItems.objects.filter(account=account)
+    cartItems =0
+    if cart:
+            for i in cart:
+                cartItems = cartItems + i.get_cart_items
+
     account = Account.objects.get(id=id)
     wishlst = Wishlist.objects.filter(account=account)
+    context = {'cartItems': cartItems, 'wishlst': wishlst}
 
     try:
         orders = OrderedItems.objects.filter(account=account).order_by('id')
-        if orders:
-            for i in orders:
-                items = i.order.orderitems_set.all()
-                cartItems = i.order.get_cart_items
-                context = {'cartItems': cartItems, 'wishlst': wishlst}
+        print('heyyyyyyyyy')
+        cart = OrderItems.objects.filter(account=account)
+        cartItems =0
+        if cart:
+                for i in cart:
+                    cartItems = cartItems + i.get_cart_items
     except:
         cartItems = []
     datas = {
@@ -653,4 +656,7 @@ def addressAdd(request):
         else:
             address.save()
             return redirect('shipping')
+
+def contact(request):
+    pass
 

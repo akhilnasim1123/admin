@@ -334,7 +334,8 @@ def razorpay(request):
         total_price = total_price + item.get_cart_total
 
     return JsonResponse({
-        'total_price': total_price
+        'total_price': total_price,
+
     })
 
 
