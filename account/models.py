@@ -1,7 +1,6 @@
 # Create your models here.
 import random
 import this
-import phonenumber_field
 import regex as regex
 from django.contrib.auth.models import AbstractUser, BaseUserManager, User
 from django.core.validators import RegexValidator
