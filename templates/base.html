@@ -35,7 +35,8 @@
 </head>
 
 <body class="d-flex flex-column">
-    <header class="header bg-dark " style="position: fixed; width: 100%;z-index: 10;">
+    <header class="header " style="position: fixed; width: 100%;z-index: 10;height: 95px;">
+
         <div class="container">
             <div class="head bg-dark">
                 <div class="logo" style="width: 45%;  height: auto;">
@@ -131,7 +132,10 @@
 <style>
     .headcontent{
         color: white;
-    }
+    }.header{
+    background-image: url("{% static '/images/images.JPG' %}");
+}
+
 </style>
     {% block scripts %}
 

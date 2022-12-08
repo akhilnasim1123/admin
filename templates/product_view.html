@@ -25,18 +25,15 @@
                           <div class="price-tag text-danger" style="width:20%;font-size:25px"><b> ₹{{ key5.get_product_price }} </b></div>
 {% else %}
 <div class="price-tag text-dark" style="width:20%;font-size:25px"><b> <del>₹{{ key5.price }}</del> </b></div>
-
-
 <div class="price-tag text-danger" style="width:20%;font-size:25px"><b> ₹{{ key5.get_product_price }} </b></div>
-
 {% endif %}
-
-
     </div>
-  
-{%for message in messages%}
-<p class="text-danger mt-4"> {{message}}</p>
-{%endfor%}
+
+{%if key5.quantity == 0%}
+<p class="text-danger mt-4">Out Of Stock</p>
+{% else %}
+<p class="text-success mt-4">In Stock</p>
+{%endif%}
 
     <div class="mt-5">
   <p>{{ key5.desc }}</p>

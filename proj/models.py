@@ -63,12 +63,25 @@ class Product(models.Model):
     def get_product_price(self):
         if self.product_offer == 0 and self.category.category_offer==0:
             product_price = self.price
+            
         elif self.product_offer < self.category.category_offer:
             product_price = self.price - float((self.price * self.category.category_offer)/100)
+            offer = self.category.category_offer
         else:
             product_price = self.price - float((self.price * self.product_offer)/100)
+            offer = self.product_offer
         product_price = float(product_price)
         return product_price
+    
+    @property
+    def offer(self):
+        if self.product_offer == 0 and self.category.category_offer==0:
+            offer = self.product_offer
+        elif self.product_offer < self.category.category_offer: 
+            offer = self.category.category_offer
+        else:
+            offer = self.product_offer
+        return offer
 
 
 
