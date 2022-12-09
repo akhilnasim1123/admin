@@ -436,7 +436,7 @@ def statusEdit(request,id):
         return redirect(order_list)
     elif order.status == 'Shipped':
         order.status = 'delivered'
-        order.delivered_at=datetime.datetime.now()
+        order.delivered_at=timezone.now()
         order.save()
         return redirect(order_list)
     else:
