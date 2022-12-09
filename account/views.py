@@ -397,8 +397,7 @@ def user_profile(request, id):
     orders = OrderedItems.objects.filter(account=account).order_by('id')
     print('heyyyyyyyyy')
     cart = OrderItems.objects.filter(account=account)
-    for ordered in orders:
-        returnPolicy = ordered.returnPolicy
+
     cartItems =0
     if cart:
             for i in cart:
