@@ -341,7 +341,7 @@
 
 
     </td>
-    {% elif i.status == 'delivered' %}
+    {% elif i.status == 'delivered' and i.returnPolicy == false%}
 
     
     <td class="text-success mt-3 pt-5"><i class="mt-5">{{i.delivered_at}}</i></td>
