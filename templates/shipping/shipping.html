@@ -93,7 +93,7 @@ input [type=text]{
         {% for message in messages %} 
         <p class="text-center text-danger">{{message}}</p>
         {% endfor %}
-        {% if order %}
+        <!-- {% if order %} -->
         <!-- Modal Header -->
         <form class="mt-2" method="post" action="{% url 'addressAdd' %}" id="form-checkouts" >
                   
@@ -105,7 +105,7 @@ input [type=text]{
 
             </div>
             <div  class="form-outline form-white mt-2">
-            <input type="email" class="form-control " value="{{order.account.email}}" name="emails" />
+            <input type="email" class="form-control " value="" name="emails" />
             </div>
 
          <div  class="form-outline form-white mt-2">
@@ -166,7 +166,7 @@ input [type=text]{
                               <hr>
                           {% endfor %}
                         </div>
-                          {% endif %}
+                          <!-- {% endif %} -->
                           </div>
                             
                             
