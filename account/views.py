@@ -187,7 +187,7 @@ def login_page(request):
                                 # add.save()  
                                 item.delete()        
 
-                guestItem.delete()
+                    guestItem.delete()
                     
                 login(request, user)   
                 return redirect('home')
