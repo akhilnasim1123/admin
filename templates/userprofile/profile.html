@@ -285,7 +285,8 @@
 
 
 
-    {% elif i.status == 'delivered' and i.returnPolicy == True %}
+    {% elif i.status == 'delivered'%}
+    {% if i.returnPolicy %}
 
     
     <td class="text-success mt-3 pt-5"><i class="mt-5">{{i.delivered_at}}</i></td>
@@ -341,11 +342,9 @@
 
 
     </td>
-    {% elif i.status == 'delivered' and i.returnPolicy == False %}
-
-    
+    {% else %}
     <td class="text-success mt-3 pt-5"><i class="mt-5">{{i.delivered_at}}</i></td>
-    
+    {% endif %}
     <!-- <td>
         <a href="{% url 'returnProduct' i.id %}"><button class="btn btn-danger mt-3">Return</button></a>
     </td> -->
