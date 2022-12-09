@@ -95,7 +95,7 @@ input [type=text]{
         {% endfor %}
         <!-- {% if order %} -->
         <!-- Modal Header -->
-        <form class="mt-2" method="post" action="{% url 'addressAdd' %}" id="form-checkouts" >
+        <form class="mt-2" method="post" action="{% url 'addressAdd' %}" id="form-checkouts">
                   
           {% csrf_token %}
 
@@ -182,9 +182,9 @@ input [type=text]{
                           <div class="d-flex justify-content-between align-items-center mb-4">
 
                           </div>
-                          {% if order %}
+                          <!-- {% if order %} -->
                           <form class="mt-2" method="post" id="form-checkout" >
-                  
+                  <div>address</div>
                             {% csrf_token %}
 
                           <div class="form-outline form-white">
@@ -193,7 +193,7 @@ input [type=text]{
 
                               </div>
 
-                              <input type="email" value="{{order.account.email}}" name="email" hidden/>
+                              <input type="email" value="" name="email" hidden/>
 
 
                            <div  class="form-outline form-white mt-2">
@@ -249,7 +249,7 @@ input [type=text]{
                         <button type="submit" class="cod-button btn text-white btn-block"  style="width: 100%;background-color: #387445">
                           <div class="d-flex justify-content-evenly">
                             <input type="hidden" name="payment_mode" value="COD">
-                            <input type="hidden"name="butt" value="{{ order.get_cart_total}}">
+                            <input type="hidden"name="butt" value="{{ get_cart_total}}">
                             <input type="hidden" name="check" value="0" hidden>
                             <div><span>₹{{ get_cart_total|floatformat:2 }}/-</span></div>
     <div> <span>COD Checkout <i class="fas fa-long-arrow-alt-right ms-2"></i></span></div>
@@ -274,7 +274,7 @@ input [type=text]{
                         
                       </div>
                             </form>
-                              {% endif %}
+                              <!-- {% endif %} -->
                         </div>
                       </div>
 
