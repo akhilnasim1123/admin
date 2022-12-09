@@ -57,9 +57,8 @@ class OrderedItems(models.Model):
         return total
     @property
     def returnPolicy(self):
-        Today = utc.localize(datetime.now().date())
+        Today = utc.localize(datetime.now())
         date = self.delivered_at + timedelta(days=7)
-        self.eligible =False
         if Today < date:
             self.eligible = True
         return self.eligible
