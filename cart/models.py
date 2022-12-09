@@ -62,7 +62,7 @@ class OrderedItems(models.Model):
         self.eligible =False
         if Today < date:
             self.eligible = True
-        return self.is_return
+        return self.eligible
 
 
 
