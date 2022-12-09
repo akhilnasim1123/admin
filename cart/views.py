@@ -91,10 +91,12 @@ def shippingaddress(request):
         items = cartOrder
         get_cart_total =0
         get_cart_items =0
+        email = []
         for i in cartOrder:
 
             get_cart_items =get_cart_items + i.get_cart_items
             get_cart_total = get_cart_total + i.get_cart_total
+            email = i.account.email
 
         address = ShippingAddress.objects.filter(
             account=customer).order_by('id')
@@ -107,6 +109,7 @@ def shippingaddress(request):
             if coupen_check: 
                 coupen_discound = Coupen.objects.get(coupen=coupen)
                 user = Account.objects.get(id=customer.id)
+                
                 # cart = Order.objects.get(account=user)
                 # print(cart.get_cart_total)
                 # items = OrderItems.objects.filter(cart=cart)
@@ -131,10 +134,10 @@ def shippingaddress(request):
     # count =itm.product.quantity
 
     if discound is not None:
-            context = {'items': items, 'order': order,'coupen':coupen,'get_cart_total':get_cart_total,
+            context = {'items': items, 'order': order,'coupen':coupen,'get_cart_total':get_cart_total,'email':email,
                'cartItems': cartItems,'discound':discound, 'address': address}
     else:
-        context = {'items': items, 'order': order,'get_cart_total':get_cart_total,
+        context = {'items': items, 'order': order,'get_cart_total':get_cart_total,'email':email,
                 'cartItems': cartItems, 'address': address}
     return render(request, 'shipping/shipping.html', context)
 
