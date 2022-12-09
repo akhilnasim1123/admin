@@ -46,6 +46,7 @@ class OrderedItems(models.Model):
     reason                      = models.CharField(max_length=100,null=True,blank=True)
     delivered_at                = models.DateTimeField(null=True,blank=True)
     return_date                 = models.DateTimeField(null=True,blank=True)
+    eligible                    = models.BooleanField(default=False,null=True,blank=True)
     # def __str__(self):
     #     return datetime.datetime.strftime(self.delivered_at)
     def __str__(self):
