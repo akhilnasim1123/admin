@@ -156,13 +156,14 @@ input [type=text]{
   </div>
   </div>
   <hr>
-  {% for i in address %}          
+  {% for i in address %}     
+  <label for="address{{i.id}}">   
                                <p>
                                     {{i.address}}<br>
                                     {{i.city}},{{i.state}}
                               </p>
-                               
-                               <input type="radio" id="address" name="address"  onclick="addressSelection('{{i.id}}')">
+                            </label>  
+                               <input type="radio" id="address{{i.id}}" name="address"  onclick="addressSelection('{{i.id}}')">
                               <hr>
                           {% endfor %}
                         </div>

@@ -595,10 +595,13 @@ def password_change(request, id):
         repeatpass = request.POST.get('repeatpass')
         if currentpass == '' or newpass == '' or repeatpass == '':
             return redirect('password_change', id)
+        elif repeatpass == '':
+            messages.error(request, 'please confirm your password')
+            return redirect('password_change', id)
         else:
             print(id)
             user = Account.objects.filter(id=id, password=currentpass).exists()
-            if user:
+            if user != None:
                 print(user)
                 if newpass == repeatpass:
                     change = Account.objects.get(id=id)
