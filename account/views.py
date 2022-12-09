@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 import random
 from random import randint
 import uuid
@@ -396,19 +395,12 @@ def user_profile(request, id):
     data = ShippingAddress.objects.filter(account=id).first()
     account = Account.objects.get(id=id)
     orders = OrderedItems.objects.filter(account=account).order_by('id')
-    Today = datetime.now()
-    for it in orders:
-        date = it.delivered_at + timedelta(days=7)
-        if Today < date:
-            it.eligible = True
     print('heyyyyyyyyy')
     cart = OrderItems.objects.filter(account=account)
-
     cartItems =0
     if cart:
             for i in cart:
                 cartItems = cartItems + i.get_cart_items
-
 
     account = Account.objects.get(id=id)
     wishlst = Wishlist.objects.filter(account=account)
@@ -416,11 +408,6 @@ def user_profile(request, id):
 
     try:
         orders = OrderedItems.objects.filter(account=account).order_by('id')
-        Today = datetime.now()
-        for it in orders:
-            date = it.delivered_at + timedelta(days=7)
-            if Today < date:
-                it.eligible = True
         print('heyyyyyyyyy')
         cart = OrderItems.objects.filter(account=account)
         cartItems =0

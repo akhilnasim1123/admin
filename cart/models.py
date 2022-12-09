@@ -2,6 +2,7 @@ import datetime
 from datetime import datetime, timedelta, timezone
 from time import strftime
 from django.db import models
+from pytz import utc
 
 from account.models import *
 from coupen.models import Coupen
@@ -12,7 +13,6 @@ from proj.models import *
 class CustomDateTimeField(models.DateTimeField):
     def value_to_string(self, obj):
         return str(obj) 
-
 
 
 
@@ -57,13 +57,11 @@ class OrderedItems(models.Model):
         return total
     @property
     def returnPolicy(self):
-        Today = datetime.now()
-        if self.delivered_at == None:
-            self.delivered_at = datetime.now()
+        Today = utc.localize(datetime.now().date())
         date = self.delivered_at + timedelta(days=7)
-        self.is_return =False
+        self.eligible =False
         if Today < date:
-            self.is_return = True
+            self.eligible = True
         return self.is_return
 
 
