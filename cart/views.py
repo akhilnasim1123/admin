@@ -78,7 +78,7 @@ def cart(request):
         return render(request, 'cart/cart.html', context)
 
 
-@login_required(login_url='login_page')
+@login_required(login_url=login_page)
 def shippingaddress(request):
     if request.user.is_authenticated:
         discound = 0
@@ -117,6 +117,7 @@ def shippingaddress(request):
                     messages.success(request,'coupen applied')
                 else:
                     messages.error(request,'you are not eligible for this coupen..!')
+            
 
 
     else:
