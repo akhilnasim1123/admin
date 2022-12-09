@@ -187,7 +187,7 @@ def login_page(request):
                                 # add.save()  
                                 item.delete()        
 
-                        guestItem.delete()
+                    guestItem.delete()
                     
                 login(request, user)   
                 return redirect('home')
@@ -218,6 +218,8 @@ def logout_page(request):
         items = OrderItems.objects.filter(session_id=guestUser)
         items.delete()
         return redirect('home')
+    items = OrderItems.objects.filter(session_id=guestUser)
+    items.delete()
     logout(request)
     return redirect('home')
 
