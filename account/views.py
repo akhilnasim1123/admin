@@ -394,9 +394,6 @@ def user_profile(request, id):
     data = ShippingAddress.objects.filter(account=id).first()
     account = Account.objects.get(id=id)
     orders = OrderedItems.objects.filter(account=account).order_by('id')
-    if orders:
-            for i in orders:
-                print(i.returnPolicy)
     print('heyyyyyyyyy')
     cart = OrderItems.objects.filter(account=account)
     cartItems =0
