@@ -93,7 +93,7 @@ input [type=text]{
         {% for message in messages %} 
         <p class="text-center text-danger">{{message}}</p>
         {% endfor %}
-        <!-- {% if order %} -->
+
         <!-- Modal Header -->
         <form class="mt-2" method="post" action="{% url 'addressAdd' %}" id="form-checkouts">
                   
@@ -166,7 +166,7 @@ input [type=text]{
                               <hr>
                           {% endfor %}
                         </div>
-                          <!-- {% endif %} -->
+
                           </div>
                             
                             
@@ -182,7 +182,7 @@ input [type=text]{
                           <div class="d-flex justify-content-between align-items-center mb-4">
 
                           </div>
-                          <!-- {% if order %} -->
+ 
                           <form class="mt-2" method="post" id="form-checkout" >
                   <div>address</div>
                             {% csrf_token %}
@@ -274,7 +274,6 @@ input [type=text]{
                         
                       </div>
                             </form>
-                              <!-- {% endif %} -->
                         </div>
                       </div>
 
