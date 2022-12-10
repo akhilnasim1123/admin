@@ -3,10 +3,9 @@
 
 {% block content %}
 <center class="mt-5">
-
     <div class="container p-4 shadow">
         <h1 class="text-center">Edit Product</h1>
-    <form class="container" method="post" action="{% url 'productEdit' id=product.id %}">
+    <form enctype="multipart/form-data" class="container" method="post" action="{% url 'productEdit' id=product.id %}">
         {% csrf_token %}
         <div class="row">
         <div class="col-md-6 mt-3">
@@ -19,7 +18,8 @@
         </div>
         <div class="col-md-6 mt-3">
           <label for="description" >Description</label>
-            <textarea  type="text" name="reason" class="message" style="height: 100px; width: 100%;" maxlength="1800" value="{{product.desc}}"></textarea>
+            <textarea  type="text" name="description" class="message" style="height: 100px; width: 100%;" maxlength="1800">{{product.desc}}
+            </textarea>
         </div>
         <div class=" mt-5 col-md-2">
           <label for="category" class="mr-2">Category</label>
@@ -86,7 +86,7 @@
                               Image
                             </label>
                             
-                            <input type="file" required id="id_image1" name="image1" accept="image/*" value="{{product.image1}}" class="form-control" onchange="viewImage1(event)"
+                            <input type="file"  src="{{product.image1}}" name="image1" accept="image/*" value="{{product.image1.url}}" class="form-control" onchange="viewImage1(event)"
                             style="width:100%;"><br>
                           <img src="" id="imgView1" alt="" class="clr" style="height:100px">
                          
@@ -103,7 +103,7 @@
                           <label for="productimage" class="">
                             Image
                           </label>
-                          <input type="file" id="id_image2" value="{{product.image2}}" required name="image2" accept="image/*" class="form-control" onchange="viewImage2(event)"
+                          <input type="file" id="id_image2" src="{{product.image2}}" value="{{product.image2.url}}"  accept="image/*" class="form-control" onchange="viewImage2(event)"
                           style="width:100%;"><br>
                         <img src="" id="imgView2" class="clr" alt="" style="height:100px">
                        
@@ -122,7 +122,7 @@
                                           Image
                                         </label>
                                         
-                                        <input  type="file" value="{{product.image3}}" required id="id_image3" name="image3" accept="image/*" class="form-control" onchange="viewImage3(event)"
+                                        <input  type="file" src="{{product.image3}}"  name="image3" accept="image/*" class="form-control" onchange="viewImage3(event)"
                                         style="width:100%;"><br>
                                       <img src="" id="imgView3" class="clr" alt="" style="height:100px">
                                      

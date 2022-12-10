@@ -183,10 +183,12 @@ def proEdit(request,id):
         'category':category,
         'sub_category':sub_category,
     }
+    edit = Product.objects.get(id=id)
+    print("Images are",product.image1)
     return render(request,'proEdit.html',context)
 
 def productEdit(request,id):
-
+    
     if request.method == 'POST':
         edit = Product.objects.get(id=id)
         edit.product_name = request.POST.get('productname')
@@ -197,14 +199,23 @@ def productEdit(request,id):
         edit.offer_name = request.POST.get('OfferName')
         edit.product_offer = request.POST.get('offer')
         edit.quantity = request.POST.get('stock')
-        edit.image1 = request.FILES.get('image1')
-        edit.image2 = request.FILES.get('image2')
-        edit.image3 = request.FILES.get('image3')
+        print(edit.desc)
+        image1 = request.FILES.get('image1')
+        print(request.FILES.get('image1'))
+        image2 = request.FILES.get('image2')
+        image3 = request.FILES.get('image3')
+        if image1 is not None:
+            edit.image1=image1
+        if image2 is not None:
+            edit.image2=image2
+        if image3 is not None:
+            edit.image3=image2
         category = Category.objects.get(id=categoryid)
         sub=SubCategory.objects.get(id=subcat)
         edit.category = category
         edit.sub = sub
         edit.save()
+        
         return redirect(productAdding)
 
 
