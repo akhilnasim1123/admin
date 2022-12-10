@@ -215,6 +215,8 @@ def deleteData(request, id):
 def searchdata(request):
     pass
 
+def editData(request,id):
+    pass
 
 def editCat(request, cat_id):
     if request.method == 'POST':
