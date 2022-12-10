@@ -174,7 +174,7 @@
                   <td> {{i.price}}/-</td>
                   <td> {{i.quantity}}</td>
                   <td>
-                    <form name="editform" action="{% url 'productEdit' id=i.id %}" method="post">
+                    <form name="editform" action="{% url 'proEdit' id=i.id %}" method="post">
                         {% csrf_token %}
                         <input class="btn bg-success text-white" type="submit" name="Edit" value="Edit">
           

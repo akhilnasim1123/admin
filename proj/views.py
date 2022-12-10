@@ -174,9 +174,19 @@ def editpage(request, id):
     val = Product.objects.get(id=id)
     return render(request, 'proEdit.html', {'key3': val})
 
+def proEdit(request,id):
+    product = Product.objects.get(id=id)
+    category = Category.objects.all()
+    sub_category = SubCategory.objects.all()
+    context = {
+        'product':product,
+        'category':category,
+        'sub_category':sub_category,
+    }
+    return render(request,'proEdit.html',context)
 
 def productEdit(request,id):
-    product = Product.objects.get(id=id)
+
     if request.method == 'POST':
         edit = Product.objects.get(id=id)
         edit.product_name = request.POST.get('productname')
@@ -190,20 +200,13 @@ def productEdit(request,id):
         edit.image1 = request.FILES.get('image1')
         edit.image2 = request.FILES.get('image2')
         edit.image3 = request.FILES.get('image3')
-        categoryid = Category.objects.get(id=categoryid)
-        subcat=SubCategory.objects.get(id=subcat)
-        edit.category = categoryid
-        edit.sub = subcat
+        category = Category.objects.get(id=categoryid)
+        sub=SubCategory.objects.get(id=subcat)
+        edit.category = category
+        edit.sub = sub
         edit.save()
         return redirect(productAdding)
-    category = Category.objects.all()
-    sub_category = SubCategory.objects.all()
-    context = {
-        'product':product,
-        'category':category,
-        'sub_category':sub_category,
-    }
-    return render(request,'proEdit.html',context)
+
 
 
 def deleteData(request, id):
