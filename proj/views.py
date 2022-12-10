@@ -202,7 +202,7 @@ def productEdit(request,id):
         print(request.FILES.get('image1'))
         image2 = request.FILES.get('image2')
         image3 = request.FILES.get('image3')
-        if product_name == '' or desc=='' or categoryid == '' or subcat == '' or price == '' or offer_name == '' or product_offer == ''  or  quantity == '':
+        if product_name == '' or desc=='' or categoryid == '' or subcat == '' or price == '' or product_offer == ''  or  quantity == '':
             messages.error(request,'Check fields')
             return redirect(proEdit,id)
         else:
@@ -391,9 +391,9 @@ def productAdding(request):
         image1 = request.FILES.get('image1')
         image2 = request.FILES.get('image2')
         image3 = request.FILES.get('image3')
-        if product == '' or description=='' or categoryid == '' or subcat == '' or price == '' or offer_name == '' or offer == ''  or  stock == '':
+        if product == '' or description=='' or categoryid == '' or subcat == '' or price == ''  or offer == ''  or  stock == '':
             messages.error(request,'Check fields')
-            return redirect(proEdit,id)
+            return redirect(productAdding)
         categoryid = Category.objects.get(id=categoryid)
         subcat=SubCategory.objects.get(id=subcat)
         Product.objects.create(product_name=product,price=price,desc=description,sub=subcat,category=categoryid,
