@@ -175,14 +175,35 @@ def editpage(request, id):
     return render(request, 'proEdit.html', {'key3': val})
 
 
-def editData(request, id):
+def productEdit(request,id):
+    product = Product.objects.get(id=id)
     if request.method == 'POST':
         edit = Product.objects.get(id=id)
-        edit.product_name = request.POST.get('product_name')
+        edit.product_name = request.POST.get('productname')
         edit.desc = request.POST.get('description')
+        categoryid = request.POST.get('categoryid')
         edit.price = request.POST.get('price')
+        subcat = request.POST.get('subcat')
+        edit.offer_name = request.POST.get('OfferName')
+        edit.offer = request.POST.get('offer')
+        edit.quantity = request.POST.get('stock')
+        edit.image1 = request.FILES.get('image1')
+        edit.image2 = request.FILES.get('image2')
+        edit.image3 = request.FILES.get('image3')
+        categoryid = Category.objects.get(id=categoryid)
+        subcat=SubCategory.objects.get(id=subcat)
+        edit.category = categoryid
+        edit.sub = subcat
         edit.save()
-        return redirect('product_list')
+        return redirect(productAdding)
+    category = Category.objects.all()
+    sub_category = SubCategory.objects.all()
+    context = {
+        'product':product,
+        'category':category,
+        'sub_category':sub_category,
+    }
+    return render(request,'proEdit.html',context)
 
 
 def deleteData(request, id):
@@ -364,16 +385,16 @@ def productAdding(request):
     
 
 
-def productEdit(request,id):
-    form = ProductEditForm()
-    instance = Product.objects.get(id=id)
-    if request.method == 'POST':
-        form = ProductEditForm(request.POST,request.FILES,instance=instance)
-        if form.is_valid():
-            print(id)
-            form.save(productAdding)
-    form = ProductEditForm(instance=instance)
-    return render(request,'admin/productEdit.html',{'form': form,'id':id})
+# def productEdit(request,id):
+#     form = ProductEditForm()
+#     instance = Product.objects.get(id=id)
+#     if request.method == 'POST':
+#         form = ProductEditForm(request.POST,request.FILES,instance=instance)
+#         if form.is_valid():
+#             print(id)
+#             form.save(productAdding)
+#     form = ProductEditForm(instance=instance)
+#     return render(request,'admin/productEdit.html',{'form': form,'id':id})
 
 
 def Offers(request):

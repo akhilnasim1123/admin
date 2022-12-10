@@ -41,7 +41,7 @@ class Product(models.Model):
     product_id              = models.AutoField
     product_name            = models.CharField(max_length=50)
     price                   = models.BigIntegerField()
-    desc                    = models.CharField(max_length=600)
+    desc                    = models.TextField(max_length=2000)
     quantity                = models.IntegerField(default=0)
     image1                  = models.ImageField(upload_to="media/images")
     image2                  = models.ImageField(upload_to="media/images",null=True,blank=True)
