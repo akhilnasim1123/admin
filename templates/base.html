@@ -35,16 +35,15 @@
 </head>
 
 <body class="d-flex flex-column">
-    <header class="header bg-dark" style="position: fixed; width: 100%;z-index: 10;height: 95px;">
-
+    <header class="header bg-white" style="position: fixed; width: 100%;z-index: 10;">
         <div class="container">
             <div class="head">
                 <div class="logo" style="width: 45%;  height: auto;">
                     <p><a href="{% url 'landing_page' %}" style="text-decoration: none;"><span
-                                class="t text-danger">T</span><span class="text-white">orque</span></p></a>
+                                class="t text-danger">T</span><span class="text-black">orque</span></p></a>
                 </div>
                 <div class="content" style="width: 45%; height: auto;">
-                    <div class="cont text-white" >
+                    <div class="cont">
                         <div>
                             <a class="headcontent" href="{% url 'home' %}">Online Store</a>
                         </div>
@@ -131,7 +130,7 @@
     </script>
 <style>
     .headcontent{
-        color: white;
+        color: rgb(0, 0, 0);
     }.header{
     background-image: url("{% static '/images/images.JPG' %}");
 }
