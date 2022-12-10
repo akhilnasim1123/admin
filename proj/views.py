@@ -185,7 +185,7 @@ def productEdit(request,id):
         edit.price = request.POST.get('price')
         subcat = request.POST.get('subcat')
         edit.offer_name = request.POST.get('OfferName')
-        edit.offer = request.POST.get('offer')
+        edit.product_offer = request.POST.get('offer')
         edit.quantity = request.POST.get('stock')
         edit.image1 = request.FILES.get('image1')
         edit.image2 = request.FILES.get('image2')
