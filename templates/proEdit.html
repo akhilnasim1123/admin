@@ -3,6 +3,9 @@
 
 {% block content %}
 <center class="mt-5">
+    {% for msg in messages %}
+    <p class="text-danger">{{msg}}</p>
+    {% endfor %}
     <div class="container p-4 shadow">
         <h1 class="text-center">Edit Product</h1>
     <form enctype="multipart/form-data" class="container" method="post" action="{% url 'productEdit' id=product.id %}">
@@ -137,7 +140,7 @@
 
                                     <div class="mt-2 col-md-12 ">
                                       <div class=" d-flex justify-content-center mb-5">
-                                          <button type="submit" class="btn btn-primary ">Add Product
+                                          <button type="submit" class="btn btn-primary ">Edit Product
                                           </button>
                                       </div>
                                       </div>

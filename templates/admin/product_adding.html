@@ -2,9 +2,10 @@
 
 
 {% block content %}
-
+{% for message in messages %}
+<p class="text-danger text-center">{{messages}}</p>
+{% endfor %}
     
-
   <div class="container p-4 shadow">
     <h1 class="text-center"> Add Product</h1>
       <form  id="addproduct" action="{% url 'productAdding' %}" method="post" enctype="multipart/form-data" >

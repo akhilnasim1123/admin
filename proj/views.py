@@ -190,36 +190,41 @@ def proEdit(request,id):
 def productEdit(request,id):
     
     if request.method == 'POST':
-        edit = Product.objects.get(id=id)
-        edit.product_name = request.POST.get('productname')
-        edit.desc = request.POST.get('description')
+        product_name = request.POST.get('productname')
+        desc = request.POST.get('description')
         categoryid = request.POST.get('categoryid')
-        edit.price = request.POST.get('price')
+        price = request.POST.get('price')
         subcat = request.POST.get('subcat')
-        edit.offer_name = request.POST.get('OfferName')
-        edit.product_offer = request.POST.get('offer')
-        edit.quantity = request.POST.get('stock')
-        print(edit.desc)
+        offer_name = request.POST.get('OfferName')
+        product_offer = request.POST.get('offer')
+        quantity = request.POST.get('stock')
         image1 = request.FILES.get('image1')
         print(request.FILES.get('image1'))
         image2 = request.FILES.get('image2')
         image3 = request.FILES.get('image3')
+        if product_name == '' or desc=='' or categoryid == '' or subcat == '' or price == '' or offer_name == '' or product_offer == ''  or  quantity == '':
+            messages.error(request,'Check fields')
+            return redirect(proEdit,id)
+        else:
+            edit = Product.objects.get(id=id)
+            edit.product_name = product_name
+            edit.desc = desc
+            edit.price = price
+            edit.offer_name = offer_name
+            edit.product_offer = product_offer
+            edit.quantity = quantity
         if image1 is not None:
             edit.image1=image1
         if image2 is not None:
             edit.image2=image2
         if image3 is not None:
-            edit.image3=image2
-        category = Category.objects.get(id=categoryid)
-        sub=SubCategory.objects.get(id=subcat)
-        edit.category = category
-        edit.sub = sub
-        edit.save()
-        
-        return redirect(productAdding)
-
-
-
+            edit.image3=image2        
+            category = Category.objects.get(id=categoryid)
+            sub=SubCategory.objects.get(id=subcat)
+            edit.category = category
+            edit.sub = sub
+            edit.save()
+            return redirect(productAdding)
 def deleteData(request, id):
     delete = Product.objects.get(id=id)
     delete.delete()
@@ -386,6 +391,9 @@ def productAdding(request):
         image1 = request.FILES.get('image1')
         image2 = request.FILES.get('image2')
         image3 = request.FILES.get('image3')
+        if product == '' or description=='' or categoryid == '' or subcat == '' or price == '' or offer_name == '' or offer == ''  or  stock == '':
+            messages.error(request,'Check fields')
+            return redirect(proEdit,id)
         categoryid = Category.objects.get(id=categoryid)
         subcat=SubCategory.objects.get(id=subcat)
         Product.objects.create(product_name=product,price=price,desc=description,sub=subcat,category=categoryid,
