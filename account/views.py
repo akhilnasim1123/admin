@@ -185,7 +185,8 @@ def login_page(request):
                                 # add.quantity = item.quantity
                                 # add.order = item.order
                                 # add.save()  
-                                item.delete()        
+                                item.delete() 
+                        items.delete()       
 
                     guestItem.delete()
                     
