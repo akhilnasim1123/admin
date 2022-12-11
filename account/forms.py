@@ -28,17 +28,17 @@ class RegistrationForm(UserCreationForm):
                 'style': 'max-width: 300px;margin-left:15%;color:white',
                 'placeholder': 'Last Name'
             }),
-            'email': EmailInput(attrs={
-                'class': "form-control", 
-                'style': 'max-width: 300px;margin-left:15%;color:white',
-                'placeholder': 'Email'
-            }),
             'phone': TextInput(attrs={
             'class': "form-control", 
             'style': 'max-width: 300px;margin-left:15%;color:white',
             'placeholder': 'Phone'
             }),
-            'password': PasswordInput(attrs={
+            'email': EmailInput(attrs={
+                'class': "form-control", 
+                'style': 'max-width: 300px;margin-left:15%;color:white',
+                'placeholder': 'Email'
+            }),
+            'password1': PasswordInput(attrs={
                 'class': "form-control",
                 'style': 'max-width: 300px;margin-left:15%;color:white',
                 'placeholder': 'Password'
