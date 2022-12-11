@@ -31,14 +31,14 @@
       <form action="" method="post" style="margin-top: 5%;">
           {% csrf_token %}
     <div class="row fir" >
-    {% for field in registration_form %}
+
        <div class="form-outline container"style="width:100%;">
-           <label class="form-label">{{ field.label_tag }}</label>
+ 
            <div>
-           {{ field }}
+           {{ registration_form }}
         </div>
 
-  {% for error in field.errors %}
+  {% for error in registration_form.errors %}
         <p style="color: red;">{{error}}</p>
         {% endfor %}
     </div>
@@ -46,7 +46,7 @@
 
 
     </p>
-    {% endfor %}
+
 
 
 
