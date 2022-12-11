@@ -11,7 +11,7 @@ from coupen.models import Coupen
 
 
 class RegistrationForm(UserCreationForm):
-    email = forms.EmailField(max_length=60, help_text='Required. Add a valid email address')
+    # email = forms.EmailField(max_length=60, help_text='Required. Add a valid email address')
 
 
     class Meta:
@@ -20,32 +20,32 @@ class RegistrationForm(UserCreationForm):
         widgets = {
             'first_name': TextInput(attrs={
                 'class': "form-control",
-                'style': 'max-width: 300px;margin-left:15%;color:white',
+                'style': 'max-width: 300px;margin-left:12%;color:white',
                 'placeholder': 'First Name'
                 }),
             'last_name':TextInput(attrs={
                 'class': "form-control",
-                'style': 'max-width: 300px;margin-left:15%;color:white',
+                'style': 'max-width: 300px;margin-left:12%;color:white',
                 'placeholder': 'Last Name'
             }),
             'phone': TextInput(attrs={
             'class': "form-control", 
-            'style': 'max-width: 300px;margin-left:15%;color:white',
+            'style': 'max-width: 300px;margin-left:12%;color:white',
             'placeholder': 'Phone'
             }),
             'email': EmailInput(attrs={
-                'class': "form-control", 
-                'style': 'max-width: 300px;margin-left:15%;color:white',
-                'placeholder': 'Email'
+            'class': "form-control", 
+            'style': 'max-width: 300px;margin-left:12%;',
+            'placeholder': 'Email'
             }),
             'password1': PasswordInput(attrs={
                 'class': "form-control",
-                'style': 'max-width: 300px;margin-left:15%;color:white',
+                'style': 'max-width: 300px;margin-left:12%;color:white',
                 'placeholder': 'Password'
             }),
             'password2': PasswordInput(attrs={
                 'class': "form-control",
-                'style': 'max-width: 300px;margin-left:15%;color:white',
+                'style': 'max-width: 300px;margin-left:12%;color:white',
                 'placeholder': 'Confirm Password'
             }),
 
