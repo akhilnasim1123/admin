@@ -20,17 +20,17 @@ class RegistrationForm(UserCreationForm):
         widgets = {
             'first_name': TextInput(attrs={
                 'class': "form-control",
-                'style': 'max-width: 300px;margin-left:12%;color:white',
+                'style': 'max-width: 300px;margin-left:12%;',
                 'placeholder': 'First Name'
                 }),
             'last_name':TextInput(attrs={
                 'class': "form-control",
-                'style': 'max-width: 300px;margin-left:12%;color:white',
+                'style': 'max-width: 300px;margin-left:12%;',
                 'placeholder': 'Last Name'
             }),
             'phone': TextInput(attrs={
             'class': "form-control", 
-            'style': 'max-width: 300px;margin-left:12%;color:white',
+            'style': 'max-width: 300px;margin-left:12%;',
             'placeholder': 'Phone'
             }),
             'email': EmailInput(attrs={
@@ -39,14 +39,14 @@ class RegistrationForm(UserCreationForm):
             'placeholder': 'Email'
             }),
             'password1': PasswordInput(attrs={
-                'class': "form-control",
-                'style': 'max-width: 300px;margin-left:12%;color:white',
-                'placeholder': 'Password'
+            'class': "form-control",
+            'style': 'max-width: 300px;margin-left:12%;',
+            'placeholder': 'Password'
             }),
             'password2': PasswordInput(attrs={
-                'class': "form-control",
-                'style': 'max-width: 300px;margin-left:12%;color:white',
-                'placeholder': 'Confirm Password'
+            'class': "form-control",
+            'style': 'max-width: 300px;margin-left:12%;',
+            'placeholder': 'Confirm Password'
             }),
 
 
