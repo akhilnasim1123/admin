@@ -3,7 +3,7 @@ from turtle import numinput
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
-from django.forms import EmailInput, NumberInput, TextInput
+from django.forms import EmailInput, NumberInput, PasswordInput, TextInput
 from phonenumber_field.formfields import PhoneNumberField
 import account
 from account.models import Account
@@ -16,15 +16,43 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = Account
-        fields = ('first_name','last_name','phone','email', 'password1', 'password2','referal_code')
-    # def save(self, *args, **kwargs):
-    #     referal_code = self.cleaned_data.get("referal_code")
-    #     print(referal_code,'super')
-    #     if referal_code is None:
-    #         referal_code ='Torque.in'+str(random.randint(1111111, 9999999))
-    #         print(referal_code)
-            
-    #     super().save()
+        fields = ('first_name','last_name','phone','email', 'password1', 'password2')
+        widgets = {
+            'first_name': TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;margin-left:15%;color:white',
+                'placeholder': 'First Name'
+                }),
+            'last_name':TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;margin-left:15%;color:white',
+                'placeholder': 'First Name'
+            }),
+            'email': EmailInput(attrs={
+                'class': "form-control", 
+                'style': 'max-width: 300px;margin-left:15%;',
+                'placeholder': 'Email'
+                }),
+            'phone': TextInput(attrs={
+            'class': "form-control", 
+            'style': 'max-width: 300px;margin-left:15%;',
+            'placeholder': 'Last Name'
+            }),
+            'password':PasswordInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;margin-left:15%;color:white',
+                'placeholder': 'Password'
+            }),
+            'password2':PasswordInput(attrs={
+                'class': "form-control",
+                'style': 'max-width: 300px;margin-left:15%;color:white',
+                'placeholder': 'Password2'
+            }),
+
+
+
+        }
+
 
 
 class AccountAuthenticationForm(forms.ModelForm):
@@ -34,14 +62,6 @@ class AccountAuthenticationForm(forms.ModelForm):
     class Meta:
         email = Account
         fields = ('email', 'password')
-
-    # def clean(self):
-    #     if self.is_valid():
-    #         email = self.cleaned_data['email']
-    #         password = self.cleaned_data['password']
-    #         if not authenticate(email=email, password=password):
-    #             raise forms.ValidationError('invalid login')
-
 
 class UserEditForm(forms.ModelForm):
      class Meta:

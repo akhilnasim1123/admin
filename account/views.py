@@ -210,10 +210,10 @@ def login_page(request):
 
 def logout_page(request):
     print('prrr')
+    guestUser = request.session.session_key
     if 'user_exist' in request.session:
         del request.session['user_exist']
         print('hey')
-        guestUser = request.session.session_key
         logout(request)
         items = OrderItems.objects.filter(session_id=guestUser)
         items.delete()

@@ -7,7 +7,6 @@ from account.models import Account
 class Category(models.Model):
     category_id             = models.AutoField
     category_name           = models.CharField(max_length=100)
-    # sub                     = models.ManyToManyField(SubCategory)
     offer_name              = models.CharField(max_length=100,null=True,blank=True)
     category_offer          = models.IntegerField(null=True,blank=True,default=0)
 
@@ -15,11 +14,11 @@ class Category(models.Model):
         return self.category_name
     @property    
     def filtered(self):
-        sub = self.subcategory_set.all()
+        sub                 = self.subcategory_set.all()
         return sub
     @property
     def products(self):
-        product = self.product_set.all()
+        product             = self.product_set.all()
         return product
 
 
@@ -31,7 +30,7 @@ class SubCategory(models.Model):
         return self.sub_name
     @property
     def Products(self):
-        product = self.product_set.all()
+        product             = self.product_set.all()
         return product
 
         
@@ -61,34 +60,27 @@ class Product(models.Model):
 
     @property
     def get_product_price(self):
-        if self.product_offer == 0 and self.category.category_offer==0:
-            product_price = self.price
+        if self.product_offer   == 0 and self.category.category_offer==0:
+            product_price       = self.price
             
         elif self.product_offer < self.category.category_offer:
-            product_price = self.price - float((self.price * self.category.category_offer)/100)
-            offer = self.category.category_offer
+            product_price       = self.price - float((self.price * self.category.category_offer)/100)
+            offer               = self.category.category_offer
         else:
-            product_price = self.price - float((self.price * self.product_offer)/100)
-            offer = self.product_offer
-        product_price = float(product_price)
+            product_price       = self.price - float((self.price * self.product_offer)/100)
+            offer               = self.product_offer
+        product_price           = float(product_price)
         return product_price
     
     @property
     def offer(self):
-        if self.product_offer == 0 and self.category.category_offer==0:
-            offer = self.product_offer
+        if self.product_offer   == 0 and self.category.category_offer==0:
+            offer               = self.product_offer
         elif self.product_offer < self.category.category_offer: 
-            offer = self.category.category_offer
+            offer               = self.category.category_offer
         else:
-            offer = self.product_offer
+            offer               = self.product_offer
         return offer
-
-
-
-
-
-
-
 
 
 class Order(models.Model):
@@ -106,13 +98,13 @@ class Order(models.Model):
     
     @property
     def get_cart_items(self):
-        orderitems = self.orderitems_set.all()
-        total = sum([item.quantity for item in orderitems])
+        orderitems    = self.orderitems_set.all()
+        total         = sum([item.quantity for item in orderitems])
         return total
     @property
     def get_cart_total(self):
-        orderitems = self.orderitems_set.all()
-        total = sum([item.get_total for item in orderitems])
+        orderitems    = self.orderitems_set.all()
+        total         = sum([item.get_total for item in orderitems])
         return total
 
 
@@ -129,18 +121,18 @@ class OrderItems(models.Model):
 
     @property
     def get_total(self):
-        total = self.product.get_product_price * self.quantity
+        total               = self.product.get_product_price * self.quantity
         return total
     @property
     def get_cart_items(self):
 
-        total =0
-        total = total + self.quantity
+        total               = 0
+        total               = total + self.quantity
         return total
     @property
     def get_cart_total(self):
-        total = 0
-        total = total + self.get_total
+        total               = 0
+        total               = total + self.get_total
         return total
 
 
