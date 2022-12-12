@@ -33,10 +33,7 @@ def cart(request):
         print('customer') 
         print('kaasa noy arikalum kann urunkum vazhikalum')
         items = OrderItems.objects.filter(account=customer)
-        # print(items)     
-        # for i in items:
-        #     print(i.get_total)
-        # print(items.get_cart_items)
+
         cartItems = 0
         get_cart_total =0
         get_cart_items =0
@@ -45,14 +42,8 @@ def cart(request):
             get_cart_items =get_cart_items + i.get_cart_items
             get_cart_total = get_cart_total + i.get_cart_total
             print(i.get_cart_items)
-        # items = OrderItems.objects.filter(account=customer)
+
         product_id =0
-        # count = itm.product.quantity
-        # price= itm.product.price
-        # print(count)
-        
-            
-       
         context = {'items': items, 'cartItems': cartItems,'get_cart_total':get_cart_total,'get_cart_items':get_cart_items}
         return render(request, 'cart/cart.html', context)
     else:

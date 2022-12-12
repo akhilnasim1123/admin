@@ -274,10 +274,6 @@ def cancel(request, id, val):
     pro = OrderedItems.objects.get(id=id)
     product = Product.objects.get(id=pro.product.id)
     pro.status = 'Cancelled'
-    # for qnty in product:
-    #     qnty.quantity = qnty.quantity + pro.quantity
-    #     print(qnty.quantity)
-    #     qnty.save()
     product.quantity = product.quantity + pro.quantity
     
     product.save()
@@ -407,20 +403,6 @@ def productAdding(request):
     }
     return render(request,'admin/product_adding.html',context)
     
-
-
-# def productEdit(request,id):
-#     form = ProductEditForm()
-#     instance = Product.objects.get(id=id)
-#     if request.method == 'POST':
-#         form = ProductEditForm(request.POST,request.FILES,instance=instance)
-#         if form.is_valid():
-#             print(id)
-#             form.save(productAdding)
-#     form = ProductEditForm(instance=instance)
-#     return render(request,'admin/productEdit.html',{'form': form,'id':id})
-
-
 def Offers(request):
     product = Product.objects.exclude(offer_name=None)
     category = Category.objects.exclude(offer_name=None)
@@ -553,14 +535,6 @@ def export_as_excel(request):
     for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], font_style)
     font_style = xlwt.XFStyle()
-    # if value != None and tovalue != None and state == 'date':
-    #     print('hello')
-    #     rows = Order.objects.filter(orderd=True, date_ordered__lte = tovalue, date_ordered__gte = value).values_list('user__username','payment_method',  'date_ordered', 'total_price')
-    # elif value != None and tovalue == None and state == 'month':
-    #     rows = Order.objects.filter(orderd=True, date_ordered__month = value[1], date_ordered__year = value[0]).values_list('user__username','payment_method',  'date_ordered', 'total_price')
-    # elif value != None and tovalue == None and state == 'year':
-    #     rows = Order.objects.filter(orderd=True, date_ordered__year = value).values_list('user__username','payment_method',  'date_ordered', 'total_price')
-    # else:
     rows = OrderedItems.objects.filter(status='delivered').order_by('ordered').values_list('product','quantity','account','payment', 'ordered', 'total_price','price')
     for row in rows:
         row_num += 1
@@ -578,12 +552,17 @@ def weekly(request):
     print(orders)
     return render(request,'admin/salesReport.html',{'orders':orders})
 def monthly(request):
-    last_month = datetime.datetime.now().date() - timedelta(days=30)
-    print(last_month)
-    orders = OrderedItems.objects.filter(ordered__lte=datetime.datetime.now().date(),ordered__gte=last_month,status='delivered')
-    print(orders)
-    print('success')
-    return render(request,'admin/salesReport.html',{'orders':orders})
+    if request.method=='POST':
+        month = request.POST.get('monthly')
+        print(month)
+        orders = OrderedItems.objects.filter(ordered__month=month,status='delivered')
+        return render(request,'admin/salesReport.html',{'orders':orders})
+def Yearly(request):
+    if request.method=='POST':
+        year = request.POST.get('year')
+        print(year)
+        orders = OrderedItems.objects.filter(ordered__year=year,status='delivered')
+        return render(request,'admin/salesReport.html',{'orders':orders})
 
 def progressGraph(request):
     pass

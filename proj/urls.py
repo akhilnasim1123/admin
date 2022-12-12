@@ -52,4 +52,5 @@ urlpatterns = [
     path('export-as-excel',views.export_as_excel,name='export_as_excel'),
     path('weekly',views.weekly,name='weekly'),
     path('monthly',views.monthly,name='monthly'),
+    path('yearly',views.Yearly,name='Yearly'),
 ]
