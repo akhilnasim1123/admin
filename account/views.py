@@ -545,10 +545,10 @@ def addressAdd(request):
         address.state = request.POST.get('states')
         address.pincode = request.POST.get('pincodes')
 
-        if ShippingAddress.objects.filter(address=address.address, city=address.city, state=address.state, pincode=address.pincode).exists():
-            messages.error(request, 'this address already exist !')
-            return redirect('shipping')
-        elif ShippingAddress.objects.filter(account=request.user).count() > 4:
+        # if ShippingAddress.objects.filter(address=address.address, city=address.city, state=address.state, pincode=address.pincode).exists():
+        #     messages.error(request, 'this address already exist !')
+        #     return redirect('shipping')
+        if ShippingAddress.objects.filter(account=request.user).count() > 4:
             messages.error(request, 'minimum 4 address !')
             return redirect('shipping')
         else:
