@@ -54,7 +54,7 @@
     {% for cat in filterCategory %}
 
     <tr>
-      {% for i in cat.products}
+      {% for i in cat.products %}
     <td >
       <a href="{% url 'product_view' id=i.id %}"><p class=""><b style="font-size: 13px;">{{ i.product_name }}</b></p></a>
     </td>
