@@ -9,6 +9,9 @@ class Category(models.Model):
     category_name           = models.CharField(max_length=100)
     offer_name              = models.CharField(max_length=100,null=True,blank=True)
     category_offer          = models.IntegerField(null=True,blank=True,default=0)
+    variant                 = models.CharField(max_length=100,null = True,blank=True)
+    variant2                = models.CharField(max_length=100,null = True,blank=True)
+    variant3                = models.CharField(max_length=100,null = True,blank=True)
 
     def __str__(self):
         return self.category_name
@@ -50,6 +53,8 @@ class Product(models.Model):
     sub                     = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     offer_name              = models.CharField(max_length=100,null = True,blank=True)
     product_offer           = models.IntegerField(null = True,blank=True,default=0)
+    variant_apply           = models.CharField(max_length=100,null = True,blank=True)
+
     
 
 
@@ -115,13 +120,15 @@ class OrderItems(models.Model):
     quantity                = models.IntegerField(default=0, null=True, blank=True)
     discound                = models.IntegerField(default=0,null=True, blank=True)
     session_id              = models.CharField(max_length=500,null=True, blank=True)
+    variant_price           = models.IntegerField(default=0,null=True, blank=True)
+    variant                 = models.CharField(max_length=100,null=True, blank=True)
 
     def __str__(self):
         return str(self.product.id)
 
     @property
     def get_total(self):
-        total               = self.product.get_product_price * self.quantity
+        total               = self.product.get_product_price + self.variant_price * self.quantity
         return total
     @property
     def get_cart_items(self):

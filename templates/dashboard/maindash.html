@@ -6,6 +6,25 @@
   <b class="" style="font-size: 20px;"><span class="text-danger">T</span>orque.in Progress</b>
   </div>
 
+  <form action="{% url 'monthly_dashboard' %}" class="d-flex" method="post" style="width: 15%;">
+    {% csrf_token %}
+    <select name="monthly" class="bg-dark text-white select-hover form-control" id="" style="width:100%;">
+      <option value="0" selected>Monthly</option>
+      <option value="1">Jan</option>
+      <option value="2">Feb</option>
+      <option value="3">March</option>
+      <option value="4">April</option>
+      <option value="5">May</option>
+      <option value="6">June</option>
+      <option value="7">July</option>
+      <option value="8">Aug</option>
+      <option value="9">Sep</option>
+      <option value="10">Oct</option>
+      <option value="11">Nav</option>
+      <option value="12">Dec</option>
+    </select>
+    <button type="submit" class="bg-dark btn text-white" style="height: 38px;">Get</button>
+  </form>
 
 
 <div class="text-center mt-5">
@@ -15,24 +34,24 @@
   <div class="card" style="background-color: #eeeeee;">
   <canvas id="myChart"  style="width:auto;max-width:600px"></canvas>
 </div>
-  <div class="col" >
-    <div class="box card  text-light text-center pt-2 mt-2 mx-5" style="width: 50%;background-color:  rgb(151, 11, 11)">
+  <div class="col" style="width: 30%;">
+    <div class="box card  text-light text-center pt-2 mt-2 mx-5" style="width: 70%;background-color:  rgb(151, 11, 11)">
       <p><b>Cancelled</b></p>
       <p style="font-size: 20px; font-weight:bold;">{{ cancel_data }}</p>
   
   </div>
-    <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 50%;background-color:  rgb(9, 61, 138)">
+    <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 70%;background-color:  rgb(9, 61, 138)">
       <p><b>Orders</b></p>
       <p style="font-size: 20px; font-weight:bold;">{{ order_data }}</p>
   
   </div>
 
-  <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 50%;background-color: #547d65;">
+  <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 70%;background-color: #547d65;">
       <p><b>Total Revenue</b></p>
       <p style="font-size: 20px; font-weight:bold;">₹{{ total_revenue|floatformat:2 }}/-</p>
 
   </div>
-  <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 50%;background-color: #606060;">
+  <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 70%;background-color: #606060;">
     <p><b>Earning</b></p>
     <p style="font-size: 20px; font-weight:bold;">₹{{ refund|floatformat:2 }}/-</p>
 
@@ -40,6 +59,24 @@
 
 
 </div>
+
+  <select name="month_graph" onclick="monthlyGraph()" class="bg-secondary text-white select-hover form-control " id="monthly_circle" style="width: 15%;">
+    <option selected>Monthly</option>
+    <option value="1">Jan</option>
+    <option value="2">Feb</option>
+    <option value="3">March</option>
+    <option value="4">April</option>
+    <option value="5">May</option>
+    <option value="6">June</option>
+    <option value="7">July</option>
+    <option value="8">Aug</option>
+    <option value="9">Sep</option>
+    <option value="10">Oct</option>
+    <option value="11">Nav</option>
+    <option value="12">Dec</option>
+  </select>
+
+
 </section>
 <hr>
 
@@ -94,13 +131,92 @@
 </div>
 </section> -->
 
-
-
-
-
 <script>
+
+</script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.1.js"
+integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+<script>
+
+
+
+//   $(document).ready(function () {
+//     $('#monthly_circle').click(function (e) {
+//         e.preventDefault();
+//       var month = $("[name='month_graph']").val();
+//       console.log(month);
+//       console.log(returned)
+//       var data ;
+//   $.ajax({
+//     url: "/admin-log/monthly-circle/"+month,
+//     method:'get',
+
+//     success: function (response) {
+//       console.log(response);
+//       console.log(response.context.order_data);
+//       var order_data = response.context.order_data
+//       var cancel_data = response.context.cancel_data
+//       var returned = response.context.returned
+//       data = returned
+//       console.log(data);
+//     }
+  
+//   });
+
+//   console.log(data,'data');
+//   console.log(cancel_data,'cancel');
+//   console.log(returned,'returned');
+// })
+//  returned = data
+// });
+
+let filterData = []
+function monthlyGraph(){
+  month = document.getElementById('monthly_circle').value
+  console.log(month);
+  var order_datas;
+  var cancel_datas;
+  var returneds;
+  let filterData=[]
+
+  $.ajax({
+    url: "/admin-log/monthly-circle/"+month,
+    method:'get',
+
+    success: function (response) {
+      console.log(response);
+      console.log(response.context.order_data);
+      order_data = response.context.order_data
+      cancel_data= response.context.cancel_data
+      returned = response.context.returned
+      filterData[0] = order_data
+      filterData[1]=cancel_data
+      filterData[2]=returned
+
+      console.log(filterData);
+    }
+  
+  });
+
+console.log(filterData,'kjdshfkashfkjadsfks');
+}
+var order_data = {{order_data}}
+var cancel_data = {{cancel_data}}
+var returned = {{returned}}
+console.log('gjhfghfhgfgfhfg',filterData);
+// let listData=[]
+// if (filterData[0]!== null){
+//   listData = filterData
+// }else{
+  listData = [order_data,cancel_data,returned]
+// }
+
+console.log(listData);
   var xValues = ["Orders", 'Cancelled','Return'];
-  var yValues = [ {{ order_data }}, {{cancel_data}},{{returned}}];
+  var yValues = listData;
   var barColors = [
     "#093D8A",
     "#910009",
@@ -124,6 +240,7 @@
       }
     }
   });
+
   </script>
 
 

@@ -142,6 +142,12 @@ def updateItem(request):
     print('productId:', productId)
     account = request.user
     product = Product.objects.get(id=productId)
+    variant_price =0
+    variant_item = None
+    if 'variant' in request.session and request.session['variant'] == product.id:
+        variant_price = int(request.session['price'])
+        print(type(variant_price))
+        variant_item = request.session['variant_name']
     
     if request.user.is_authenticated:
         order = 0
@@ -150,7 +156,7 @@ def updateItem(request):
         #     account=account)
         print('varum varum prabhadam vidarnnidum puthiyaru thalam')
         orderItem, created = OrderItems.objects.get_or_create(
-         product=product,account=account)
+        product=product,account=account,variant_price=variant_price,variant=variant_item)
         print(orderItem)
     else:
         print('sjkdfajhkjhbkhjhggjgg')
@@ -261,6 +267,11 @@ def pay_page(request):
             orItemss = item
             prod_qunt = Product.objects.get(id=orItemss.product.id)
             user_order.account = customer
+            if item.variant is not None:
+                user_order.variant = item.variant
+            else:
+                item.variant=None
+                user_order.variant = item.variant
             user_order.order = item.order
             user_order.shippingaddress = saddress
             user_order.tracking_no = track_no

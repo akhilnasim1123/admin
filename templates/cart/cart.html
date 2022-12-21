@@ -35,7 +35,9 @@
               <div class="col-md-3 col-lg-3 col-xl-3">
                 <p class="lead fw-normal mb-2">{{ item.product.product_name }}</p>
                 <p><span class="text-muted">Category: </span>{{ item.product.category.category_name }} </p>
-                
+                {% if item.variant %}
+                <p><span class="text-muted">Variant: </span>{{ item.variant }} </p>
+                {% endif %}
               <p><span class="text-muted">Price: </span>{{ item.product.price|floatformat:2 }}</p>
               </div>
 

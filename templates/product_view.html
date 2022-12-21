@@ -20,26 +20,58 @@
                   <div style="width:80%; height:auto;">
                     <h4 style="font-size:50px">{{ key5.product_name }}</h4>
                           </div>
+                          <div>
                           {% if key5.get_product_price == key5.price %}
         
-                          <div class="price-tag text-danger" style="width:20%;font-size:25px"><b> ₹{{ key5.get_product_price }} </b></div>
-{% else %}
+          <div class="price-tag text-danger"  value="{{ key5.get_product_price }}" style="width:20%;font-size:25px"><b id="cashOfProduct"> ₹{{ key5.get_product_price }} </b></div>
+
+          
+
+                         {% else %}
 <div class="price-tag text-dark" style="width:20%;font-size:25px"><b> <del>₹{{ key5.price }}</del> </b></div>
-<div class="price-tag text-danger" style="width:20%;font-size:25px"><b> ₹{{ key5.get_product_price }} </b></div>
+<div class="price-tag text-danger" style="width:20%;font-size:25px"><b id="cashOfProduct"> ₹{{ key5.get_product_price }} </b></div>
 {% endif %}
+
+{% if key5.category.variant %}
+<form class="mt-4" method="post" style="float: left;" id="form-variant">
+  {% csrf_token %}
+<select name="variant" id="variant"  class="bg-white border-dark form-control">
+  <option value="" selected>variant</option>
+  <option value="{{key5.category.variant}}/{{key5.id}}">{{key5.category.variant}}</option>
+  {% if key5.category.variant2 %}
+  <option value="{{key5.category.variant2}}/{{key5.id}}">{{key5.category.variant2}}</option>
+  {% endif %}
+  {% if key5.category.variant3 %}
+  <option value="{{key5.category.variant3}}{{key5.id}}">{{key5.category.variant3}}</option>
+  {% endif %}
+</select>
+</form>
+{% endif %}</div>
+
+
     </div>
 
 {%if key5.quantity == 0%}
 <p class="text-danger mt-4">Out Of Stock</p>
+{% elif key5.quantity <= 7 %}
+<p class="text-danger mt-4">Only {{key5.quantity}} Left</p>
+
 {% else %}
 <p class="text-success mt-4">In Stock</p>
+
 {%endif%}
 
     <div class="mt-5">
       {{ key5.desc }}
 
       </div>
+      <div class=" mb-2 mt-2 d-flex">
 
+
+
+  
+
+    </div>
       <div class="d-flex justify-content-between">
    
         <button data-product="{{ key5.id }}" data-action="add" type="button" class="update-cart btn btn-dark btn-block btn-lg " data-mdb-ripple-color="dark" onclick="addToCart()">Add to Cart</button>
@@ -119,5 +151,38 @@
 
 
 </div>
+<script>
+// $(document).ready(function () {
+//     $('.variant').click(function (e) {
+//         e.preventDefault();
+//         var variant = $("[name='varian']").val();
 
+//       })
+//   });
+
+$(document).ready(function () {
+    $('#variant').click(function (e) {
+        e.preventDefault();
+      var variant = $("[name='variant']").val();
+      console.log(variant);
+      if (variant != ''){
+        $.ajax({
+          url: "/variant/"+variant,
+          method:'get',
+          data: variant,
+
+          success: function (response) {
+            console.log(response.price)
+            document.getElementById('cashOfProduct').innerHTML ='₹'+response.price
+            console.log(document.getElementById('cashOfProduct'));
+          }
+
+        });
+      }
+      else{
+        return false;
+      }
+      })
+        });
+</script>
 {% endblock content %}

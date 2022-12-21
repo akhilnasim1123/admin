@@ -43,6 +43,15 @@
 <button class="btn btn-dark btn-xs mx-1" style="width:15%;" id="download-pdf">Download as Pdf</button>
 <a href=" {% url 'export_as_excel'  %}" class="btn btn-dark btn-xs mx-1" style="width: 15%;"> Download as Excel</a></span>
 </div>
+<form action="{% url 'selective_report' %}" method="post">
+  {% csrf_token %}
+<div class="mt-3 d-flex w-50">
+  <input type="date" name="from" class="form-control" value="{{from|date:'yyyy-mm-dd'}}" style="width: 40%;">
+<h6 class="text-center mx-2 mt-2">To</h6>
+<input type="date" name="to" class="form-control mx-2" value="{{from|date:'yyyy-mm-dd'}}"  style="width: 40%;">
+<button type="submit" class="btn bg-dark text-white">Get</button>
+</div>
+</form>
 
 <div class="table-responsive mt-5">
     <table class="table table-striped table-hover table-bordered table-sm table-light border-light w-100" id="example">

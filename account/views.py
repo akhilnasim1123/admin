@@ -70,7 +70,9 @@ def registration_view(request):
 
 def home(request):
     print(request.session.session_key)
+
     if 'user_exist' in request.session:
+
         print('authenticated')
         customer = request.user
         print('customer')
@@ -93,6 +95,8 @@ def home(request):
         for i in category:
             sub = i.filtered
             print(sub)
+
+
         data = {'products': products, 'items': items, 'category': category, 'sub': sub, 'filterProduct': filterProduct,
                 'filterCategory': filterCategory, 'order': order, 'cartItems': cartItems}
         return render(request, 'page.html', data)
@@ -221,19 +225,34 @@ def product_view(request, id):
             wishlist = Wishlist.objects.get(product=val, account=customer)
             print(wishlist)
 
-            if val.quantity < 0:
-                messages.error(request, 'Out Of Stock')
+
 
             if val.quantity < 0:
                 messages.error(request, 'Out Of Stock')
 
-                context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer, 'related_products': related_products,
-                           'order': order, 'cartItems': cartItems}
-                return render(request, 'product_view.html', context)
-            else:
-                context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer, 'related_products': related_products,
-                           'order': order, 'cartItems': cartItems}
-                return render(request, 'product_view.html', context)
+            if val.quantity < 0:
+                messages.error(request, 'Out Of Stock')
+            if request.method == 'POST':
+                print('sapanappa sappanappa madhadkaari')
+                val.variant_apply = request.POST.get('variant')
+                if val.variant_apply == '5.L':
+                    val.get_product_price = val.get_product_price + 100
+                    context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer, 'related_products': related_products,
+                        'order': order, 'cartItems': cartItems}
+                    return render(request, 'product_view.html', context)
+                elif val.variant_apply == '3.5L':
+                    val.get_product_price =val.get_product_price + 200
+                    context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer, 'related_products': related_products,
+                        'order': order, 'cartItems': cartItems}
+                    return render(request, 'product_view.html', context)
+
+            context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer, 'related_products': related_products,
+                        'order': order, 'cartItems': cartItems}
+            return render(request, 'product_view.html', context)
+            # else:
+            #     context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer, 'related_products': related_products,
+            #                'order': order, 'cartItems': cartItems}
+            #     return render(request, 'product_view.html', context)
         except:
             order = Order.objects.filter(account=customer, complete=False)
             items = OrderItems.objects.filter(account=customer)
@@ -252,6 +271,22 @@ def product_view(request, id):
             print(wishlist)
             print(offer)
             print(val.quantity)
+            # if request.method == 'POST':
+            #     print(val.get_product_price)
+            #     print('sapanappa sappanappa madhadkaari')
+            #     val.variant_apply = request.POST.get('variant')
+            #     if val.variant_apply == '5L':
+            #         val.get_product_price = val.get_product_price + 200
+            #         val.save()
+            #         context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer, 'related_products': related_products,
+            #             'order': order, 'cartItems': cartItems}
+            #         return render(request, 'product_view.html', context)
+            #     elif val.variant_apply == '3.5L':
+            #         val.get_product_price = val.get_product_price + 100
+            #         context = {'key5': val, 'items': items, 'wishlist': wishlist, 'offer': offer, 'related_products': related_products,
+            #             'order': order, 'cartItems': cartItems}
+            #         return render(request, 'product_view.html', context)
+
 
             context = {'key5': val, 'cartItems': cartItems, 'wishlist': wishlist, 'related_products': related_products,
                        'offer': offer, 'price': price}
@@ -558,3 +593,36 @@ def addressAdd(request):
 
 def contact(request):
     pass
+
+def variant(request,variant,id):
+    product = Product.objects.get(id=id)
+    if variant == '5L':
+        price = product.get_product_price + 200
+        request.session['variant']=id
+        request.session['price']=200
+        request.session['variant_name']=variant
+    elif variant == '3.5L':
+        price = product.get_product_price + 100
+        request.session['variant']=id
+        request.session['price']=100
+        request.session['variant_name']=variant
+    else:
+        price = product.get_product_price + 0
+        variant = None
+        request.session['variant']=id
+        request.session['price']=0
+        request.session['variant_name']=variant
+    return JsonResponse({'price':price})
+
+def searchData(request):
+    if request.method == 'POST':
+        product = request.POST.get('searchProduct')
+        product = Product.objects.get(product_name=product)
+        return redirect(product_view,product.id)
+
+    products=Product.objects.all()
+    data = list()
+    for item in products:
+        data.append(item.product_name)
+    return JsonResponse(data,safe=False)
+    

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.forms import DateTimeField
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.cache import cache_control
 from django.http import HttpResponseRedirect
@@ -213,12 +213,12 @@ def productEdit(request,id):
             edit.offer_name = offer_name
             edit.product_offer = product_offer
             edit.quantity = quantity
-        if image1 is not None:
-            edit.image1=image1
-        if image2 is not None:
-            edit.image2=image2
-        if image3 is not None:
-            edit.image3=image2        
+            if image1 is not None:
+                edit.image1=image1
+            if image2 is not None:
+                edit.image2=image2
+            if image3 is not None:
+                edit.image3=image2        
             category = Category.objects.get(id=categoryid)
             sub=SubCategory.objects.get(id=subcat)
             edit.category = category
@@ -454,14 +454,14 @@ def filterOrder(request):
 def statusEdit(request,id):
     order = OrderedItems.objects.get(id=id)
     if order.status == 'pending':
-        order.status = 'out_of_delivery'
-        order.save()
-        return redirect(order_list)
-    if order.status == 'out_of_delivery':
         order.status = 'Shipped'
         order.save()
         return redirect(order_list)
-    elif order.status == 'Shipped':
+    if order.status == 'Shipped':
+        order.status = 'out_of_delivery'
+        order.save()
+        return redirect(order_list)
+    elif order.status == 'out_of_delivery':
         order.status = 'delivered'
         order.delivered_at=timezone.now()
         order.save()
@@ -567,3 +567,96 @@ def Yearly(request):
 def progressGraph(request):
     pass
 
+def selective_report(request):
+    if request.method == 'POST':
+        from_date = request.POST.get('from')
+        to_date = request.POST.get('to')
+        print(from_date)
+        orders = OrderedItems.objects.filter(ordered__gte=from_date,ordered__lte=to_date,status='delivered')
+        return render (request,'admin/salesReport.html',{'orders':orders})
+
+
+def monthly_dash(request):
+    if request.method == 'POST':
+        month = request.POST.get('monthly')
+        cancel_data = OrderedItems.objects.filter(ordered__month=month,status='Cancelled').count()
+        returned = OrderedItems.objects.filter(ordered__month=month,status='is_returned').count()
+        order_data = OrderedItems.objects.filter(ordered__month=month).count()
+        order = OrderedItems.objects.filter(ordered__month=month)
+        total_revenue = 0
+        for item in order:
+            total_revenue = float(total_revenue) + float(item.price)
+        razorpay = OrderedItems.objects.filter(ordered__month=month,payment='Paid by Razorpay').count()
+        paypal = OrderedItems.objects.filter(ordered__month=month,payment='Paid by Paypal').count()
+        cash_on_delivery = OrderedItems.objects.filter(ordered__month=month,payment='COD').count()
+        print(razorpay)
+        cancel = OrderedItems.objects.filter(ordered__month=month,status='Cancelled')
+        refund = 0
+        for money in cancel:
+            refund = refund + float(money.price)
+
+        refund = total_revenue - refund
+
+        cod = OrderedItems.objects.filter(ordered__month=month,payment='COD')
+        cod_total = 0
+        for price in cod:
+            cod_total = cod_total + float(price.price)
+
+        payp = OrderedItems.objects.filter(ordered__month=month,payment='Paid by Paypal')
+        paypal_total = 0
+        for pp in payp:
+            paypal_total = paypal_total+float(pp.price)
+
+        razor = OrderedItems.objects.filter(ordered__month=month,payment='Paid by Razorpay')
+        razorpay_total = 0
+        for rp in razor:
+            razorpay_total = razorpay_total + float(rp.price)
+
+        print(total_revenue)
+
+        print(cancel_data)
+        print(order_data)
+        context = {
+            'cancel_data': cancel_data,
+            'returned':returned,
+            'order_data': order_data,
+            'total_revenue': total_revenue,
+            'razorpay': razorpay,
+            'paypal': paypal,
+            'cash_on_delivery': cash_on_delivery,
+            'refund': refund,
+            'cod_total': cod_total,
+            'paypal_total': paypal_total,
+            'razorpay_total': razorpay_total,
+
+        }
+        print(razorpay)
+        return render(request, 'dashboard/maindash.html', context)
+
+def monthly_circle(request,month):
+        cancel_data = OrderedItems.objects.filter(ordered__month=month,status='Cancelled').count()
+        returned = OrderedItems.objects.filter(ordered__month=month,status='is_returned').count()
+        order_data = OrderedItems.objects.filter(ordered__month=month).count()
+        order = OrderedItems.objects.filter(ordered__month=month)
+        total_revenue = 0
+        for item in order:
+            total_revenue = float(total_revenue) + float(item.price)
+        razorpay = OrderedItems.objects.filter(ordered__month=month,payment='Paid by Razorpay').count()
+        paypal = OrderedItems.objects.filter(ordered__month=month,payment='Paid by Paypal').count()
+        cash_on_delivery = OrderedItems.objects.filter(ordered__month=month,payment='COD').count()
+        print(razorpay)
+        cancel = OrderedItems.objects.filter(ordered__month=month,status='Cancelled')
+        refund = 0
+        for money in cancel:
+            refund = refund + float(money.price)
+
+        refund = total_revenue - refund
+        context = {
+            'cancel_data': cancel_data,
+            'returned':returned,
+            'order_data': order_data,
+            'total_revenue': total_revenue}
+        return JsonResponse({'context':context})
+
+# def searchData(request):
+#     pass

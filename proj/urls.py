@@ -53,4 +53,7 @@ urlpatterns = [
     path('weekly',views.weekly,name='weekly'),
     path('monthly',views.monthly,name='monthly'),
     path('yearly',views.Yearly,name='Yearly'),
+    path('selective-report',views.selective_report,name='selective_report'),
+    path('monthly-filter',views.monthly_dash,name='monthly_dashboard'),
+    path('monthly-circle/<str:month>',views.monthly_circle,name='monthly_circle'),
 ]
