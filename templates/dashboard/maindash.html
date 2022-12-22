@@ -27,42 +27,39 @@
   </form>
 
 
-<div class="text-center mt-5">
-<b class="" style="font-size: 20px;">Order Details</b>
-</div>
-<section class="d-flex justify-content-center align-items-center mt-5">
-  <div class="card" style="background-color: #eeeeee;">
-  <canvas id="myChart"  style="width:auto;max-width:600px"></canvas>
-</div>
-  <div class="col" style="width: 30%;">
-    <div class="box card  text-light text-center pt-2 mt-2 mx-5" style="width: 70%;background-color:  rgb(151, 11, 11)">
-      <p><b>Cancelled</b></p>
-      <p style="font-size: 20px; font-weight:bold;">{{ cancel_data }}</p>
-  
-  </div>
-    <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 70%;background-color:  rgb(9, 61, 138)">
-      <p><b>Orders</b></p>
-      <p style="font-size: 20px; font-weight:bold;">{{ order_data }}</p>
-  
-  </div>
-
-  <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 70%;background-color: #547d65;">
-      <p><b>Total Revenue</b></p>
-      <p style="font-size: 20px; font-weight:bold;">₹{{ total_revenue|floatformat:2 }}/-</p>
-
-  </div>
-  <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 70%;background-color: #606060;">
-    <p><b>Earning</b></p>
-    <p style="font-size: 20px; font-weight:bold;">₹{{ refund|floatformat:2 }}/-</p>
-
-</div>
-
-
-</div>
-
-
-
-</section>
+  <div class="text-center mt-5">
+    <b class="" style="font-size: 20px;">Order Details</b>
+    </div>
+    <section class="d-flex justify-content-center align-items-center mt-5">
+      <div class="card" style="background-color: #eeeeee;">
+      <canvas id="myChart"  style="width:auto;max-width:600px"></canvas>
+    </div>
+      <div class="col" >
+        <div class="box card  text-light text-center pt-2 mt-2 mx-5" style="width: 50%;background-color:  rgb(151, 11, 11)">
+          <p><b>Cancelled</b></p>
+          <p style="font-size: 20px; font-weight:bold;">{{ cancel_data }}</p>
+      
+      </div>
+        <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 50%;background-color:  rgb(9, 61, 138)">
+          <p><b>Orders</b></p>
+          <p style="font-size: 20px; font-weight:bold;">{{ order_data }}</p>
+      
+      </div>
+    
+      <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 50%;background-color: #547d65;">
+          <p><b>Total Revenue</b></p>
+          <p style="font-size: 20px; font-weight:bold;">₹{{ total_revenue|floatformat:2 }}/-</p>
+    
+      </div>
+      <div class="box card text-light text-center pt-2 mt-2 mx-5" style="width: 50%;background-color: #606060;">
+        <p><b>Earning</b></p>
+        <p style="font-size: 20px; font-weight:bold;">₹{{ refund|floatformat:2 }}/-</p>
+    
+    </div>
+    
+    
+    </div>
+    </section>
 <hr>
 
 <div class="text-center ">
